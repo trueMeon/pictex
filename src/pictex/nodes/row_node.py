@@ -2,7 +2,6 @@ from typing import Tuple, Callable
 from .container_node import ContainerNode
 from .node import Node
 from ..models import VerticalAlignment, HorizontalDistribution, SizeValueMode
-from ..utils import cached_property
 import skia
 
 class RowNode(ContainerNode):
@@ -24,23 +23,47 @@ class RowNode(ContainerNode):
 
         return max(child.margin_bounds.height() for child in children)
     
-    @cached_property(group='bounds')
-    def content_height(self) -> int:
-        height = super().content_height
+    def _apply_stretch_constraints(self):
+        """
+        Apply vertical stretch constraints to children with auto height.
+        """
         alignment = self.computed_styles.vertical_alignment.get()
+        if alignment != VerticalAlignment.STRETCH:
+            return
         
-        if alignment == VerticalAlignment.STRETCH:
-            children = self._get_positionable_children()
-            for child in children:
-                child_height = child.computed_styles.height.get()
-                if child_height and child_height.mode != SizeValueMode.AUTO:
-                    continue
-                
-                child.clear_bounds()
-                child._set_forced_size(height=height)
-                child._calculate_bounds()
+        children = self._get_positionable_children()
+        for child in children:
+            child_height = child.computed_styles.height.get()
+            if child_height and child_height.mode != SizeValueMode.AUTO:
+                continue
 
-        return height
+            child._forced_size = (child._forced_size[0], self.content_height)
+
+    def _apply_fill_available_constraints(self):
+        """
+        Apply width constraints to children with fill-available.
+        """
+        children = self._get_positionable_children()
+        fixed_children_width = 0
+        flexible_children: list[Node] = []
+        user_gap = self.computed_styles.gap.get()
+
+        for child in children:
+            child_width_style = child.computed_styles.width.get()
+            if child_width_style and child_width_style.mode == SizeValueMode.FILL_AVAILABLE:
+                flexible_children.append(child)
+            else:
+                fixed_children_width += child.size[0]
+
+        if not flexible_children:
+            return
+
+        total_gap_space = user_gap * (len(children) - 1) if len(children) > 1 else 0
+        remaining_space = self.content_width - fixed_children_width - total_gap_space
+        space_per_flexible_child = max(0, remaining_space / len(flexible_children))
+
+        for child in flexible_children:
+            child._forced_size = (space_per_flexible_child, child._forced_size[1])
 
     def _calculate_children_relative_positions(self, children: list[Node], get_child_bounds: Callable[[Node], skia.Rect]) -> list[Tuple[float, float]]:
         positions = []
@@ -89,28 +112,3 @@ class RowNode(ContainerNode):
             start_x += distribution_gap
 
         return distribution_gap, start_x
-
-    def _resize_children_if_needed(self, children: list[Node]):
-        fixed_children_width = 0
-        flexible_children: list[Node] = []
-        user_gap = self.computed_styles.gap.get()
-
-        for child in children:
-            child_width_style = child.computed_styles.width.get()
-            if child_width_style and child_width_style.mode == SizeValueMode.FILL_AVAILABLE:
-                flexible_children.append(child)
-            else:
-                fixed_children_width += child.size[0]
-
-        container_width = self.content_bounds.width()
-        total_gap_space = user_gap * (len(children) - 1) if len(children) > 1 else 0
-        remaining_space = container_width - fixed_children_width - total_gap_space
-        
-        if not flexible_children:
-            return
-        
-        space_per_flexible_child = max(0, remaining_space / len(flexible_children))
-        for child in flexible_children:
-            child.clear_bounds()
-            child._set_forced_size(width=space_per_flexible_child)
-            child._calculate_bounds()

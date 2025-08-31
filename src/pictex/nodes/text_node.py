@@ -13,6 +13,7 @@ class TextNode(Node):
         self._text = text
         self._font_manager: Optional[FontManager] = None
         self._text_shaper: Optional[TextShaper] = None
+        self._text_wrap_width: Optional[int] = None
 
     @property
     def text(self) -> str:
@@ -24,8 +25,7 @@ class TextNode(Node):
 
     @cached_property('bounds')
     def shaped_lines(self) -> list[Line]:
-        max_width = self._get_text_wrap_width()
-        return self._text_shaper.shape(self._text, max_width)
+        return self._text_shaper.shape(self._text, self._text_wrap_width)
 
     def _init_render_dependencies(self, render_props: RenderProps):
         super()._init_render_dependencies(render_props)
@@ -36,6 +36,7 @@ class TextNode(Node):
         super().clear()
         self._font_manager = None
         self._text_shaper = None
+        self._text_wrap_width = None
 
     def _get_painters(self) -> list[Painter]:
         return [
@@ -113,34 +114,28 @@ class TextNode(Node):
 
     def _get_all_bounds(self) -> list[skia.Rect]:
         return super()._get_all_bounds() + [self.text_bounds]
+    
+    def _before_calculating_bounds(self) -> None:
+        super()._before_calculating_bounds()
 
-    def _get_text_wrap_width(self) -> Optional[float]:
-        """
-        Determines if text wrapping should be applied and returns the maximum width
-        available for the text content (after subtracting padding and border).
-        Returns None if text wrapping should not be applied.
-        """
-        # Check if text wrapping is explicitly disabled
+        if not self._parent:
+            return
+        
         text_wrap_style = self.computed_styles.text_wrap.get()
         if text_wrap_style.value == 'nowrap':
             return None
         
-        # If element has positioning, disable text wrapping
-        # Positioned elements exist outside the normal layout flow where 
-        # text wrapping constraints are defined
+        # If element has positioning, disable text wrapping.
+        # Positioned elements exist outside the normal layout flow.
         position_style = self.computed_styles.position.get()
         if position_style is not None:
             return None
         
-        if self.constraints.has_width_constraint():
-            total_width = self.constraints.get_effective_width()
-            padding = self.computed_styles.padding.get()
-            border = self.computed_styles.border.get()
-            border_width = border.width if border else 0
-            
-            horizontal_spacing = padding.left + padding.right + (border_width * 2)
-            content_width = total_width - horizontal_spacing
-            
-            return max(0, content_width)
+        parent_width = self._parent.content_width
+        padding = self.computed_styles.padding.get()
+        border = self.computed_styles.border.get()
+        border_width = border.width if border else 0
+        horizontal_spacing = padding.left + padding.right + (border_width * 2)
+        content_width = parent_width - horizontal_spacing
         
-        return None
+        self._text_wrap_width = max(0, content_width)

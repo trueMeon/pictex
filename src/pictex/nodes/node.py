@@ -2,7 +2,7 @@ from __future__ import annotations
 from copy import deepcopy
 from typing import Optional, Tuple
 import skia
-from ..models import Style, Shadow, PositionMode, RenderProps, CropMode, Constraints
+from ..models import Style, Shadow, PositionMode, RenderProps, CropMode
 from ..painters import Painter
 from ..utils import create_composite_shadow_filter, clone_skia_rect, to_int_skia_rect, cached_property, Cacheable
 from ..layout import SizeResolver
@@ -14,10 +14,9 @@ class Node(Cacheable):
         self._raw_style = style
         self._parent: Optional[Node] = None
         self._children: list[Node] = []
-        self._forced_size: Tuple[Optional[int], Optional[int]] = (None, None)
         self._render_props: Optional[RenderProps] = None
         self._absolute_position: Optional[Tuple[float, float]] = None
-        self._constraints: Constraints = Constraints.none()
+        self._forced_size: Tuple[int, int] = (None, None)
 
     @property
     def parent(self) -> Node:
@@ -48,8 +47,8 @@ class Node(Cacheable):
         return self._absolute_position
 
     @property
-    def constraints(self) -> Constraints:
-        return self._constraints
+    def forced_size(self) -> Tuple[int, int]:
+        return self._forced_size
 
     @cached_property(group='bounds')
     def padding_bounds(self):
@@ -141,13 +140,11 @@ class Node(Cacheable):
         """
         Prepares the node and its children to be rendered.
         It's meant to be called in the root node.
-        It uses a two-pass approach:
-        1. Constraint resolution: determine sizing constraints for each node
-        2. Bounds calculation: calculate actual bounds using those constraints
         """
         self.clear()
         self._init_render_dependencies(render_props)
-        self._resolve_constraints(Constraints.none())
+        self._before_calculating_bounds()
+        self._clear_bounds()
         self._calculate_bounds()
         self._setup_absolute_position()
 
@@ -212,24 +209,18 @@ class Node(Cacheable):
 
         self._render_props = None
         self._absolute_position = None
-        self._forced_size = (None, None)
-        self._constraints = Constraints.none()
+        self._forced_size: Tuple[int, int] = (None, None)
         self.clear_cache()
 
-    def clear_bounds(self):
+    def _clear_bounds(self):
         """
         Resets only the calculated layout and bounds information.
         This is a more targeted version of clear().
         """
         for child in self._children:
-            child.clear_bounds()
+            child._clear_bounds()
 
-        self._forced_size = (None, None)
         self.clear_cache('bounds')
-
-    def _set_forced_size(self, width: Optional[int] = None, height: Optional[int] = None) -> None:
-        """Allows a parent to impose a size on this node."""
-        self._forced_size = (width, height)
 
     def _compute_styles(self) -> Style:
         parent_computed_styles = self._parent.computed_styles if self._parent else None
@@ -277,41 +268,12 @@ class Node(Cacheable):
     def _get_non_positionable_children(self) -> list[Node]:
         return [child for child in self.children if child.computed_styles.position.get() is not None]
 
-    def _resolve_constraints(self, parent_constraints: Constraints) -> None:
+    def _before_calculating_bounds(self) -> None:
         """
-        Resolves sizing constraints for this node and propagates them to children.
-        
-        This is the first pass of the two-pass sizing system. It determines
-        what constraints (max width/height) apply to each node based on:
-        - Parent constraints
-        - Node's own sizing styles (absolute, percent, etc.)
-        - Layout context
-        
-        Args:
-            parent_constraints: Constraints imposed by the parent
+        The idea of this method is calculate those values that are needed to re-calculate the bounds.
+        So, every bound calculated in this process, will be removed.
+        For example, we can calculate the text node parent width to the text-wrap feature,
+        or we can calculate how much width/height should have each node with fill-available size.
         """
-        # Store the constraints for this node
-        self._constraints = self._compute_node_constraints(parent_constraints)
-        
-        # Propagate constraints to children
-        child_constraints = self._compute_child_constraints(self._constraints)
         for child in self._children:
-            child._resolve_constraints(child_constraints)
-
-    def _compute_node_constraints(self, parent_constraints: Constraints) -> Constraints:
-        """
-        Computes the constraints for this specific node based on parent constraints
-        and this node's own sizing styles.
-        """
-        # Default implementation: inherit parent constraints
-        # Container nodes will override this to provide more specific logic
-        return parent_constraints
-
-    def _compute_child_constraints(self, own_constraints: Constraints) -> Constraints:
-        """
-        Computes the constraints to pass to children based on this node's constraints
-        and layout behavior.
-        """
-        # Default implementation: pass through constraints unchanged
-        # Container nodes will override this to provide layout-specific constraints
-        return own_constraints
+            child._before_calculating_bounds()

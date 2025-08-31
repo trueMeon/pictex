@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Callable, TYPE_CHECKING
+from typing import TYPE_CHECKING
 import skia
 
 if TYPE_CHECKING:
@@ -13,33 +13,20 @@ class SizeResolver:
         self._intrinsic_bounds: skia.Rect | None = None
     
     def resolve_width(self) -> int:
-        if self._node._forced_size[0] is not None:
-            forced_width, _ = self._node._forced_size
+        forced_width = self._node.forced_size[0]
+        if forced_width is not None:
             spacing = self._get_horizontal_spacing()
             return max(0, forced_width - spacing)
 
-        width = self._node.computed_styles.width.get()
-        if not width:
-            return self._node.compute_intrinsic_width()
-
-        spacing = self._get_horizontal_spacing()
-        box_width = self._get_axis_size(width, "width", spacing)
-        return max(0, box_width)
+        return self._resolve_width_from_style()
 
     def resolve_height(self) -> int:
-        if self._node._forced_size[1] is not None:
-            _, forced_height = self._node._forced_size
+        forced_height = self._node.forced_size[1]
+        if forced_height is not None:
             spacing = self._get_vertical_spacing()
             return max(0, forced_height - spacing)
 
-        height = self._node.computed_styles.height.get()
-        if not height:
-            return self._node.compute_intrinsic_height()
-
-        spacing = self._get_vertical_spacing()
-        box_height = self._get_axis_size(height, "height", spacing)
-
-        return max(0, box_height)
+        return self._resolve_height_from_style()
     
     def _get_horizontal_spacing(self) -> float:
         padding = self._node.computed_styles.padding.get()
@@ -107,5 +94,24 @@ class SizeResolver:
         if not parent_size_style or parent_size_style.mode == 'fit-content' or parent_size_style.mode == 'auto':
             raise ValueError("Cannot use 'fill-available' size if parent element has 'fit-content' size.")
         
-        # We just return the intrinsic size as a placeholder, this should be recalculated when the parent is positionating the children
+        # We just return the intrinsic size as a placeholder, this should be recalculated in the second phase
         return self._get_intrinsic_axis_size(axis)
+
+    def _resolve_width_from_style(self) -> int:
+        width = self._node.computed_styles.width.get()
+        if not width:
+            return self._node.compute_intrinsic_width()
+
+        spacing = self._get_horizontal_spacing()
+        box_width = self._get_axis_size(width, "width", spacing)
+        return max(0, box_width)
+
+    def _resolve_height_from_style(self) -> int:
+        height = self._node.computed_styles.height.get()
+        if not height:
+            return self._node.compute_intrinsic_height()
+
+        spacing = self._get_vertical_spacing()
+        box_height = self._get_axis_size(height, "height", spacing)
+        return max(0, box_height)
+

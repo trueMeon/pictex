@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="569" height="117">
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="117">
 <defs>
     <builders type="text/css">
         
@@ -35,7 +35,7 @@
     </builders>
 </defs>
             
-	<rect fill-opacity="0" width="569" height="117" />
+	<rect fill-opacity="0" width="520" height="117" />
 	<rect fill="#FFF0E6" width="250" height="81" />
 	<text transform="translate(10 10)" font-size="12" font-style="italic" font-family="pictex-Lato" x="0, 7, 14, 17, 20, 26, 28, 35, 38, 40, 47, 54, 57, 62, 64, 67, 72, 74, 80, 82, 88, 94, 98, 104, 106, 109, 115, 121, 127, 129, 134, 140, 146, 150, 156, 162, 167, 173, 175, 179, 186, 192, 196, 198, 207, 210, 213, 216, 218, 224, 230, 239, 245, 251, 256, 260, 264, 270, 274, " y="11.844, ">
 			Child 1: This is a very long sentence that will demonstrate
