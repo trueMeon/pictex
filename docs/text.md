@@ -90,10 +90,11 @@ canvas.render("Variable Font").save("variable_font.png")
 
 ## Multi-line Text and Alignment
 
-`PicTex` fully supports multi-line text using newline characters (`\n`).
+`PicTex` fully supports multi-line text using newline characters (`\n`). Additionally, text can automatically wrap when placed in containers with fixed widths.
 
--   `.alignment()`: Controls how text lines are aligned within the text block. Accepts `Alignment.LEFT`, `Alignment.CENTER`, or `Alignment.RIGHT`.
+-   `.text_align()`: Controls how text lines are aligned within the text block. Accepts `TextAlign.LEFT`, `TextAlign.CENTER`, or `TextAlign.RIGHT`.
 -   `.line_height()`: Sets the spacing between lines as a multiplier of the font size. A value of `1.5` means 150% spacing.
+-   `.text_wrap()`: Controls whether text automatically wraps to fit container width. Accepts `"normal"` (default, wrapping enabled) or `"nowrap"` (wrapping disabled).
 
 ```python
 from pictex import Canvas, TextAlign
@@ -114,6 +115,32 @@ canvas.render(text).save("alignment_example.png")
 ```
 
 ![Multiline result](https://res.cloudinary.com/dlvnbnb9v/image/upload/v1754102754/alignment_example_dnk5t4.png)
+
+### Text Wrapping
+
+When text is placed inside containers with fixed widths, it can automatically wrap to multiple lines:
+
+```python
+from pictex import Canvas, Text, Column
+
+canvas = Canvas().font_family("Arial").font_size(16)
+
+# Text will automatically wrap to fit the 200px width
+long_text = "This is a very long sentence that will automatically wrap to multiple lines when placed inside a container with a fixed width."
+
+wrapped_text = Text(long_text)
+container = Column(wrapped_text).size(width=200).padding(10)
+
+canvas.render(container).save("text_wrapping_example.png")
+```
+
+You can also disable text wrapping:
+
+```python
+# This text will not wrap and may overflow the container
+no_wrap_text = Text(long_text).text_wrap("nowrap")
+container = Column(no_wrap_text).size(width=200).padding(10)
+```
 
 ## Text Decorations
 
