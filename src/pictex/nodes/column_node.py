@@ -1,29 +1,80 @@
 from typing import Tuple, Callable
 from .node import Node
 from .container_node import ContainerNode
-from ..models import HorizontalAlignment, VerticalDistribution, SizeValueMode
-from ..utils import cached_property
+from ..models import HorizontalAlignment, VerticalDistribution, SizeValueMode, Constraints
 import skia
 
 class ColumnNode(ContainerNode):
 
-    @cached_property(group='bounds')
-    def content_width(self) -> int:
-        width = super().content_width
+    def _apply_stretch_constraints(self):
+        """
+        Apply horizontal stretch constraints to children with auto width.
+        """
         alignment = self.computed_styles.horizontal_alignment.get()
-        
-        if alignment == HorizontalAlignment.STRETCH:
-            children = self._get_positionable_children()
-            for child in children:
-                child_width = child.computed_styles.width.get()
-                if child_width and child_width.mode != SizeValueMode.AUTO:
-                    continue
-                
-                child.clear_bounds()
-                child._set_forced_size(width=width)
-                child._calculate_bounds()
+        if alignment != HorizontalAlignment.STRETCH:
+            return
 
-        return width
+        if not self.constraints.has_width_constraint():
+            return
+
+        padding = self.computed_styles.padding.get()
+        border = self.computed_styles.border.get()
+        border_width = border.width if border else 0
+        horizontal_spacing = padding.left + padding.right + (border_width * 2)
+        content_width = max(0, self.constraints.get_effective_width() - horizontal_spacing)
+
+        # Apply stretch constraints to children with auto width
+        children = self._get_positionable_children()
+        for child in children:
+            child_width = child.computed_styles.width.get()
+            if child_width and child_width.mode != SizeValueMode.AUTO:
+                continue
+                
+            child_constraints = Constraints(
+                max_width=content_width,
+                max_height=child.constraints.get_effective_height() if child.constraints.has_height_constraint() else None
+            )
+            child._constraints = child_constraints
+
+    def _apply_fill_available_constraints(self):
+        """
+        Apply height constraints to children with fill-available height during constraint resolution.
+        """
+        if not self.constraints.has_height_constraint():
+            return
+
+        padding = self.computed_styles.padding.get()
+        border = self.computed_styles.border.get()
+        border_width = border.width if border else 0
+        vertical_spacing = padding.top + padding.bottom + (border_width * 2)
+        content_height = max(0, self.constraints.get_effective_height() - vertical_spacing)
+
+        # Identify children with fill-available height and calculate space distribution
+        children = self._get_positionable_children()
+        fixed_children_height = 0
+        flexible_children: list[Node] = []
+        user_gap = self.computed_styles.gap.get()
+
+        for child in children:
+            child_height_style = child.computed_styles.height.get()
+            if child_height_style and child_height_style.mode == SizeValueMode.FILL_AVAILABLE:
+                flexible_children.append(child)
+            else:
+                fixed_children_height += child.size[1]
+
+        if not flexible_children:
+            return
+
+        total_gap_space = user_gap * (len(children) - 1) if len(children) > 1 else 0
+        remaining_space = content_height - fixed_children_height - total_gap_space
+        space_per_flexible_child = max(0, remaining_space / len(flexible_children))
+
+        for child in flexible_children:
+            child_constraints = Constraints(
+                max_width=child.constraints.get_effective_width() if child.constraints.has_width_constraint() else None,
+                max_height=space_per_flexible_child
+            )
+            child._constraints = child_constraints
 
     def compute_intrinsic_width(self) -> int:
         children = self._get_positionable_children()
@@ -89,29 +140,3 @@ class ColumnNode(ContainerNode):
             start_y += distribution_gap
 
         return start_y, distribution_gap
-
-    def _resize_children_if_needed(self, children: list[Node]):
-        fixed_children_height = 0
-        flexible_children: list[Node] = []
-        user_gap = self.computed_styles.gap.get()
-
-        for child in children:
-            child_height_style = child.computed_styles.height.get()
-            if child_height_style and child_height_style.mode == SizeValueMode.FILL_AVAILABLE:
-                flexible_children.append(child)
-            else:
-                fixed_children_height += child.size[1]
-        
-        container_height = self.content_bounds.height()
-        total_gap_space = user_gap * (len(children) - 1) if len(children) > 1 else 0
-        remaining_space = container_height - fixed_children_height - total_gap_space
-
-        if not flexible_children:
-            return
-        
-        space_per_flexible_child = max(0, remaining_space / len(flexible_children))
-        for child in flexible_children:
-            child.clear_bounds()
-            child._set_forced_size(height=space_per_flexible_child)
-            child._calculate_bounds()
-        

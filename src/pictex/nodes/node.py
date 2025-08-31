@@ -148,6 +148,7 @@ class Node(Cacheable):
         self.clear()
         self._init_render_dependencies(render_props)
         self._resolve_constraints(Constraints.none())
+        self.clear_bounds()
         self._calculate_bounds()
         self._setup_absolute_position()
 

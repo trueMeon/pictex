@@ -14,9 +14,6 @@ class ContainerNode(Node):
     def _calculate_children_relative_positions(self, children: list[Node], get_child_bounds: Callable[[Node], skia.Rect]) -> list[Tuple[float, float]]:
         raise NotImplemented
     
-    def _resize_children_if_needed(self, children: list[Node]):
-        raise NotImplemented
-
     def _compute_paint_bounds(self) -> skia.Rect:
         paint_bounds = skia.Rect.MakeEmpty()
 
@@ -41,7 +38,6 @@ class ContainerNode(Node):
         super()._setup_absolute_position(x, y)
         x, y = self._absolute_position
         positionable_children = self._get_positionable_children()
-        self._resize_children_if_needed(positionable_children)
         positions = self._calculate_children_relative_positions(positionable_children, lambda node: node.margin_bounds)
         for i, child in enumerate(positionable_children):
             position = positions[i]
@@ -71,11 +67,10 @@ class ContainerNode(Node):
             elif parent_constraints.has_width_constraint():
                 max_width = parent_constraints.get_effective_width()
         else:
-            # No explicit width, inherit parent constraint
             if parent_constraints.has_width_constraint():
                 max_width = parent_constraints.get_effective_width()
         
-        # Determine height constraint (similar logic)
+        # Determine height constraint
         if height_style:
             if height_style.mode == SizeValueMode.ABSOLUTE:
                 max_height = float(height_style.value)
@@ -90,27 +85,26 @@ class ContainerNode(Node):
         return Constraints(max_width=max_width, max_height=max_height)
 
     def _compute_child_constraints(self, own_constraints: Constraints) -> Constraints:
+        return Constraints.none()
+
+    def _resolve_constraints(self, parent_constraints: Constraints) -> None:
         """
-        Compute constraints to pass to children. Default implementation 
-        subtracts padding and border from own constraints.
+        Override to handle stretch alignment and fill-available sizing during constraint resolution.
         """
-        if not own_constraints.has_width_constraint() and not own_constraints.has_height_constraint():
-            return Constraints.none()
-        
-        padding = self.computed_styles.padding.get()
-        border = self.computed_styles.border.get()
-        border_width = border.width if border else 0
-        
-        horizontal_spacing = padding.left + padding.right + (border_width * 2)
-        vertical_spacing = padding.top + padding.bottom + (border_width * 2)
-        
-        child_max_width = None
-        child_max_height = None
-        
-        if own_constraints.has_width_constraint():
-            child_max_width = max(0, own_constraints.get_effective_width() - horizontal_spacing)
-        
-        if own_constraints.has_height_constraint():
-            child_max_height = max(0, own_constraints.get_effective_height() - vertical_spacing)
-        
-        return Constraints(max_width=child_max_width, max_height=child_max_height)
+        super()._resolve_constraints(parent_constraints)
+        self._apply_stretch_constraints()
+        self._apply_fill_available_constraints()
+
+    def _apply_stretch_constraints(self):
+        """
+        Apply stretch-specific constraints to children that have auto sizing.
+        This is overridden by RowNode and ColumnNode with specific stretch logic.
+        """
+        pass
+
+    def _apply_fill_available_constraints(self):
+        """
+        Apply fill-available constraints to children that use fill-available sizing.
+        This is overridden by RowNode and ColumnNode with specific fill-available logic.
+        """
+        pass
