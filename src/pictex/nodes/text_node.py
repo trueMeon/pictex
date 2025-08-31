@@ -116,16 +116,23 @@ class TextNode(Node):
 
     def _get_text_wrap_width(self) -> Optional[float]:
         """
-        Determines if text wrapping should be applied and returns the maximum width.
+        Determines if text wrapping should be applied and returns the maximum width
+        available for the text content (after subtracting padding and border).
         Returns None if text wrapping should not be applied.
         """
-        # Check if text wrapping is enabled via style
         text_wrap_style = self.computed_styles.text_wrap.get()
         if text_wrap_style.value == 'nowrap':
             return None
         
-        # Use the width constraint from the constraint resolution system
         if self.constraints.has_width_constraint():
-            return self.constraints.get_effective_width()
+            total_width = self.constraints.get_effective_width()
+            padding = self.computed_styles.padding.get()
+            border = self.computed_styles.border.get()
+            border_width = border.width if border else 0
+            
+            horizontal_spacing = padding.left + padding.right + (border_width * 2)
+            content_width = total_width - horizontal_spacing
+            
+            return max(0, content_width)
         
         return None
