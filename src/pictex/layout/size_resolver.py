@@ -13,35 +13,19 @@ class SizeResolver:
         self._intrinsic_bounds: skia.Rect | None = None
     
     def resolve_width(self) -> int:
-        # Priority 1: Forced size (backwards compatibility)
-        if self._node._forced_size[0] is not None:
-            forced_width, _ = self._node._forced_size
-            spacing = self._get_horizontal_spacing()
-            return max(0, forced_width - spacing)
-
-        # Priority 2: Constraints (only when explicitly set by stretch/fill-available logic)
         if self._node.constraints.has_width_constraint():
             constraint_width = self._node.constraints.get_effective_width()
             spacing = self._get_horizontal_spacing()
             return max(0, constraint_width - spacing)
 
-        # Priority 3: Style-based sizing (fallback for normal elements)
         return self._resolve_width_from_style()
 
     def resolve_height(self) -> int:
-        # Priority 1: Forced size (backwards compatibility)
-        if self._node._forced_size[1] is not None:
-            _, forced_height = self._node._forced_size
-            spacing = self._get_vertical_spacing()
-            return max(0, forced_height - spacing)
-
-        # Priority 2: Constraints (only when explicitly set by stretch/fill-available logic)
         if self._node.constraints.has_height_constraint():
             constraint_height = self._node.constraints.get_effective_height()
             spacing = self._get_vertical_spacing()
             return max(0, constraint_height - spacing)
 
-        # Priority 3: Style-based sizing (fallback for normal elements)
         return self._resolve_height_from_style()
     
     def _get_horizontal_spacing(self) -> float:

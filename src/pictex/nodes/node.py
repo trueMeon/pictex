@@ -14,7 +14,6 @@ class Node(Cacheable):
         self._raw_style = style
         self._parent: Optional[Node] = None
         self._children: list[Node] = []
-        self._forced_size: Tuple[Optional[int], Optional[int]] = (None, None)
         self._render_props: Optional[RenderProps] = None
         self._absolute_position: Optional[Tuple[float, float]] = None
         self._constraints: Constraints = Constraints.none()
@@ -148,7 +147,7 @@ class Node(Cacheable):
         self.clear()
         self._init_render_dependencies(render_props)
         self._resolve_constraints()
-        self.clear_bounds()
+        self._clear_bounds()
         self._calculate_bounds()
         self._setup_absolute_position()
 
@@ -213,24 +212,18 @@ class Node(Cacheable):
 
         self._render_props = None
         self._absolute_position = None
-        self._forced_size = (None, None)
         self._constraints = Constraints.none()
         self.clear_cache()
 
-    def clear_bounds(self):
+    def _clear_bounds(self):
         """
         Resets only the calculated layout and bounds information.
         This is a more targeted version of clear().
         """
         for child in self._children:
-            child.clear_bounds()
+            child._clear_bounds()
 
-        self._forced_size = (None, None)
         self.clear_cache('bounds')
-
-    def _set_forced_size(self, width: Optional[int] = None, height: Optional[int] = None) -> None:
-        """Allows a parent to impose a size on this node."""
-        self._forced_size = (width, height)
 
     def _compute_styles(self) -> Style:
         parent_computed_styles = self._parent.computed_styles if self._parent else None
