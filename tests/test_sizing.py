@@ -138,7 +138,7 @@ def test_size_fill_available_single_child(file_regression, render_engine):
 
     parent = Row(
         Image(IMAGE_PATH).size(width=100), # Fixed-size sibling takes 100px
-        Text("This text fills the rest").size(width='fill-available').background_color("#27ae60"),
+        Text("This text fills the rest").size(width='fill-available').background_color("#27ae60").text_wrap("nowrap"),
     ).size(
         width=400, height=150
     ).gap(
@@ -162,7 +162,7 @@ def test_size_fill_available_multiple_children(file_regression, render_engine):
         Text("Fixed Top").size(height=50).background_color("#f39c12"),
         Row(Text("Flexible 1")).size(height='fill-available').background_color("#2980b9"),
         Row(Text("Flexible 2")).size(height='fill-available').background_color("#8e44ad"),
-        Text("Fixed Bottom").size(height=30).background_color("#f39c12"),
+        Text("Fixed Bottom").size(height=30).background_color("#f39c12").text_wrap("nowrap"),
     ).size(
         width=300, height=400
     ).gap(

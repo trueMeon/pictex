@@ -22,9 +22,10 @@ class TextNode(Node):
     def text_bounds(self) -> Optional[skia.Rect]:
         return self._compute_text_bounds()
 
-    @cached_property('bounds') # This doesn't depend on the bounds right now, but it could in the future (text wrapping)
+    @cached_property('bounds')
     def shaped_lines(self) -> list[Line]:
-        return self._text_shaper.shape(self._text)
+        max_width = self._get_text_wrap_width()
+        return self._text_shaper.shape(self._text, max_width)
 
     def _init_render_dependencies(self, render_props: RenderProps):
         super()._init_render_dependencies(render_props)
@@ -112,3 +113,34 @@ class TextNode(Node):
 
     def _get_all_bounds(self) -> list[skia.Rect]:
         return super()._get_all_bounds() + [self.text_bounds]
+
+    def _get_text_wrap_width(self) -> Optional[float]:
+        """
+        Determines if text wrapping should be applied and returns the maximum width
+        available for the text content (after subtracting padding and border).
+        Returns None if text wrapping should not be applied.
+        """
+        # Check if text wrapping is explicitly disabled
+        text_wrap_style = self.computed_styles.text_wrap.get()
+        if text_wrap_style.value == 'nowrap':
+            return None
+        
+        # If element has positioning, disable text wrapping
+        # Positioned elements exist outside the normal layout flow where 
+        # text wrapping constraints are defined
+        position_style = self.computed_styles.position.get()
+        if position_style is not None:
+            return None
+        
+        if self.constraints.has_width_constraint():
+            total_width = self.constraints.get_effective_width()
+            padding = self.computed_styles.padding.get()
+            border = self.computed_styles.border.get()
+            border_width = border.width if border else 0
+            
+            horizontal_spacing = padding.left + padding.right + (border_width * 2)
+            content_width = total_width - horizontal_spacing
+            
+            return max(0, content_width)
+        
+        return None

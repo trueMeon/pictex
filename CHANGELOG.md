@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - New `'fill-available'` size mode allows elements to grow and fill the remaining space within a `Row` or `Column`, enabling more complex and fluid layouts.
+- **Text Wrapping**: Added automatic text wrapping support. Text now automatically wraps to multiple lines when placed in containers with fixed widths. A new `.text_wrap()` method controls this behavior with `"normal"` (default, wrapping enabled) and `"nowrap"` (wrapping disabled) values.
 
 ### Fixed
 
