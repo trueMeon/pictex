@@ -3,7 +3,7 @@ from pictex import *
 AVATAR_PATH = "mersenne.jpg"
 DISPLAY_NAME = "Marin Mersenne"
 USERNAME = "@marin.mersenne"
-TWEET_TEXT = "Spent all week calculating 2⁶⁷-1 by hand only to find it's composite.\nMy quill is broken and I'm out of ink."
+TWEET_TEXT = "Spent all week calculating 2⁶⁷-1 by hand only to find it's composite. My quill is broken and I'm out of ink."
 REPLIES = "31"
 REPOSTS = "127"
 LIKES = "1.9K"
