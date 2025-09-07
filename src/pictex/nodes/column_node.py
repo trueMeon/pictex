@@ -10,9 +10,9 @@ class ColumnNode(ContainerNode):
         children = self._get_positionable_children()
         width_style_prop = self.computed_styles.width.get()
         is_auto_width = not width_style_prop or width_style_prop.mode == "auto"
-        width_contraint = width_constraint if is_auto_width and width_constraint is not None else self.content_width
+        width_constraint = width_constraint if is_auto_width else self.content_width
         for child in children:
-            child._set_width_constraint(width_contraint)
+            child._set_width_constraint(width_constraint)
 
     def compute_min_width(self) -> int:
         children = self._get_positionable_children()
