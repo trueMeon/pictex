@@ -95,7 +95,7 @@ def test_size_percent_height(file_regression, render_engine):
         50, 0
     ).background_color("#ecf0f1")
 
-    image = render_func(Canvas(), parent)
+    image = render_func(Canvas().text_wrap("nowrap"), parent)
     check_func(file_regression, image)
 
 
