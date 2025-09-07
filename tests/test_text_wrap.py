@@ -146,3 +146,19 @@ def test_text_wrap_with_styling(file_regression, render_engine):
     canvas = Canvas().font_family(STATIC_FONT_PATH)
     image = render_func(canvas, container)
     check_func(file_regression, image)
+
+def test_two_sibling_texts_using_width_limited_by_ancestor(file_regression, render_engine):
+    render_func, check_func = render_engine
+    ONE_LONG_WORD = "OneLongWord"
+
+    one_long_word = Column(Text(ONE_LONG_WORD).font_weight(700)).border(3, "blue")
+    long_text = Column(Text(LONG_TEXT).font_weight(700)).border(3, "red")
+
+    container = Row(
+        one_long_word,
+        long_text
+    ).padding(20).background_color("white").border_radius(10).size(width=700)
+
+    canvas = Canvas().background_color("#DAE0E6").padding(40)
+    image = render_func(canvas, container)
+    check_func(file_regression, image)
