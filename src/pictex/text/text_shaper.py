@@ -150,13 +150,20 @@ class TextShaper:
                 current_width = potential_width
             else:
                 # Token doesn't fit, start new line
-                wrapped_lines.append(''.join(current_line))
+                wrapped_lines.append(''.join(current_line).strip())
                 current_line = [token]
                 current_width = token_width
 
         if current_line:
-            wrapped_lines.append(''.join(current_line))
+            wrapped_lines.append(''.join(current_line).strip())
 
+        if len(wrapped_lines) == 1:
+            # This is to avoid removing spaces at the begining or at the end of a line
+            # when the line was not actually wrapped.
+            # When the line is wrapped we must remove spaces at the begining and at the end of each line
+            # to obtain an useful behavior (avoid single spaces at the begining of a line, for example)
+            return [text]
+        
         return wrapped_lines if wrapped_lines else ['']
     
     def _measure_word_width(self, word: str) -> float:
