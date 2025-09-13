@@ -35,6 +35,7 @@ class Canvas(Stylable, WithSizeMixin):
             *elements: Union[Element, str],
             crop_mode: CropMode = CropMode.NONE,
             font_smoothing: Union[FontSmoothing, str] = FontSmoothing.SUBPIXEL,
+            scale_factor: float = 1.0,
     ) -> BitmapImage:
         """Renders an image from the given elements using the configured builders.
 
@@ -46,6 +47,8 @@ class Canvas(Stylable, WithSizeMixin):
                 - `NONE`: No cropping, includes all effect boundaries (default).
             font_smoothing: The font smoothing mode. Accepts either `FontSmoothing.SUBPIXEL`
                 or `FontSmoothing.STANDARD`, or their string equivalents (`"subpixel"` or `"standard"`).
+            scale_factor: Scaling factor for rendering. Values > 1.0 will render the image at 
+                a larger size. All dimensions (width, height, fonts, etc.) are scaled proportionally. Default is 1.0.
 
         Returns:
             An `Image` object containing the rendered result.
@@ -55,7 +58,7 @@ class Canvas(Stylable, WithSizeMixin):
         element = Row(*elements)
         element._style = self._style
         root = element._to_node()
-        return renderer.render_as_bitmap(root, crop_mode, font_smoothing)
+        return renderer.render_as_bitmap(root, crop_mode, font_smoothing, scale_factor)
 
     def render_as_svg(self, *elements: Union[Element, str], embed_font: bool = True) -> VectorImage:
         """Renders the given elements as a scalable vector graphic (SVG).
