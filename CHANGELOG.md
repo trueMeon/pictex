@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2025-09-13
+
+### Added
+
+- **Render Tree Access**: Both `BitmapImage` and `VectorImage` now expose a `render_tree` property that provides access to the hierarchical structure of rendered nodes with their bounds information. This allows users to inspect and interact with individual elements after rendering.
+- **NodeType Enum**: New `NodeType` enum with values `TEXT`, `ROW`, `COLUMN`, and `ELEMENT` for type-safe node identification.
+- **RenderNode Class**: New `RenderNode` class that represents nodes in the render tree, featuring:
+  - `bounds`: Bounding box information for each node
+  - `children`: Access to child nodes in the hierarchy  
+  - `node_type`: Type-safe node identification using `NodeType` enum
+  - `visit_children()`: Method to recursively traverse child nodes
+  - `find_nodes_by_type()`: Method to find all nodes of a specific type
+- **Scale Factor Support**: New `scale_factor` parameter in `Canvas.render()` method allows rendering images at larger sizes. All dimensions (width, height, fonts, etc.) are scaled proportionally.
+- **Extended Named Colors**: Added support for many additional named colors including extended CSS color names.
+
 ## [1.2.1] - 2025-09-07
 
 ### Fixed
