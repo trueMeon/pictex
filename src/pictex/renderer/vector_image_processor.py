@@ -1,7 +1,7 @@
 import skia
 import base64
 import re
-from ..models import TypefaceSource, TypefaceLoadingInfo
+from ..models import TypefaceSource, TypefaceLoadingInfo, render_tree
 import warnings
 from ..exceptions import SystemFontCanNotBeEmbeddedInSvgWarning
 from ..nodes import Node, TextNode
@@ -22,7 +22,8 @@ class VectorImageProcessor:
         svg = self._fix_text_attributes(svg, typefaces)
         # svg = self._add_shadows(svg, root.computed_styles)
         svg = self._embed_fonts_in_svg(svg, typefaces, embed_fonts)
-        return VectorImage(svg)
+        tree = render_tree._create_render_tree(root)
+        return VectorImage(svg, tree)
     
     def _get_used_fonts(self, root: Node) -> list[skia.Font]:
         fonts = []

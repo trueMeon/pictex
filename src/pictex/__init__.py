@@ -46,4 +46,6 @@ __all__ = [
     "HorizontalAlignment",
     "VerticalDistribution",
     "VerticalAlignment",
+    "RenderNode",
+    "NodeType",
 ]

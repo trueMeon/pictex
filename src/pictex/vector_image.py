@@ -1,4 +1,6 @@
 from __future__ import annotations
+from typing import Optional
+from .models import RenderNode
 
 class VectorImage:
     """Represents a rendered vector image in SVG format.
@@ -20,9 +22,11 @@ class VectorImage:
 
     Attributes:
         svg (str): The raw SVG content as a string.
+        render_tree (RenderNode): The hierarchical structure of rendered nodes
+            with their bounds information.
     """
 
-    def __init__(self, svg_content: str):
+    def __init__(self, svg_content: str, render_tree: Optional[RenderNode] = None):
         """Initializes the VectorImage.
 
         Note:
@@ -31,13 +35,20 @@ class VectorImage:
 
         Args:
             svg_content: The full SVG content as a string.
+            render_tree: The hierarchical structure of rendered nodes with bounds.
         """
         self._svg_content = svg_content
+        self._render_tree = render_tree
 
     @property
     def svg(self) -> str:
         """Gets the raw SVG content as a string."""
         return self._svg_content
+
+    @property
+    def render_tree(self) -> Optional[RenderNode]:
+        """Gets the hierarchical structure of rendered nodes with bounds."""
+        return self._render_tree
 
     def save(self, output_path: str) -> None:
         """Saves the SVG image to a file.

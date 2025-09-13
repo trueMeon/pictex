@@ -1,5 +1,5 @@
 import skia
-from ..models import CropMode, Box
+from ..models import CropMode, Box, render_tree
 from typing import Optional
 import numpy as np
 from ..bitmap_image import BitmapImage
@@ -25,7 +25,8 @@ class ImageProcessor:
             height=int(ceil(content_rect.height()))
         )
 
-        return BitmapImage(skia_image=image, content_box=content_box)
+        tree = render_tree._create_render_tree(root)
+        return BitmapImage(skia_image=image, content_box=content_box, render_tree=tree)
 
     def _get_trim_rect(self, image: skia.Image) -> Optional[skia.Rect]:
         """

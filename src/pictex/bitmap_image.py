@@ -1,8 +1,8 @@
 from __future__ import annotations
-from typing import Literal
+from typing import Literal, Optional
 import skia
 import numpy as np
-from .models import Box
+from .models import Box, RenderNode
 import os
 
 class BitmapImage:
@@ -36,9 +36,11 @@ class BitmapImage:
         height (int): The total height of the image in pixels.
         skia_image (skia.Image): The underlying raw `skia.Image` object for
             advanced use cases.
+        render_tree (RenderNode): The hierarchical structure of rendered nodes
+            with their bounds information.
     """
 
-    def __init__(self, skia_image: skia.Image, content_box: Box):
+    def __init__(self, skia_image: skia.Image, content_box: Box, render_tree: Optional[RenderNode] = None):
         """Initializes the Image wrapper.
 
         Note:
@@ -48,9 +50,11 @@ class BitmapImage:
         Args:
             skia_image: The underlying `skia.Image` object.
             content_box: The calculated bounding box of the content area.
+            render_tree: The hierarchical structure of rendered nodes with bounds.
         """
         self._skia_image = skia_image
         self._content_box = content_box
+        self._render_tree = render_tree
 
     @property
     def content_box(self) -> Box:
@@ -71,6 +75,11 @@ class BitmapImage:
     def skia_image(self) -> skia.Image:
         """Gets the raw, underlying `skia.Image` object."""
         return self._skia_image
+
+    @property
+    def render_tree(self) -> Optional[RenderNode]:
+        """Gets the hierarchical structure of rendered nodes with bounds."""
+        return self._render_tree
 
     def to_bytes(self) -> bytes:
         """Returns the raw pixel data as a byte string.
