@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.1] - 2025-09-14
+
+### Fixed
+
+- Fixed transparency handling in `BitmapImage.to_pillow()` method. The method now properly unpremultiplies alpha values from Skia's premultiplied format to Pillow's straight alpha format.
+
 ## [1.3.0] - 2025-09-13
 
 ### Added
@@ -13,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **NodeType Enum**: New `NodeType` enum with values `TEXT`, `ROW`, `COLUMN`, and `ELEMENT` for type-safe node identification.
 - **RenderNode Class**: New `RenderNode` class that represents nodes in the render tree, featuring:
   - `bounds`: Bounding box information for each node
-  - `children`: Access to child nodes in the hierarchy  
+  - `children`: Access to child nodes in the hierarchy
   - `node_type`: Type-safe node identification using `NodeType` enum
   - `visit_children()`: Method to recursively traverse child nodes
   - `find_nodes_by_type()`: Method to find all nodes of a specific type
