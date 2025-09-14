@@ -147,7 +147,21 @@ class BitmapImage:
                 "Pillow is not installed. Please install it with 'pip install Pillow'."
             )
 
-        return PillowImage.fromarray(self.to_numpy(), mode='RGBA')
+        rgba_array = self.to_numpy('RGBA')
+
+        # Skia returns premultiplied alpha, but Pillow expects straight alpha
+        # We need to unpremultiply the RGB channels
+        alpha = rgba_array[:, :, 3:4].astype(np.float32)
+        rgb = rgba_array[:, :, :3].astype(np.float32)
+        alpha_nonzero = np.maximum(alpha, 1)
+        rgb_unpremultiplied = np.divide(rgb * 255, alpha_nonzero, out=rgb, where=alpha > 0)
+
+        result = np.concatenate([
+            np.clip(rgb_unpremultiplied, 0, 255).astype(np.uint8),
+            rgba_array[:, :, 3:4]
+        ], axis=2)
+
+        return PillowImage.fromarray(result, mode='RGBA')
 
     def save(self, output_path: str, quality: int = 100) -> None:
         """Saves the image to a file.
