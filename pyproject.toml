@@ -46,6 +46,16 @@ build-backend = "hatchling.build"
 [tool.hatch.build]
 sources = ["src"]
 
+exclude = [
+  "/.github",
+  "/docs",
+  "/examples",
+  "/tests",
+  ".gitignore",
+  "*.yml",
+  "*.yaml",
+]
+
 [project.optional-dependencies]
 test = [
     "pytest",

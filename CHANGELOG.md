@@ -5,7 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [unreleased]
+
+### Changed
+
+- Exclude development files from package distribution (/.github, /docs, /examples, /tests, .gitignore, *.yml, *.yaml)
+
 ## [1.3.3] - 2025-09-27
+
+### Fixed
 
 - Fixed `RuntimeError: Failed to get; Likely no parameter` when using static font file. This error is happening only in some cases (maybe because of the font file, system, or skia version).
 
