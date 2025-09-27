@@ -11,6 +11,7 @@ from ..vector_image import VectorImage
 from ..models import Shadow, Style
 from typing import Optional
 import os
+from .. import utils
 
 class VectorImageProcessor:
     
@@ -150,7 +151,7 @@ class VectorImageProcessor:
         root = ET.fromstring(svg)
         elements = root.findall(".//{http://www.w3.org/2000/svg}text")
         for tf in typefaces:
-            is_variable_font = tf.typeface.getVariationDesignParameters()
+            is_variable_font = utils.is_variable_font(tf.typeface)
             font_family = self._get_svg_family_name(tf.typeface)
             for text_elem in elements:
                 if text_elem.attrib.get("font-family", None) != font_family:

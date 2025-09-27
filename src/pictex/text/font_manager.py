@@ -6,6 +6,7 @@ import warnings
 from ..models import Style, FontStyle, FontSmoothing
 from ..exceptions import FontNotFoundWarning
 from .typeface_loader import TypefaceLoader
+from .. import utils
 
 class FontManager:
 
@@ -48,7 +49,7 @@ class FontManager:
                 "The file might be corrupted or in an unsupported format."
             )
         
-        if typeface.getVariationDesignParameters():
+        if utils.is_variable_font(typeface):
             return self._apply_variations_to_variable_font(typeface)
         
         return typeface
