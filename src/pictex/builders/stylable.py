@@ -4,7 +4,7 @@ from pathlib import Path
 from ..models import *
 
 try:
-    from typing import Self
+    from typing import Self # type: ignore[attr-defined]
 except ImportError:
     from typing_extensions import Self
 

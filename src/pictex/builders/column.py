@@ -4,7 +4,7 @@ from ..models import VerticalDistribution, HorizontalAlignment
 from ..nodes import Node, ColumnNode
 
 try:
-    from typing import Self
+    from typing import Self # type: ignore[attr-defined]
 except ImportError:
     from typing_extensions import Self
 

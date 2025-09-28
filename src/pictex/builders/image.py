@@ -3,7 +3,7 @@ from .with_size_mixin import WithSizeMixin
 from ..nodes import Node, RowNode
 
 try:
-    from typing import Self
+    from typing import Self # type: ignore[attr-defined]
 except ImportError:
     from typing_extensions import Self
 

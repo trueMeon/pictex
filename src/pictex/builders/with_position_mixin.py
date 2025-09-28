@@ -2,7 +2,7 @@ from typing import Union, Tuple
 from ..models import Position, Style, PositionMode
 
 try:
-    from typing import Self
+    from typing import Self # type: ignore[attr-defined]
 except ImportError:
     from typing_extensions import Self
 

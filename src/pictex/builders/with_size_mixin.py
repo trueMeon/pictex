@@ -2,7 +2,7 @@ from typing import Union, Optional, Literal
 from ..models import Style, SizeValue, SizeValueMode
 
 try:
-    from typing import Self
+    from typing import Self # type: ignore[attr-defined]
 except ImportError:
     from typing_extensions import Self
 
