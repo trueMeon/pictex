@@ -12,19 +12,19 @@ class SizeResolver:
         self._node = node
         self._intrinsic_bounds: skia.Rect | None = None
     
-    def resolve_width(self) -> int:
+    def resolve_width(self) -> float:
         forced_width = self._node.forced_size[0]
         if forced_width is not None:
             spacing = self._get_horizontal_spacing()
-            return int(max(0, forced_width - spacing))
+            return max(0, forced_width - spacing)
 
         return self._resolve_width_from_style()
 
-    def resolve_height(self) -> int:
+    def resolve_height(self) -> float:
         forced_height = self._node.forced_size[1]
         if forced_height is not None:
             spacing = self._get_vertical_spacing()
-            return int(max(0, forced_height - spacing))
+            return max(0, forced_height - spacing)
 
         return self._resolve_height_from_style()
     
@@ -97,21 +97,21 @@ class SizeResolver:
         # We just return the intrinsic size as a placeholder, this should be recalculated in the second phase
         return self._get_intrinsic_axis_size(axis)
 
-    def _resolve_width_from_style(self) -> int:
+    def _resolve_width_from_style(self) -> float:
         width = self._node.computed_styles.width.get()
         if not width:
             return self._node.compute_intrinsic_width()
 
         spacing = self._get_horizontal_spacing()
         box_width = self._get_axis_size(width, "width", spacing)
-        return int(max(0, box_width))
+        return max(0, box_width)
 
-    def _resolve_height_from_style(self) -> int:
+    def _resolve_height_from_style(self) -> float:
         height = self._node.computed_styles.height.get()
         if not height:
             return self._node.compute_intrinsic_height()
 
         spacing = self._get_vertical_spacing()
         box_height = self._get_axis_size(height, "height", spacing)
-        return int(max(0, box_height))
+        return max(0, box_height)
 

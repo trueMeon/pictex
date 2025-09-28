@@ -35,11 +35,11 @@ class Node(Cacheable):
         return (self.border_bounds.width(), self.border_bounds.height())
     
     @cached_property(group='bounds')
-    def content_width(self) -> int:
+    def content_width(self) -> float:
         return SizeResolver(self).resolve_width()
 
     @cached_property(group='bounds')
-    def content_height(self) -> int:
+    def content_height(self) -> float:
         return SizeResolver(self).resolve_height()
 
     @property
