@@ -60,6 +60,7 @@ class TextShaper:
         line_width: float = 0
         for run in runs:
             run.blob = skia.TextBlob.MakeFromShapedText(run.text, run.font)
+            # TODO: it's failing with the emoji '👨‍👩‍👧‍👦' in the system font from windows for emojis
             glyph_ids = [gid for run in list(run.blob) for gid in run.fGlyphIndices]
             run.width = sum(run.font.getWidths(glyph_ids))
             line_width += run.width
@@ -72,6 +73,7 @@ class TextShaper:
         current_run_text = ""
 
         for grapheme in regex.findall(r"\X", line_text):
+            print("grapheme:", grapheme)
             if utils.is_grapheme_supported_for_typeface(grapheme, primary_font.getTypeface()):
                 current_run_text += grapheme
                 continue
