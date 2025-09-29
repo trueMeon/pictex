@@ -26,7 +26,7 @@ class TypefaceLoader:
 
     @staticmethod
     def load_for_grapheme(grapheme: str, style: skia.FontStyle) -> Optional[skia.Typeface]:
-        for cp in len(grapheme):
+        for cp in grapheme:
             system_typeface = TypefaceLoader._get_font_manager().matchFamilyStyleCharacter(
                 "",
                 style,
