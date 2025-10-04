@@ -5,12 +5,12 @@ from .paint_source import PaintSource
 from .color import SolidColor
 
 @dataclass
-class LinearGradient(PaintSource):
+class RadialGradient(PaintSource):
     """
-    Represents a linear gradient fill, smoothly transitioning between colors
-    along a straight line.
+    Represents a radial gradient fill, smoothly transitioning between colors
+    from a center point outward in a circular pattern.
 
-    The gradient's direction and color distribution are controlled by its
+    The gradient's center, radius, and color distribution are controlled by its
     parameters.
 
     Attributes:
@@ -19,50 +19,51 @@ class LinearGradient(PaintSource):
         stops (Optional[Sequence[float]]): A sequence of numbers between 0.0
             and 1.0 that specify the position of each color in the `colors`
             sequence. The length of `stops` must match the length of `colors`.
-            If `None`, the colors are distributed evenly along the gradient line.
+            If `None`, the colors are distributed evenly from center to edge.
             For example, for `colors` with 3 colors, `stops=[0.0, 0.5, 1.0]`
-            would place the second color exactly in the middle of the gradient.
-        start_point (tuple[float, float]): A tuple `(x, y)` representing the
-            starting point of the gradient line. Coordinates are relative to the
+            would place the second color exactly halfway between center and edge.
+        center (tuple[float, float]): A tuple `(x, y)` representing the
+            center point of the radial gradient. Coordinates are relative to the
             object's bounding box, where (0.0, 0.0) is the top-left corner and
-            (1.0, 1.0) is the bottom-right corner.
-        end_point (tuple[float, float]): A tuple `(x, y)` representing the
-            ending point of the gradient line. The gradient is drawn along the
-            line connecting `start_point` to `end_point`.
+            (1.0, 1.0) is the bottom-right corner. Defaults to (0.5, 0.5) which
+            is the center of the object.
+        radius (float): The radius of the gradient circle, relative to the
+            object's dimensions. A value of 0.5 means the radius extends halfway
+            across the bounding box. Must be positive. Defaults to 0.5.
 
     Example:
-        # A simple horizontal gradient from red to blue
+        # A simple radial gradient from red (center) to blue (edge)
         ```python
-        horizontal_gradient = LinearGradient(
+        radial_gradient = RadialGradient(
             colors=['#FF0000', 'blue']
         )
         ```
 
-        # A vertical gradient from top (yellow) to bottom (orange)
+        # A radial gradient centered at top-left corner
         ```python
-        vertical_gradient = LinearGradient(
+        corner_gradient = RadialGradient(
             colors=['yellow', 'orange'],
-            start_point=(0.5, 0.0),
-            end_point=(0.5, 1.0)
+            center=(0.0, 0.0),
+            radius=0.7
         )
         ```
 
-        # A diagonal gradient with a custom color stop
+        # A radial gradient with custom color stops
         ```python
-        diagonal_gradient = LinearGradient(
+        multi_stop_gradient = RadialGradient(
             colors=[
                 'magenta',
                 'cyan',
                 'yellow'
             ],
-            stops=[0.0, 0.2, 1.0] # 'cyan' is positioned 20% along the gradient
+            stops=[0.0, 0.3, 1.0]  # 'cyan' positioned 30% from center
         )
         ```
     """
     colors: Sequence[SolidColor]
     stops: Optional[Sequence[float]] = None
-    start_point: tuple[float, float] = (0.0, 0.5)
-    end_point: tuple[float, float] = (1.0, 0.5)
+    center: tuple[float, float] = (0.5, 0.5)
+    radius: float = 0.5
 
     def __post_init__(self):
         self.colors = [
@@ -75,15 +76,13 @@ class LinearGradient(PaintSource):
         if len(self.colors) < 2:
             raise ValueError("At least 2 colors are required for a gradient.")
 
-        if len(self.start_point) != 2:
-            raise ValueError("start_point must be a tuple of 2 values (x, y).")
-        if not all(0.0 <= v <= 1.0 for v in self.start_point):
-            raise ValueError("start_point values must be between 0.0 and 1.0.")
+        if len(self.center) != 2:
+            raise ValueError("center must be a tuple of 2 values (x, y).")
+        if not all(0.0 <= v <= 1.0 for v in self.center):
+            raise ValueError("center values must be between 0.0 and 1.0.")
 
-        if len(self.end_point) != 2:
-            raise ValueError("end_point must be a tuple of 2 values (x, y).")
-        if not all(0.0 <= v <= 1.0 for v in self.end_point):
-            raise ValueError("end_point values must be between 0.0 and 1.0.")
+        if self.radius <= 0 or self.radius > 1.0:
+            raise ValueError("Radius must be between 0.0 and 1.0.")
 
         if self.stops is not None:
             if len(self.stops) != len(self.colors):
@@ -99,24 +98,23 @@ class LinearGradient(PaintSource):
                     raise ValueError(f"Values in 'stops' must be strictly increasing. Found {stops_list[i]} >= {stops_list[i + 1]} at positions {i} and {i + 1}.")
 
     def apply_to_paint(self, paint: skia.Paint, bounds: skia.Rect) -> None:
-        """Creates a linear gradient shader and applies it to the paint."""
+        """Creates a radial gradient shader and applies it to the paint."""
         if not self.colors:
             return
 
         skia_colors = [skia.Color(c.r, c.g, c.b, c.a) for c in self.colors]
-        
-        p1 = (
-            bounds.left() + self.start_point[0] * bounds.width(),
-            bounds.top() + self.start_point[1] * bounds.height()
-        )
-        p2 = (
-            bounds.left() + self.end_point[0] * bounds.width(),
-            bounds.top() + self.end_point[1] * bounds.height()
+
+        center_point = skia.Point(
+            bounds.left() + self.center[0] * bounds.width(),
+            bounds.top() + self.center[1] * bounds.height()
         )
 
-        shader = skia.GradientShader.MakeLinear(
-            points=[p1, p2],
+        absolute_radius = self.radius * (bounds.width() + bounds.height()) / 2.0
+
+        shader = skia.GradientShader.MakeRadial(
+            center=center_point,
+            radius=absolute_radius,
             colors=skia_colors,
-            positions=self.stops
+            positions=self.stops if self.stops else []
         )
         paint.setShader(shader)

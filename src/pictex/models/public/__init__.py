@@ -4,6 +4,9 @@ from .typography import FontStyle, FontWeight, FontSmoothing, TextAlign, TextWra
 from .paint_source import PaintSource
 from .color import SolidColor, NamedColor
 from .linear_gradient import LinearGradient
+from .radial_gradient import RadialGradient
+from .sweep_gradient import SweepGradient
+from .two_point_conical_gradient import TwoPointConicalGradient
 from .decoration import TextDecoration
 from .crop import CropMode
 from .box import Box
@@ -22,6 +25,9 @@ __all__ = [
     "PaintSource",
     "SolidColor", "NamedColor",
     "LinearGradient",
+    "RadialGradient",
+    "SweepGradient",
+    "TwoPointConicalGradient",
     "TextDecoration",
     "CropMode",
     "Box",
