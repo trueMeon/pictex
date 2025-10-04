@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [unreleased]
 
+### Added
+- **Gradient Support**: Added support for advanced gradient fills
+  - `RadialGradient`: Circular gradients from center point outward
+  - `SweepGradient`: Conical gradients sweeping around a center point
+  - `TwoPointConicalGradient`: Gradients transitioning between two circles with different radii
+
 ### Fixed
 - Avoid font family name normalization on system fonts used in SVGs
 
