@@ -1,24 +1,24 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="869" height="84"><defs><style type="text/css">@font-face {
+<svg xmlns="http://www.w3.org/2000/svg" width="865" height="102"><defs><style type="text/css">@font-face {
     font-family: 'pictex-Lato';
     src: url('Lato-BoldItalic.ttf');
 }@font-face {
     font-family: 'pictex-NotoSansJP';
     src: url('NotoSansJP-Regular.ttf');
 }</style></defs>
-	<rect fill-opacity="0" width="869" height="84" />
-	<text font-size="70" font-style="italic" font-family="pictex-Lato" x="0, 40, 76, 90, 111, " y="69.089996, ">
+	<rect fill-opacity="0" width="865" height="102" />
+	<text font-size="70" font-style="italic" font-family="pictex-Lato" x="0, 40.425095, 76.545181, 90.055222, 111.05527, " y="69.089996, ">
 			PF | 
 	</text>
-	<text font-size="70" font-family="pictex-NotoSansJP" x="125, 195, " y="81.199997, ">
+	<text font-size="70" font-family="pictex-NotoSansJP" x="124.56531, 194.56525, " y="81.199997, ">
 			世界
 	</text>
-	<text font-size="70" font-style="italic" font-family="pictex-Lato" x="279, 300, 314, 359, 393, 429, 447, 485, 501, 515, 555, 591, 605, 626, " y="69.089996, ">
+	<text font-size="70" font-style="italic" font-family="pictex-Lato" x="278.07523, 299.07526, 312.58533, 357.49042, 391.44049, 427.66559, 445.69061, 483.38574, 499.13577, 512.64581, 553.07092, 589.19104, 602.70105, 623.70111, " y="69.089996, ">
 			| Again, PF | 
 	</text>
-	<text font-size="70" font-family="Noto Color Emoji" x="640, " y="64.862389, ">
+	<text font-size="70" font-family="Noto Color Emoji" x="637.21112, " y="64.862389, ">
 			✨
 	</text>
-	<text font-size="70" font-style="italic" font-family="pictex-Lato" x="741.34375, 762.34375, 776.34375, 816.34375, 846.04376, " y="69.089996, ">
+	<text font-size="70" font-style="italic" font-family="pictex-Lato" x="738.06494, 759.06494, 772.57501, 813.00012, 842.82019, " y="69.089996, ">
 			| PF.
 	</text>
 </svg>

@@ -4,32 +4,32 @@
 }</style></defs>
 	<rect fill-opacity="0" width="150" height="165" />
 	<rect fill="#DDD" width="150" height="165" />
-	<rect fill="#F5F5DC" transform="translate(10 10)" width="128" height="145" />
-	<text transform="translate(10 10)" font-size="14" font-style="italic" font-family="pictex-Lato" x="8, 16, 24, 28, 34, 37, 41, 47, 50, 57, 60, 66.768997, 73.768997, 78.768997, 85.768997, 88.768997, 92.768997, 99.768997, 107.769, " y="21.818001, ">
+	<rect fill="#F5F5DC" transform="translate(10 10)" width="127" height="145" />
+	<text transform="translate(10 10)" font-size="14" font-style="italic" font-family="pictex-Lato" x="8, 15.671967, 23.266937, 26.871918, 32.366898, 35.068893, 38.673874, 44.168854, 46.87085, 54.115814, 56.81781, 63.544785, 70.166763, 75.255737, 82.213715, 84.91571, 88.408691, 95.54866, 103.08763, " y="21.818001, ">
 			This is a very long
 	</text>
-	<text transform="translate(10 10)" font-size="14" font-style="italic" font-family="pictex-Lato" x="8, 14, 21, 29, 34, 41, 49, 55, 62, 65, 70, 78, 85, 90, 93, 103, 107, 111, " y="35.818001, ">
+	<text transform="translate(10 10)" font-size="14" font-style="italic" font-family="pictex-Lato" x="8, 13.49498, 20.116959, 27.65593, 32.618912, 39.240891, 46.779861, 52.876831, 59.49881, 62.200806, 67.163788, 74.758759, 82.003723, 86.966705, 89.668701, 99.937653, 103.54263, 107.03561, " y="35.818001, ">
 			sentence that will
 	</text>
-	<text transform="translate(10 10)" font-size="14" font-style="italic" font-family="pictex-Lato" x="8, 16, 23, 34, 41, 49, 55, 60, 64.720001, 71.720001, 76.720001, 83.720001, 86.720001, 91.720001, 98.328003, 105.328, " y="49.818001, ">
+	<text transform="translate(10 10)" font-size="14" font-style="italic" font-family="pictex-Lato" x="8, 15.545975, 22.167953, 33.234909, 40.374878, 47.913849, 53.408829, 58.371811, 63.180786, 70.425751, 75.388733, 82.010712, 84.712708, 89.67569, 95.90567, 102.94765, " y="49.818001, ">
 			demonstrate text
 	</text>
-	<text transform="translate(10 10)" font-size="14" font-style="italic" font-family="pictex-Lato" x="8, 18, 22.720001, 29.720001, 36.720001, 43.720001, 47.720001, 55.720001, 62.720001, 65.720001, 73.720001, 80.720001, 88.720001, 95.720001, 102.72, 106.72, 113.72, " y="63.818001, ">
+	<text transform="translate(10 10)" font-size="14" font-style="italic" font-family="pictex-Lato" x="8, 18.268951, 23.077927, 30.322891, 37.742859, 45.162827, 48.767807, 56.306778, 63.096756, 65.798752, 73.330719, 79.952698, 87.547668, 94.792633, 101.75061, 105.35559, 112.49556, " y="63.818001, ">
 			wrapping behavior
 	</text>
-	<text transform="translate(10 10)" font-size="14" font-style="italic" font-family="pictex-Lato" x="8, 18, 26, 33, 41, 44, 51, 55, 62, 68, 75, " y="77.818001, ">
-			when placed
+	<text transform="translate(10 10)" font-size="14" font-style="italic" font-family="pictex-Lato" x="8, 18.268951, 25.863922, 32.485901, 40.024872, 42.726868, 50.146835, 53.639816, 60.884781, 66.98175, 73.603729, 81.149704, 83.8517, 87.45668, 94.995651, 100.49063, 104.09561, 111.64159, " y="77.818001, ">
+			when placed inside
 	</text>
-	<text transform="translate(10 10)" font-size="14" font-style="italic" font-family="pictex-Lato" x="8, 12, 20, 26, 30, 38, 45, 48, 54, 61, 69, 74, 81, 85, 93, 100, 105, " y="91.818001, ">
-			inside containers
+	<text transform="translate(10 10)" font-size="14" font-style="italic" font-family="pictex-Lato" x="8, 14.09697, 21.236938, 28.775909, 33.738892, 40.983856, 44.588837, 52.127808, 58.749786, 63.83876, 69.33374, 72.035736, 82.304688, 85.909668, 90.87265, " y="91.818001, ">
+			containers with
 	</text>
-	<text transform="translate(10 10)" font-size="14" font-style="italic" font-family="pictex-Lato" x="8, 18, 22, 27, 35, 38, 44.768997, 51.768997, 56.768997, 60.768997, 67.768997, 75.768997, 81.768997, 84.768997, 94.768997, 98.768997, 106.769, 111.769, " y="105.818, ">
-			with various width
+	<text transform="translate(10 10)" font-size="14" font-style="italic" font-family="pictex-Lato" x="8, 14.726974, 21.971939, 27.060913, 30.665894, 37.805862, 45.330826, 50.825806, 53.527802, 63.796753, 67.401733, 74.947708, 79.91069, " y="105.818, ">
+			various width
 	</text>
-	<text transform="translate(10 10)" font-size="14" font-style="italic" font-family="pictex-Lato" x="8, 14, 21, 29, 35, 40, 44.720001, 51.720001, 55.720001, 63.720001, 68.720001, 74.720001, 77.720001, 84.720001, 92.720001, " y="119.818, ">
+	<text transform="translate(10 10)" font-size="14" font-style="italic" font-family="pictex-Lato" x="8, 14.09697, 21.236938, 28.775909, 34.270889, 39.233871, 44.042847, 51.287811, 54.892792, 62.431763, 67.394745, 72.889725, 75.591721, 82.836685, 90.375656, " y="119.818, ">
 			constraints and
 	</text>
-	<text transform="translate(10 10)" font-size="14" font-style="italic" font-family="pictex-Lato" x="8, 14, 21, 26, 31, 35, 43, 50, 56, " y="133.81799, ">
+	<text transform="translate(10 10)" font-size="14" font-style="italic" font-family="pictex-Lato" x="8, 13.49498, 20.116959, 25.079941, 30.042923, 33.647903, 41.186874, 47.976852, 53.471832, " y="133.81799, ">
 			settings.
 	</text>
 </svg>

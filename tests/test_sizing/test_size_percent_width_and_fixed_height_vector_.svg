@@ -2,7 +2,7 @@
 	<rect fill-opacity="0" width="400" height="200" />
 	<rect fill="#ECF0F1" width="400" height="200" />
 	<rect fill="#9B59B6" transform="translate(20 20)" width="180" height="50" />
-	<text transform="translate(20 20)" font-size="50" font-family="DejaVu Sans" x="0, 32, 64, 112, 128, 175.90137, 189.90137, 221.90137, 241.90137, " y="46.411133, ">
+	<text transform="translate(20 20)" font-size="50" font-family="DejaVu Sans" x="0, 31.811523, 63.623047, 111.13281, 127.02637, 175.36621, 189.25781, 220.99609, 240.60059, " y="46.411133, ">
 			50% Width
 	</text>
 </svg>
