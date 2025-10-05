@@ -15,17 +15,17 @@ class Renderer:
         root.prepare_tree_for_rendering(RenderProps(False, crop_mode, font_smoothing))
 
         canvas_bounds = root.paint_bounds
-        
-        # Calculate actual rendering dimensions based on scale factor
         render_width = int(canvas_bounds.width() * scale_factor)
         render_height = int(canvas_bounds.height() * scale_factor)
         
-        image_info = skia.ImageInfo.MakeN32Premul(render_width, render_height)
-        surface = skia.Surface(image_info)
+        # We're using by default:
+        # - kUnknown_PixelGeometry as pixel geometry
+        # - kPremul_AlphaType alpha type
+        # This is the valid approach for our case
+        surface = skia.Surface.MakeRasterN32Premul(render_width, render_height)
         canvas = surface.getCanvas()
         canvas.clear(skia.ColorTRANSPARENT)
         
-        # Scale the canvas by the scale factor
         canvas.scale(scale_factor, scale_factor)
         canvas.translate(-canvas_bounds.left(), -canvas_bounds.top())
 
