@@ -12,12 +12,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `RadialGradient`: Circular gradients from center point outward
   - `SweepGradient`: Conical gradients sweeping around a center point
   - `TwoPointConicalGradient`: Gradients transitioning between two circles with different radii
+- **Font Rendering Enhancements**: Enabled linear metrics, auto hinting, and slight hinting to improve text quality and consistency across platforms
 
 ### Changed
 - **SVG Font References**: When using `embed_font=False` in `render_as_svg()`, font file references now use only the filename (e.g., `'font.ttf'`) instead of absolute paths. This improves portability and assumes fonts are placed in the same directory as the SVG file.
 
 ### Fixed
-- Avoid font family name normalization on system fonts used in SVGs
+- Avoid font family name normalization on system fonts used in SVGs.
+- Fixed fallback font behavior: fallback fonts are now used when the primary font is not found, rather than falling back to default system font.
+- Fixed text line height calculation to account for all fonts used in each line, not just the primary font. This ensures correct vertical spacing when fallback fonts are used.
 
 ## [1.4.0] - 2025-09-29
 
