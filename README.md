@@ -123,6 +123,13 @@ For a complete guide on all features, from layout and the box model to advanced 
 
 Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/francozanardi/pictex/issues).
 
+## Running tests locally (matching CI environment)
+
+```bash
+docker build -f Dockerfile.test -t pictex-test .
+docker run --rm -v "$(pwd)/tests:/app/tests" pictex-test pytest
+```
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](https://github.com/francozanardi/pictex/LICENSE) file for details.
