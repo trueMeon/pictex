@@ -45,8 +45,8 @@ class Canvas(Stylable, WithSizeMixin):
                 - `SMART`: Tightly crops to only visible pixels.
                 - `CONTENT_BOX`: Crops to the text + padding area.
                 - `NONE`: No cropping, includes all effect boundaries (default).
-            font_smoothing: The font smoothing mode. Accepts either `FontSmoothing.SUBPIXEL`
-                or `FontSmoothing.STANDARD`, or their string equivalents (`"subpixel"` or `"standard"`).
+            font_smoothing: The font smoothing strategy. Accepts either `FontSmoothing.SUBPIXEL` (default)
+                or `FontSmoothing.STANDARD`.
             scale_factor: Scaling factor for rendering. Values > 1.0 will render the image at 
                 a larger size. All dimensions (width, height, fonts, etc.) are scaled proportionally. Default is 1.0.
 

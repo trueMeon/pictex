@@ -39,6 +39,9 @@ class FontManager:
     
     def _create_font(self, typeface: skia.Typeface) -> skia.Font:
         font = skia.Font(typeface, self._style.font_size.get())
+        font.setLinearMetrics(True)
+        font.setForceAutoHinting(True)
+        font.setHinting(skia.FontHinting.kSlight)
         if self._font_smoothing == FontSmoothing.SUBPIXEL:
             font.setEdging(skia.Font.Edging.kSubpixelAntiAlias)
             font.setSubpixel(True)
