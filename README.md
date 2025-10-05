@@ -127,7 +127,7 @@ Contributions, issues, and feature requests are welcome! Feel free to check the 
 
 ```bash
 docker build -f Dockerfile.test -t pictex-test .
-docker run --rm -v "$(pwd)/tests:/app/tests" pictex-test pytest
+docker run --rm -v "$(pwd):/app" pictex-test pytest
 ```
 
 ## License
