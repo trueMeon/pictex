@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Avoid font family name normalization on system fonts used in SVGs.
 - Fixed fallback font behavior: fallback fonts are now used when the primary font is not found, rather than falling back to default system font.
 - Fixed text line height calculation to account for all fonts used in each line, not just the primary font. This ensures correct vertical spacing when fallback fonts are used.
+- Fixed bug when no system font is found for specific grapheme during falling back process
 
 ## [1.4.0] - 2025-09-29
 
