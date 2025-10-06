@@ -53,6 +53,7 @@ exclude = [
   "/examples",
   "/tests",
   ".gitignore",
+  "Dockerfile.test",
   "*.yml",
   "*.yaml",
 ]
