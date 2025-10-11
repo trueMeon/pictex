@@ -9,7 +9,7 @@ class TypefaceLoader:
 
     @staticmethod
     def load_default() -> skia.Typeface:
-        return TypefaceLoader._save(skia.Typeface.MakeDefault(), TypefaceSource.SYSTEM)
+        return TypefaceLoader._save(skia.Typeface(""), TypefaceSource.SYSTEM)
 
     @staticmethod
     def load_from_file(filepath: str) -> Optional[skia.Typeface]:
