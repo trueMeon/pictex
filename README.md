@@ -24,7 +24,19 @@ A powerful Python library for creating complex visual compositions and beautiful
 
 ## Installation
 
+It is highly recommended to install PicTex in a virtual environment to avoid conflicts with system-wide packages and potential permission issues on certain operating systems like Windows.
+
 ```bash
+# 1. Create and activate a virtual environment
+python -m venv .venv
+
+# On Windows:
+.\.venv\Scripts\activate
+
+# On macOS/Linux:
+# source .venv/bin/activate
+
+# 2. Install PicTex into the active environment
 pip install pictex
 ```
 
@@ -118,6 +130,37 @@ For a complete guide on all features, from layout and the box model to advanced 
 -   [**Styling Guide: The Box Model**](https://pictex.readthedocs.io/en/latest/box_model/)
 -   [**Styling Guide: Colors & Gradients**](https://pictex.readthedocs.io/en/latest/colors/)
 -   [**Styling Guide: Text & Fonts**](https://pictex.readthedocs.io/en/latest/text/)
+
+## Troubleshooting
+
+### Text rendering issues on Windows (missing ligatures, incorrect text shaping)
+
+**Symptom:** You may notice that advanced typography features, such as font ligatures or complex scripts, do not render correctly on Windows.
+
+**Cause:** This is typically caused by an incomplete installation of the `skia-python` dependency, where a crucial data file (`icudtl.dat`) required for advanced text shaping is missing. This often happens when `pip` installs the package in a user-level directory without administrator privileges.
+
+**Solutions:**
+
+1.  **(Recommended) Reinstall in a Virtual Environment:** This is the safest and most reliable method to ensure a correct installation. A virtual environment does not require administrator rights and provides a clean slate.
+
+    ```bash
+    # If already installed, uninstall first
+    pip uninstall pictex skia-python
+
+    # Create and activate a new virtual environment (see installation section)
+    python -m venv .venv
+    .\.venv\Scripts\activate
+
+    # Install PicTex again
+    pip install pictex
+    ```
+
+2.  **Reinstall with Administrator Privileges:** If you cannot use a virtual environment, running the installation from a terminal with administrator rights will allow `pip` to install the package correctly.
+
+    ```bash
+    # Open PowerShell or Command Prompt as an Administrator
+    pip install --force-reinstall pictex
+    ```
 
 ## Contributing
 
