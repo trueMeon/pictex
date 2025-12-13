@@ -17,12 +17,17 @@ class Renderer:
         canvas_bounds = root.paint_bounds
         render_width = int(canvas_bounds.width() * scale_factor)
         render_height = int(canvas_bounds.height() * scale_factor)
+        if render_width <= 0 or render_height <= 0:
+            raise Exception(f"Invalid render dimensions: {render_width}x{render_height}. Use size() to set a valid size, or include at least one node with content.")
         
         # We're using by default:
         # - kUnknown_PixelGeometry as pixel geometry
         # - kPremul_AlphaType alpha type
         # This is the valid approach for our case
         surface = skia.Surface.MakeRasterN32Premul(render_width, render_height)
+        if surface is None:
+            raise Exception("Failed to create surface")
+        
         canvas = surface.getCanvas()
         canvas.clear(skia.ColorTRANSPARENT)
         
