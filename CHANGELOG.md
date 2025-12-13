@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Avoid usage of deprecated method: `skia.Typeface.MakeDefault()`.
+- Added handled exception when unexpected canvas size is received or surface couldn't be created.
 
 ## [1.5.0] - 2025-10-05
 
