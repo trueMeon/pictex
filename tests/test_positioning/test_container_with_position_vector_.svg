@@ -1,6 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><defs><style type="text/css">@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}</style></defs>
 	<rect fill-opacity="0" width="100" height="100" />
-	<text font-size="50" font-family="DejaVu Sans" x="0, 19.604492, 50.366211, 76.416016, " y="46.411133, ">
+	<text font-size="50" font-family="pictex-InterVariable" x="0, 15.869141, 45.019531, 71.411133, " y="48.4375, ">
 			test
 	</text>
 </svg>

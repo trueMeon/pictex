@@ -1,8 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300">
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><defs><style type="text/css">@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}</style></defs>
 	<rect fill-opacity="0" width="400" height="300" />
 	<rect fill="#ECF0F1" width="400" height="300" />
-	<rect fill="#E67E22" transform="translate(125 200)" width="346" height="59" />
-	<text transform="translate(125 200)" font-size="50" font-family="DejaVu Sans" x="0, 31.811523, 63.623047, 111.13281, 127.02637, 156.61621, 172.50977, 188.40332, 220.21484, 252.02637, 299.53613, 315.42969, " y="46.411133, ">
+	<rect fill="#E67E22" transform="translate(125 200)" width="329" height="61" />
+	<text transform="translate(125 200)" font-size="50" font-family="pictex-InterVariable" x="0, 30.493164, 60.15625, 109.25293, 123.31543, 150.61035, 165.01465, 179.07715, 206.88477, 236.54785, 285.64453, 299.70703, " y="48.4375, ">
 			25% x, 75% y
 	</text>
 </svg>

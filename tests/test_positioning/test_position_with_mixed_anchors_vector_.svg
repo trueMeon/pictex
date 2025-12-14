@@ -1,8 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="500" height="200">
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="200"><defs><style type="text/css">@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}</style></defs>
 	<rect fill-opacity="0" width="500" height="200" />
 	<rect fill="#ECF0F1" width="500" height="200" />
-	<rect fill="#34495E" transform="translate(250 20)" width="613" height="79" />
-	<text fill="white" transform="translate(250 20)" font-size="50" font-family="DejaVu Sans" x="10, 44.912109, 75.673828, 107.36328, 126.96777, 157.72949, 177.1875, 207.94922, 239.6875, 255.58105, 286.17188, 317.86133, 333.75488, 365.56641, 397.37793, 444.8877, 460.78125, 476.6748, 508.48633, 540.29785, 572.03613, " y="56.411133, ">
+	<rect fill="#34495E" transform="translate(250 20)" width="586" height="81" />
+	<text fill="white" transform="translate(250 20)" font-size="50" font-family="pictex-InterVariable" x="10, 46.523438, 75.673828, 105.21484, 121.08398, 150.23438, 168.22754, 197.37793, 227.99316, 242.05566, 272.03613, 301.57715, 315.63965, 345.30273, 376.8457, 425.94238, 440.34668, 454.40918, 484.90234, 516.44531, 545.9375, " y="58.4375, ">
 			Centered on 50%, 20px
 	</text>
 </svg>

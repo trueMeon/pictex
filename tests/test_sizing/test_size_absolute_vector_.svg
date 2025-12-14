@@ -1,7 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="400" height="150">
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="150"><defs><style type="text/css">@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}</style></defs>
 	<rect fill-opacity="0" width="400" height="150" />
 	<rect fill="#3498DB" width="400" height="150" />
-	<text font-size="50" font-family="DejaVu Sans" x="0, 25.12207, 39.013672, 67.06543, 97.827148, 129.56543, 145.45898, 177.19727, 191.08887, 217.33398, " y="46.411133, ">
+	<text font-size="50" font-family="pictex-InterVariable" x="0, 29.516602, 41.625977, 67.797852, 96.948242, 127.56348, 141.62598, 173.70605, 185.81543, 212.69531, " y="48.4375, ">
 			Fixed Size
 	</text>
 </svg>
