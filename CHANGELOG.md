@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [unreleased]
 
+### Added
+- **Bundled Default Font**: Inter Variable is now bundled with the package and used as the default font. This prevents issues in environments like Google Colab where system fonts are unavailable.
+- **Automatic Font Copying for SVG**: When using `embed_font=False`, font files are now automatically copied to a `fonts/` subdirectory relative to the SVG output path, ensuring SVGs remain portable.
+
+### Changed
+- **SVG Font Handling**: Font references in SVG now use relative paths to a `fonts/` subdirectory (e.g., `url('fonts/InterVariable.ttf')`). The `VectorImage.save()` method accepts optional `copy_fonts` and `fonts_subdir` parameters to customize this behavior.
+
 ### Fixed
 - Avoid usage of deprecated method: `skia.Typeface.MakeDefault()`.
 - Added handled exception when unexpected canvas size is received or surface couldn't be created.

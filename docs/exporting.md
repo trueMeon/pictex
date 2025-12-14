@@ -98,15 +98,23 @@ vector_image.save("portable_text.svg")
 ```
 
 #### `embed_font=False`
--   **What it does:** The SVG will still contain a `@font-face` rule, but instead of embedding the font data, it will reference the font file using only its filename (e.g., `src: url('font.ttf')`).
--   **Result:** The SVG file itself is very small. However, for it to render correctly, the font file **must be distributed alongside the SVG in the same directory**. This is useful for web projects where you manage fonts and SVGs as separate assets.
--   **Trade-off:** The SVG is no longer self-contained.
+-   **What it does:** The SVG will contain a `@font-face` rule referencing the font file. **PicTex automatically copies** all used font files to a `fonts/` subdirectory relative to the SVG output path and updates the references accordingly.
+-   **Result:** The SVG file itself is very small. The font files are distributed alongside the SVG in the `fonts/` subdirectory, making the output portable as a package.
+-   **Customization:** You can customize the subdirectory name using the `fonts_subdir` parameter, or disable automatic copying entirely with `copy_fonts=False`.
 
 ```python
-# This creates a lightweight SVG that depends on an external font file
+# This creates a lightweight SVG with automatic font copying
 vector_image = canvas.render_as_svg("Linked Font", embed_font=False)
-vector_image.save("linked_text.svg")
-# You must also provide the font file for "linked_text.svg" to work correctly.
+vector_image.save("output/linked_text.svg")
+# Font files are automatically copied to output/fonts/
+
+# Customize the fonts subdirectory
+vector_image.save("output/linked_text.svg", fonts_subdir="my-fonts")
+# Font files are copied to output/my-fonts/
+
+# Disable automatic copying
+vector_image.save("output/linked_text.svg", copy_fonts=False)
+# No fonts are copied; SVG will only work if fonts exist in the same directory
 ```
 
 ### Scenario 2: Using a System Font (e.g., `.font_family("Arial")`)
@@ -121,5 +129,5 @@ This applies when you specify a font by name or when `PicTex` uses a system font
 
 | Font Source          | `embed_font=True` (Default)                                   | `embed_font=False`                                         |
 | -------------------- | ------------------------------------------------------------- | ---------------------------------------------------------- |
-| **Font from File**   | **Fully Portable SVG.** Font is embedded (Base64).            | **Linked SVG.** Relies on external font file (filename only, same directory). |
+| **Font from File**   | **Fully Portable SVG.** Font is embedded (Base64).            | **Portable Package.** Fonts are automatically copied to `fonts/` subdirectory with SVG. |
 | **System Font**      | **System-Dependent SVG.** Font is referenced by name. (Warning issued) | **System-Dependent SVG.** Font is referenced by name.      |

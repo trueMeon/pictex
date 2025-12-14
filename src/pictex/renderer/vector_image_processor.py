@@ -25,7 +25,12 @@ class VectorImageProcessor:
         # svg = self._add_shadows(svg, root.computed_styles)
         svg = self._embed_fonts_in_svg(svg, typefaces, embed_fonts)
         tree = utils.create_render_tree(root)
-        return VectorImage(svg, tree)
+        
+        font_files = []
+        if not embed_fonts:
+            font_files = [tf.filepath for tf in typefaces if tf.filepath]
+        
+        return VectorImage(svg, tree, font_files=font_files)
     
     def _get_used_fonts(self, root: Node) -> list[skia.Font]:
         fonts = []

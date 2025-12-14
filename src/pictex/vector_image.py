@@ -1,6 +1,8 @@
 from __future__ import annotations
 from typing import Optional
 from .models import RenderNode
+import os
+import shutil
 
 class VectorImage:
     """Represents a rendered vector image in SVG format.
@@ -26,7 +28,12 @@ class VectorImage:
             with their bounds information.
     """
 
-    def __init__(self, svg_content: str, render_tree: Optional[RenderNode] = None):
+    def __init__(
+        self, 
+        svg_content: str, 
+        render_tree: Optional[RenderNode] = None,
+        font_files: Optional[list[str]] = None
+    ):
         """Initializes the VectorImage.
 
         Note:
@@ -36,9 +43,12 @@ class VectorImage:
         Args:
             svg_content: The full SVG content as a string.
             render_tree: The hierarchical structure of rendered nodes with bounds.
+            font_files: List of absolute paths to font files used in the SVG.
+                       Only populated when embed_fonts=False.
         """
         self._svg_content = svg_content
         self._render_tree = render_tree
+        self._font_files = font_files or []
 
     @property
     def svg(self) -> str:
@@ -50,14 +60,27 @@ class VectorImage:
         """Gets the hierarchical structure of rendered nodes with bounds."""
         return self._render_tree
 
-    def save(self, output_path: str) -> None:
+    def save(
+        self, 
+        output_path: str,
+        copy_fonts: bool = True,
+        fonts_subdir: str = "fonts"
+    ) -> None:
         """Saves the SVG image to a file.
+
+        When the SVG was rendered with embed_fonts=False and copy_fonts=True,
+        this method will automatically copy all used font files to a subdirectory
+        relative to the SVG output path and update font references accordingly.
 
         The file is saved with UTF-8 encoding.
 
         Args:
             output_path: The path where the output file will be saved
                 (e.g., 'image.svg').
+            copy_fonts: If True (default), copies font files to fonts_subdir
+                       and updates references. Set to False to skip copying.
+            fonts_subdir: Name of the subdirectory for fonts (default: "fonts").
+                         Only used if copy_fonts=True.
 
         Raises:
             IOError: If there is an error writing the file to disk.
@@ -66,8 +89,15 @@ class VectorImage:
         if not output_path.lower().endswith('.svg'):
             output_path += '.svg'
 
+        svg_content = self._svg_content
+        
+        # Copy fonts and update references if needed
+        if self._font_files and copy_fonts:
+            svg_dir = os.path.dirname(os.path.abspath(output_path))
+            svg_content = self._copy_fonts_and_update_svg(svg_dir, fonts_subdir)
+
         with open(output_path, 'w', encoding='utf-8') as f:
-            f.write(self._svg_content)
+            f.write(svg_content)
 
     def __str__(self) -> str:
         """Returns the SVG content as a string.
@@ -94,3 +124,38 @@ class VectorImage:
             The raw SVG content, which is then rendered by the frontend.
         """
         return self._svg_content
+
+    def _copy_fonts_and_update_svg(self, svg_dir: str, fonts_subdir: str) -> str:
+        """Copies fonts to subdirectory and updates SVG content with relative paths.
+        
+        Args:
+            svg_dir: Absolute path to the directory where the SVG will be saved.
+            fonts_subdir: Name of the subdirectory for fonts.
+            
+        Returns:
+            Updated SVG content with corrected font references.
+        """
+        fonts_dir = os.path.join(svg_dir, fonts_subdir)
+        os.makedirs(fonts_dir, exist_ok=True)
+        svg_content = self._svg_content
+        
+        for font_path in self._font_files:
+            if not os.path.exists(font_path):
+                continue
+                
+            font_basename = os.path.basename(font_path)
+            dest_path = os.path.join(fonts_dir, font_basename)
+            try:
+                shutil.copy2(font_path, dest_path)
+            except (IOError, OSError):
+                continue
+            
+            old_ref_single = f"url('{font_basename}')"
+            new_ref_single = f"url('{fonts_subdir}/{font_basename}')"
+            svg_content = svg_content.replace(old_ref_single, new_ref_single)
+            
+            old_ref_double = f'url("{font_basename}")'
+            new_ref_double = f'url("{fonts_subdir}/{font_basename}")'
+            svg_content = svg_content.replace(old_ref_double, new_ref_double)
+        
+        return svg_content
