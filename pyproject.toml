@@ -45,12 +45,6 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build]
 sources = ["src"]
-
-[tool.hatch.build.targets.wheel]
-include = [
-  "src/pictex/fonts/**/*.ttf"
-]
-
 exclude = [
   "/.github",
   "/docs",
@@ -60,6 +54,9 @@ exclude = [
   "Dockerfile.test",
   "*.yml",
   "*.yaml",
+]
+artifacts = [
+  "pictex/fonts/*.ttf",
 ]
 
 [project.optional-dependencies]
