@@ -84,8 +84,8 @@ class FontManager:
             slant=self._style.font_style.get().to_skia_slant()
         )
         typeface = TypefaceLoader.load_system_font(font_family, font_style)
-        actual_font_family = typeface.getFamilyName()
-        if actual_font_family.lower() != font_family.lower():
+        actual_font_family = typeface.getFamilyName() if typeface else ""
+        if typeface is None or actual_font_family.lower() != font_family.lower():
             warning_message = f"Font '{font_family}' was not found. It will be ignored."
             warnings.warn(FontNotFoundWarning(warning_message))
             return None

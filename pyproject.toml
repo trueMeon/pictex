@@ -27,7 +27,6 @@ classifiers = [
     "Typing :: Typed"
 ]
 
-
 dependencies = [
   "skia-python",
   "typing_extensions >=4.0; python_version < '3.11'",
@@ -46,6 +45,11 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build]
 sources = ["src"]
+
+[tool.hatch.build.targets.wheel]
+include = [
+  "src/pictex/fonts/**/*.ttf"
+]
 
 exclude = [
   "/.github",

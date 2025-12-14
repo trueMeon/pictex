@@ -1,3 +1,4 @@
+from importlib import resources
 from typing import Optional
 from ..models import TypefaceLoadingInfo, TypefaceSource
 from .. import utils
@@ -9,34 +10,54 @@ class TypefaceLoader:
 
     @staticmethod
     def load_default() -> skia.Typeface:
-        return TypefaceLoader._save(skia.Typeface(""), TypefaceSource.SYSTEM)
+        font_path = resources.files("pictex.fonts").joinpath("InterVariable.ttf")
+        tf = TypefaceLoader.load_from_file(str(font_path))
+        if tf is None:
+            raise RuntimeError("Failed to load default font (bundled Inter font)")
+        return tf
 
     @staticmethod
     def load_from_file(filepath: str) -> Optional[skia.Typeface]:
-        return TypefaceLoader._save(skia.Typeface.MakeFromFile(filepath), TypefaceSource.FILE, filepath)
+        try:
+            tf = skia.Typeface.MakeFromFile(filepath)
+            return TypefaceLoader._save(tf, TypefaceSource.FILE, filepath)
+        except:
+            return None
 
     @staticmethod
-    def load_system_font(family: str, style: skia.FontStyle = None) -> skia.Typeface:
+    def load_system_font(family: str, style: skia.FontStyle = None) -> Optional[skia.Typeface]:
         """
             Creates a new reference to the typeface that most closely
             matches the requested familyName and fontStyle.
-            Will never return null.
+            It shouldn't return null if it's handled correctly.
+            However, it can return null if an unhandled exception is thrown in Skia.
         """
-        return TypefaceLoader._save(skia.Typeface(family, style), TypefaceSource.SYSTEM)
+        try:
+            tf = skia.Typeface(family, style)
+            return TypefaceLoader._save(tf, TypefaceSource.SYSTEM)
+        except:
+            return None
 
     @staticmethod
     def load_for_grapheme(grapheme: str, style: skia.FontStyle) -> Optional[skia.Typeface]:
         for cp in grapheme:
-            system_typeface = TypefaceLoader._get_font_manager().matchFamilyStyleCharacter(
-                "",
-                style,
-                [],
-                ord(cp)
-            )
+            system_typeface = TypefaceLoader.find_system_font_for_grapheme(style, ord(cp))
             if system_typeface and utils.is_grapheme_supported_for_typeface(grapheme, system_typeface):
                 return TypefaceLoader._save(system_typeface, TypefaceSource.SYSTEM)
         
         return None
+
+    @staticmethod
+    def find_system_font_for_grapheme(style: skia.FontStyle, character: int) -> Optional[skia.Typeface]:
+        try:
+            return TypefaceLoader._get_font_manager().matchFamilyStyleCharacter(
+                "",
+                style,
+                [],
+                character
+            )
+        except:
+            return None
 
     @staticmethod
     def clone_with_arguments(typeface: skia.Typeface, arguments: skia.FontArguments) -> skia.Typeface:
