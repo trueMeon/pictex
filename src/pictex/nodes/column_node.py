@@ -9,7 +9,7 @@ class ColumnNode(ContainerNode):
     def _set_width_constraint(self, width_constraint: Optional[int]) -> None:
         children = self._get_positionable_children()
         width_style_prop = self.computed_styles.width.get()
-        is_auto_width = not width_style_prop or width_style_prop.mode == "auto"
+        is_auto_width = not width_style_prop or width_style_prop.mode == SizeValueMode.AUTO
         width_constraint = width_constraint if is_auto_width else self.content_width
         for child in children:
             child._set_width_constraint(width_constraint)
@@ -75,7 +75,14 @@ class ColumnNode(ContainerNode):
         if not children:
             return 0
 
-        return max(child.margin_bounds.width() for child in children)
+        max_width = 0
+        for child in children:
+            width_style = child.computed_styles.width.get()
+            if width_style and width_style.mode in [SizeValueMode.PERCENT, SizeValueMode.FILL_AVAILABLE]:
+                continue
+            max_width = max(max_width, child.margin_bounds.width())
+            
+        return max_width
     
     def compute_intrinsic_height(self) -> int:
         children = self._get_positionable_children()
@@ -84,7 +91,14 @@ class ColumnNode(ContainerNode):
 
         gap = self.computed_styles.gap.get()
         total_gap = gap * (len(children) - 1)
-        total_children_height = sum(child.margin_bounds.height() for child in children)
+        
+        total_children_height = 0
+        for child in children:
+            height_style = child.computed_styles.height.get()
+            if height_style and height_style.mode in [SizeValueMode.PERCENT, SizeValueMode.FILL_AVAILABLE]:
+                continue
+            total_children_height += child.margin_bounds.height()
+            
         return total_children_height + total_gap
 
     def _calculate_children_relative_positions(self, children: list[Node], get_child_bounds: Callable[[Node], skia.Rect]) -> list[Tuple[float, float]]:

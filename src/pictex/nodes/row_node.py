@@ -10,7 +10,7 @@ class RowNode(ContainerNode):
     def _set_width_constraint(self, width_constraint: Optional[int]) -> None:
         children = self._get_positionable_children()
         width_style_prop = self.computed_styles.width.get()
-        is_auto_width = not width_style_prop or width_style_prop.mode == "auto"
+        is_auto_width = not width_style_prop or width_style_prop.mode == SizeValueMode.AUTO
         width_constraint = width_constraint if is_auto_width else self.content_width
         if width_constraint is None:
             for child in children:
@@ -105,7 +105,14 @@ class RowNode(ContainerNode):
 
         gap = self.computed_styles.gap.get()
         total_gap = gap * (len(children) - 1)
-        total_children_width = sum(child.margin_bounds.width() for child in children)
+        total_children_width = 0
+        
+        for child in children:
+            width_style = child.computed_styles.width.get()
+            if width_style and width_style.mode in [SizeValueMode.PERCENT, SizeValueMode.FILL_AVAILABLE]:
+                continue
+            total_children_width += child.margin_bounds.width()
+
         return total_children_width + total_gap
     
     def compute_intrinsic_height(self) -> int:
@@ -113,7 +120,14 @@ class RowNode(ContainerNode):
         if not children:
             return 0
 
-        return max(child.margin_bounds.height() for child in children)
+        max_height = 0
+        for child in children:
+            height_style = child.computed_styles.height.get()
+            if height_style and height_style.mode in [SizeValueMode.PERCENT, SizeValueMode.FILL_AVAILABLE]:
+                continue
+            max_height = max(max_height, child.margin_bounds.height())
+            
+        return max_height
     
     def _apply_stretch_constraints(self):
         """
