@@ -31,11 +31,13 @@ This means you can render complex, multi-lingual text and emojis without worryin
 ### How It Works
 
 The fallback chain is:
-1.  Your primary font set with `.font_family()`.
+1.  Your primary font set with `.font_family()`, or the bundled **Inter Variable** font if none is specified.
 2.  Any custom fallback fonts you provide with `.font_fallbacks()`.
-3.  A list of default system emoji fonts (`Segoe UI Emoji` on Windows, `Apple Color Emoji` on macOS, `Noto Color Emoji` on Linux).
+3.  Automatic system font discovery: PicTex automatically find a system font that supports the grapheme being rendered.
 
 If a provided font is not found, a warning message is displayed and the font is ignored.
+
+> **Note**: PicTex includes Inter Variable as a bundled default font. This ensures consistent rendering across all platforms, including environments like Google Colab where system fonts may be unavailable.
 
 ### Providing Custom Fallbacks
 
