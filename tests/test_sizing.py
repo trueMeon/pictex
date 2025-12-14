@@ -173,3 +173,18 @@ def test_size_fill_available_multiple_children(file_regression, render_engine):
     
     image = render_func(Canvas(), parent)
     check_func(file_regression, image)
+
+
+def test_size_fill_available_parent_with_percent_child(file_regression, render_engine):
+    """
+    Tests that a child with percentage width is correctly declared inside a 
+    parent with 'fill-available' width.
+    """
+    render_func, check_func = render_engine
+
+    element = Row(
+        Text("I should not cause recursion").size(width="100%")
+    ).size(width="fill-available")
+
+    image = render_func(Canvas().size(width=500, height=500), element)
+    check_func(file_regression, image)
