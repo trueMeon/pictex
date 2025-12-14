@@ -1,5 +1,12 @@
-from importlib import resources
+import sys
 from typing import Optional
+
+# Use the compatibility library for Python < 3.10
+if sys.version_info >= (3, 10):
+    from importlib import resources
+else:
+    import importlib_resources as resources
+
 from ..models import TypefaceLoadingInfo, TypefaceSource
 from .. import utils
 import skia
