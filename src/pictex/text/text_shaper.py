@@ -150,6 +150,7 @@ class TextShaper:
                 current_line_tokens.append(token)
                 current_width = potential_width
             else:
+                print("Token doesn't fit, starting new line", potential_width, max_width)
                 # Token doesn't fit, start new line
                 wrapped_lines.append(''.join(current_line_tokens).strip())
                 current_line_tokens = [token]

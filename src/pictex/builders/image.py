@@ -1,6 +1,6 @@
 from .element import Element
 from .with_size_mixin import WithSizeMixin
-from ..nodes import Node, RowNode
+from ..nodes import Node, ImageNode
 
 try:
     from typing import Self # type: ignore[attr-defined]
@@ -82,4 +82,5 @@ class Image(Element, WithSizeMixin):
             height = image.height()
             self.size(width * self._resize_factor, height * self._resize_factor)
 
-        return RowNode(self._style, [])
+        return ImageNode(self._style)
+

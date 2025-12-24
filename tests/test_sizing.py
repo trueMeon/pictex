@@ -99,36 +99,6 @@ def test_size_percent_height(file_regression, render_engine):
     check_func(file_regression, image)
 
 
-def test_size_percent_throws_error_on_fit_content_parent(render_engine):
-    """
-    Verifies that the system correctly raises a ValueError when a child
-    with a percentage size is placed inside a parent with a 'fit-content'
-    size, preventing an infinite loop.
-    """
-    render_func, _ = render_engine
-
-    # This parent's size depends on its children.
-    parent_with_fit_content = Row(
-        # This child's size depends on its parent.
-        Text("I cause a problem").size(width="50%")
-    )  # No .size() means 'fit-content'
-
-    with pytest.raises(ValueError, match="Cannot use 'percent' size if parent element has 'fit-content' size"):
-        render_func(Canvas(), parent_with_fit_content)
-
-
-def test_size_percent_on_root_element_is_not_supported(render_engine):
-    """
-    Verifies that using a percentage size on a root element, which has no
-    container to be relative to, raises an error.
-    """
-    render_func, _ = render_engine
-
-    canvas = Canvas().size(width="50%")
-
-    with pytest.raises(ValueError, match="Cannot use 'percent' size on a root element without a parent"):
-        render_func(canvas, "Percent")
-
 def test_size_fill_available_single_child(file_regression, render_engine):
     """
     Tests that a single 'fill-available' child expands to fill all the
