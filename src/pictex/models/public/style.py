@@ -5,6 +5,7 @@ from .background import BackgroundImage
 from .effects import Shadow, OutlineStroke
 from .layout import Margin, Padding, HorizontalDistribution, VerticalAlignment, HorizontalAlignment, VerticalDistribution
 from .position import Position
+from .transform import Transform
 from .style_property import StyleProperty
 from .typography import TextAlign, FontWeight, FontStyle, TextWrap
 from .paint_source import PaintSource
@@ -43,6 +44,7 @@ class Style:
     border: StyleProperty[Optional[Border]] = field(default_factory=lambda: StyleProperty(None, inheritable=False))
     border_radius: StyleProperty[Optional[BorderRadius]] = field(default_factory=lambda: StyleProperty(None, inheritable=False))
     position: StyleProperty[Optional[Position]] = field(default_factory=lambda: StyleProperty(None, inheritable=False))
+    transform: StyleProperty[Optional[Transform]] = field(default_factory=lambda: StyleProperty(None, inheritable=False))
     width: StyleProperty[Optional[SizeValue]] = field(default_factory=lambda: StyleProperty(None, inheritable=False))
     height: StyleProperty[Optional[SizeValue]] = field(default_factory=lambda: StyleProperty(None, inheritable=False))
     horizontal_distribution: StyleProperty[HorizontalDistribution] = field(

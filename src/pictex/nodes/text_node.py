@@ -119,11 +119,11 @@ class TextNode(Node):
         return self._compute_intrinsic_content_bounds().height()
 
     def _add_decoration_bounds(
-            self,
-            dest_bounds: skia.Rect,
-            decoration: Optional[TextDecoration],
-            line_bounds: skia.Rect,
-            line_y: float
+        self,
+        dest_bounds: skia.Rect,
+        decoration: Optional[TextDecoration],
+        line_bounds: skia.Rect,
+        line_y: float
     ) -> None:
         if not decoration:
             return

@@ -13,6 +13,9 @@ from stretchable.style import (
     AlignItems,
     JustifyContent,
     Display,
+    Position as StretchablePosition,
+    AUTO,
+    PCT,
 )
 
 if TYPE_CHECKING:
@@ -22,6 +25,8 @@ if TYPE_CHECKING:
         Padding,
         Margin,
         Border,
+        Position,
+        Inset,
     )
 
 
@@ -163,6 +168,15 @@ class StyleMapper:
         if flex_grow > 0:
             style_kwargs['flex_grow'] = flex_grow
         
+        # Map position and inset
+        position_config: 'Position' = computed.position.get()
+        if position_config is not None:
+            position_type, inset = cls._map_position(position_config)
+            if position_type is not None:
+                style_kwargs['position'] = position_type
+            if inset is not None:
+                style_kwargs['inset'] = inset
+        
         return StretchableStyle(**style_kwargs)
 
     @classmethod
@@ -217,3 +231,61 @@ class StyleMapper:
         if height and height.mode == 'fill-available':
             return 1.0
         return 0.0
+
+    @classmethod
+    def _map_position(cls, position: 'Position') -> tuple:
+        """Map pictex Position to stretchable position and inset.
+        
+        Args:
+            position: The pictex Position configuration.
+            
+        Returns:
+            Tuple of (stretchable_position, inset_tuple)
+        """
+        from ..models import PositionType
+        
+        # Map position type
+        position_type = None
+        if position.type == PositionType.ABSOLUTE:
+            position_type = StretchablePosition.ABSOLUTE
+        elif position.type == PositionType.RELATIVE:
+            position_type = StretchablePosition.RELATIVE
+        # STATIC is the default, no need to set
+        
+        # Map inset values
+        inset = position.inset
+        if inset is None:
+            return position_type, None
+        
+        top = cls._map_inset_value(inset.top)
+        right = cls._map_inset_value(inset.right)
+        bottom = cls._map_inset_value(inset.bottom)
+        left = cls._map_inset_value(inset.left)
+        
+        # Only return inset if at least one value is set
+        if all(v is AUTO for v in [top, right, bottom, left]):
+            return position_type, None
+        
+        return position_type, (top, right, bottom, left)
+
+    @classmethod
+    def _map_inset_value(cls, value) -> any:
+        """Map a single pictex inset value to stretchable length.
+        
+        Args:
+            value: Inset value - None, pixels (int/float), or percentage string.
+            
+        Returns:
+            Stretchable length value (AUTO, pixels, or percentage).
+        """
+        if value is None:
+            return AUTO
+        
+        if isinstance(value, (int, float)):
+            return float(value)
+        
+        if isinstance(value, str) and value.endswith('%'):
+            pct = float(value.rstrip('%'))
+            return pct * PCT
+        
+        return AUTO

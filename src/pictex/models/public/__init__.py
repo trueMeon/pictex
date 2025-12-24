@@ -10,7 +10,8 @@ from .two_point_conical_gradient import TwoPointConicalGradient
 from .decoration import TextDecoration
 from .crop import CropMode
 from .box import Box
-from .position import Position, PositionMode
+from .position import Position, PositionType, Inset
+from .transform import Transform
 from .size import SizeValue, SizeValueMode
 from .layout import Margin, Padding, HorizontalDistribution, VerticalAlignment, HorizontalAlignment, VerticalDistribution
 from .background import BackgroundImage, BackgroundImageSizeMode
@@ -31,7 +32,8 @@ __all__ = [
     "TextDecoration",
     "CropMode",
     "Box",
-    "Position", "PositionMode",
+    "Position", "PositionType", "Inset",
+    "Transform",
     "SizeValue", "SizeValueMode",
     "Margin", "Padding", "HorizontalDistribution", "VerticalAlignment", "HorizontalAlignment", "VerticalDistribution",
     "BackgroundImage", "BackgroundImageSizeMode",
