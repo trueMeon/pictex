@@ -4,7 +4,7 @@ from .node import Node
 from ..models import TextDecoration, Style, RenderProps, Line
 from ..text import FontManager, TextShaper
 from ..painters import Painter, BackgroundPainter, TextPainter, DecorationPainter, BorderPainter
-from ..utils import clone_skia_rect, cached_property, cached_method
+from ..utils import cached_property, cached_method
 
 
 class TextNode(Node):
@@ -108,6 +108,7 @@ class TextNode(Node):
             current_y += line_gap
 
         content_bounds.join(self.relative_text_bounds)
+
         return content_bounds
     
     def compute_intrinsic_width(self) -> float:

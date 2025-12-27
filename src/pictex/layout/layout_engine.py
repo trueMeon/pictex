@@ -15,6 +15,8 @@ from stretchable.style.geometry.length import Scale
 from .style_mapper import StyleMapper
 from .layout_result import LayoutResult
 
+from math import ceil
+
 if TYPE_CHECKING:
     from ..nodes import Node, TextNode, RowNode, ColumnNode
     from ..models import RenderProps
@@ -109,16 +111,24 @@ class LayoutEngine:
             Measure function compatible with stretchable.
         """
         def measure(_node: StretchableNode, _known_size: SizePoints, available_space: SizeAvailableSpace) -> SizePoints:
+            text_node._clear_bounds()
+            text_node.set_text_wrap_width(None)
             wrap_width = None
             if available_space.width is not None and available_space.width.scale == Scale.POINTS:
                 wrap_width = available_space.width.value
             
             if wrap_width is not None and wrap_width > 0:
-                text_node.set_text_wrap_width(wrap_width)
+                # We need to use ceil here since the text content bounds are computed using ceil
+                # If we use floor (or the float value) here, the text may be cut off in some edge cases
+                text_node.set_text_wrap_width(ceil(wrap_width))
             
             width = text_node.compute_intrinsic_width()
             height = text_node.compute_intrinsic_height()
-            
+
+            # This could cause an issue:
+            # Stretchable is using float width/height
+            # However, we're using integer bounds in pictex for skia (to avoid rendering artefacs with float)
+            # Keep this in mind if a weird bug appears
             return SizePoints(float(width), float(height))
         
         return measure
@@ -133,6 +143,7 @@ class LayoutEngine:
             Measure function that uses node's intrinsic size.
         """
         def measure(_node: StretchableNode, _known_size: SizePoints, _available_space: SizeAvailableSpace) -> SizePoints:
+            node._clear_bounds()
             width = node.compute_intrinsic_width()
             height = node.compute_intrinsic_height()
             return SizePoints(float(width), float(height))
@@ -144,7 +155,8 @@ class LayoutEngine:
         
         Uses the public set_layout_result() method to respect encapsulation.
         """
-        
+
+        pictex_node._clear_bounds()
         pictex_node.set_layout_result(LayoutResult(stretchable_node))
         for child in pictex_node.children:
             if child in self._node_map:

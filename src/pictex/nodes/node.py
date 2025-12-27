@@ -52,6 +52,7 @@ class Node(Cacheable):
         if self._layout_result is None:
             raise RuntimeError("Layout not computed")
         bounds = self._layout_result.get_content_bounds()
+
         return self._apply_transform(bounds)
 
     @cached_property(group='bounds')
