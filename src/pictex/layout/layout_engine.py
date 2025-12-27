@@ -114,16 +114,21 @@ class LayoutEngine:
             text_node._clear_bounds()
             text_node.set_text_wrap_width(None)
             wrap_width = None
-            if available_space.width is not None and available_space.width.scale == Scale.POINTS:
-                wrap_width = available_space.width.value
+
+            if available_space.width is not None:
+                if available_space.width.scale == Scale.POINTS:
+                    wrap_width = available_space.width.value
+                elif available_space.width.scale == Scale.MIN_CONTENT:
+                    wrap_width = 0
             
-            if wrap_width is not None and wrap_width > 0:
+            if wrap_width is not None:
                 # We need to use ceil here since the text content bounds are computed using ceil
                 # If we use floor (or the float value) here, the text may be cut off in some edge cases
                 text_node.set_text_wrap_width(ceil(wrap_width))
             
             width = text_node.compute_intrinsic_width()
             height = text_node.compute_intrinsic_height()
+            text_node._clear_bounds()
 
             # This could cause an issue:
             # Stretchable is using float width/height
@@ -146,6 +151,7 @@ class LayoutEngine:
             node._clear_bounds()
             width = node.compute_intrinsic_width()
             height = node.compute_intrinsic_height()
+            node._clear_bounds()
             return SizePoints(float(width), float(height))
         
         return measure
