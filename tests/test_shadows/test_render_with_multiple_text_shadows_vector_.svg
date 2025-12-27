@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="394" height="178">
 	<rect fill-opacity="0" width="394" height="178" />
 	<rect fill="#AAA" width="394" height="178" />
-	<text fill="gray" transform="translate(20 20)" font-size="120" font-family="Arial" x="0, 33.339844, 120, 200.03906, 280.07812, " y="108.63281, ">
+	<text fill="gray" font-size="120" font-family="Arial" x="20, 53.339844, 140, 220.03906, 300.07812, " y="128.63281, ">
 			INSET
 	</text>
 </svg>

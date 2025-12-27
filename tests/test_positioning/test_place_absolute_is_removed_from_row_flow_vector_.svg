@@ -14,12 +14,12 @@
 	<text font-size="50" font-family="pictex-InterVariable" x="10, 48.232422, 77.773438, " y="58.4375, ">
 			One
 	</text>
-	<rect fill="#E74C3C" transform="translate(138 34.5)" width="124" height="81" />
-	<text transform="translate(138 34.5)" font-size="50" font-family="pictex-InterVariable" x="10, 39.150391, 79.165039, " y="58.4375, ">
+	<rect fill="#E74C3C" x="138" y="34" width="124" height="82" />
+	<text font-size="50" font-family="pictex-InterVariable" x="148, 177.15039, 217.16504, " y="92.4375, ">
 			Two
 	</text>
-	<rect fill="#2ECC71" transform="translate(117 0)" width="159" height="81" />
-	<text transform="translate(117 0)" font-size="50" font-family="pictex-InterVariable" x="10, 42.275391, 71.84082, 89.833984, 118.98438, " y="58.4375, ">
+	<rect fill="#2ECC71" x="116" width="160" height="81" />
+	<text font-size="50" font-family="pictex-InterVariable" x="126, 158.27539, 187.84082, 205.83398, 234.98438, " y="58.4375, ">
 			Three
 	</text>
 </svg>

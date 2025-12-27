@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="200"><defs><style type="text/css">@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}</style></defs>
+	<rect fill-opacity="0" width="300" height="200" />
+	<rect fill="#BDC3C7" width="300" height="200" />
+	<rect fill="#1ABC9C" width="61" height="61" />
+	<text font-size="50" font-family="pictex-InterVariable" x="0, 32.275391, " y="48.4375, ">
+			TL
+	</text>
+	<rect fill="#1ABC9C" x="235" width="65" height="61" />
+	<text font-size="50" font-family="pictex-InterVariable" x="235, 267.27539, " y="48.4375, ">
+			TR
+	</text>
+	<rect fill="#1ABC9C" y="139" width="61" height="61" />
+	<text font-size="50" font-family="pictex-InterVariable" x="0, 32.714844, " y="187.4375, ">
+			BL
+	</text>
+	<rect fill="#1ABC9C" x="235" y="139" width="65" height="61" />
+	<text font-size="50" font-family="pictex-InterVariable" x="235, 267.71484, " y="187.4375, ">
+			BR
+	</text>
+	<rect fill="#9B59B6" x="70" y="69" width="160" height="62" />
+	<text font-size="50" font-family="pictex-InterVariable" x="70, 106.52344, 135.67383, 165.21484, 181.08398, 210.23438, " y="117.4375, ">
+			Center
+	</text>
+	<rect fill="#F1C40F" x="50" y="50" width="148" height="61" />
+	<text font-size="50" font-family="pictex-InterVariable" x="50, 88.232422, 104.78516, 122.16797, 148.55957, 177.70996, " y="98.4375, ">
+			Offset
+	</text>
+</svg>

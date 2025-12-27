@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="410" height="243"><defs><style type="text/css">@font-face {
+<svg xmlns="http://www.w3.org/2000/svg" width="410" height="242"><defs><style type="text/css">@font-face {
     font-family: 'pictex-InterVariable';
     src: url('InterVariable.ttf');
 }@font-face {
@@ -8,18 +8,18 @@
     font-family: 'pictex-InterVariable';
     src: url('InterVariable.ttf');
 }</style></defs>
-	<rect fill-opacity="0" width="410" height="243" />
-	<rect fill="#ECF0F1" transform="translate(55 0)" width="300" height="243" />
-	<rect fill="#3498DB" transform="translate(131.5 0)" width="147" height="81" />
-	<text transform="translate(131.5 0)" font-size="50" font-family="pictex-InterVariable" x="10, 42.080078, 71.645508, 101.62598, 121.23047, " y="58.4375, ">
+	<rect fill-opacity="0" width="410" height="242" />
+	<rect fill="#ECF0F1" transform="translate(55 0)" width="300" height="242" />
+	<rect fill="#3498DB" transform="translate(55 0)" x="76" width="148" height="81" />
+	<text transform="translate(55 0)" font-size="50" font-family="pictex-InterVariable" x="86, 118.08008, 147.64551, 177.62598, 197.23047, " y="58.4375, ">
 			Short
 	</text>
-	<rect fill="#E74C3C" transform="translate(0.5 81)" width="409" height="81" />
-	<text transform="translate(0.5 81)" font-size="50" font-family="pictex-InterVariable" x="10, 38.271484, 68.251953, 98.232422, 128.21289, 158.19336, 188.17383, 218.1543, 248.13477, 278.11523, 308.0957, 338.07617, 367.61719, " y="58.4375, ">
+	<rect fill="#E74C3C" transform="translate(55 0)" x="-55" y="80" width="410" height="81" />
+	<text transform="translate(55 0)" font-size="50" font-family="pictex-InterVariable" x="-45, -16.728516, 13.251953, 43.232422, 73.212891, 103.19336, 133.17383, 163.1543, 193.13477, 223.11523, 253.0957, 283.07617, 312.61719, " y="138.4375, ">
 			Loooooooooong
 	</text>
-	<rect fill="#2ECC71" transform="translate(70.5 162)" width="269" height="81" />
-	<text transform="translate(70.5 162)" font-size="50" font-family="pictex-InterVariable" x="10, 55.166016, 84.316406, 113.4668, 142.61719, 173.23242, 185.3418, 214.90723, " y="58.4375, ">
+	<rect fill="#2ECC71" transform="translate(55 0)" x="15" y="160" width="270" height="82" />
+	<text transform="translate(55 0)" font-size="50" font-family="pictex-InterVariable" x="25, 70.166016, 99.316406, 128.4668, 157.61719, 188.23242, 200.3418, 229.90723, " y="218.4375, ">
 			Meeedium
 	</text>
 </svg>
