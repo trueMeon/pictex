@@ -1,8 +1,6 @@
 from .node import Node
 from ..painters import Painter, BackgroundPainter, BorderPainter
 from ..models import Style
-from ..utils import clone_skia_rect
-import skia
 
 
 class ContainerNode(Node):
@@ -24,12 +22,10 @@ class ContainerNode(Node):
 
     def compute_intrinsic_width(self) -> int:
         """Compute intrinsic width (sum/max of children depending on layout direction)."""
-        # This is called by stretchable's measure function
-        # For containers, stretchable calculates this from children
+        # For containers with children, stretchable calculates size from children
         return 0
     
     def compute_intrinsic_height(self) -> int:
         """Compute intrinsic height (sum/max of children depending on layout direction)."""
-        # This is called by stretchable's measure function
-        # For containers, stretchable calculates this from children
+        # For containers with children, stretchable calculates size from children
         return 0

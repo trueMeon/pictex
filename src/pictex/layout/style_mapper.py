@@ -159,7 +159,7 @@ class StyleMapper:
             style_kwargs['align_items'] = align_items
         
         # Map size values
-        size = cls._map_size(width_value, height_value)
+        size = cls._map_size(node, width_value, height_value)
         if size is not None:
             style_kwargs['size'] = size
         
@@ -182,20 +182,27 @@ class StyleMapper:
     @classmethod
     def _map_size(
         cls,
+        node: 'Node',
         width: Optional['SizeValue'],
         height: Optional['SizeValue'],
     ) -> Optional[tuple]:
         """Map pictex size values to stretchable size tuple."""
         from stretchable.style import AUTO
         
-        w = cls._map_single_size(width) if width else AUTO
-        h = cls._map_single_size(height) if height else AUTO
+        w = cls._map_single_size(node, width, 'width') if width else AUTO
+        h = cls._map_single_size(node, height, 'height') if height else AUTO
         
         return (w, h)
 
     @classmethod
-    def _map_single_size(cls, size_value: Optional['SizeValue']):
-        """Map a single pictex SizeValue to stretchable length."""
+    def _map_single_size(cls, node: 'Node', size_value: Optional['SizeValue'], dimension: str):
+        """Map a single pictex SizeValue to stretchable length.
+        
+        Args:
+            node: The node being styled (to access background image if needed)
+            size_value: The SizeValue to map
+            dimension: Either 'width' or 'height'
+        """
         from stretchable.style import AUTO, PCT
         
         if size_value is None:
@@ -214,7 +221,15 @@ class StyleMapper:
             # Will be handled by flex_grow
             return AUTO
         elif mode == 'fit-background-image':
-            # This requires special handling outside stretchable
+            # Get background image and return its dimensions
+            bg_image_info = node.computed_styles.background_image.get()
+            if bg_image_info:
+                bg_image = bg_image_info.get_skia_image()
+                if bg_image:
+                    if dimension == 'width':
+                        return float(bg_image.width())
+                    else:  # height
+                        return float(bg_image.height())
             return AUTO
         else:
             return AUTO

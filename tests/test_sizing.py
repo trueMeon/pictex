@@ -1,5 +1,5 @@
 import pytest
-from pictex import Canvas, Row, Column, Text, Image, Box
+from pictex import Canvas, Row, Column, Text, Image
 from .conftest import IMAGE_PATH
 
 def test_size_absolute(file_regression, render_engine):
@@ -53,7 +53,7 @@ def test_size_fit_background_image(file_regression, render_engine):
     render_func, check_func = render_engine
 
     element = (
-        Row("The row has the size of the image").text_wrap("nowrap")
+        Row("The row has the size of the image")
         .background_image(IMAGE_PATH)
         .fit_background_image()
     )
