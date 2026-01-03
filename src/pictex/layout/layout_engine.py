@@ -19,13 +19,13 @@ from math import ceil
 
 if TYPE_CHECKING:
     from ..nodes import Node, TextNode, RowNode, ColumnNode
-    from ..models import RenderProps
 
 
 class LayoutEngine:
     def __init__(self):
         """Initialize the layout engine."""
         self._node_map: Dict['Node', StretchableNode] = {}
+        self._style_mapper = StyleMapper()
 
     def compute_layout(self, root: 'Node') -> None:
         """Compute layout using stretchable's flexbox algorithm.
@@ -70,11 +70,11 @@ class LayoutEngine:
         from ..nodes import RowNode, ColumnNode
         
         if isinstance(node, RowNode):
-            return StyleMapper.create_row_style(node)
+            return self._style_mapper.create_row_style(node)
         elif isinstance(node, ColumnNode):
-            return StyleMapper.create_column_style(node)
+            return self._style_mapper.create_column_style(node)
         else:
-            return StyleMapper.create_leaf_style(node)
+            return self._style_mapper.create_leaf_style(node)
 
     def _create_measure_function(self, node: 'Node') -> Optional[Callable]:
         """Create measure function for leaf nodes.
