@@ -99,16 +99,16 @@ def test_size_percent_height(file_regression, render_engine):
     check_func(file_regression, image)
 
 
-def test_size_fill_available_single_child(file_regression, render_engine):
+def test_size_flex_grow_single_child(file_regression, render_engine):
     """
-    Tests that a single 'fill-available' child expands to fill all the
+    Tests that a single flex_grow(1) child expands to fill all the
     remaining space in a Row next to a fixed-size sibling.
     """
     render_func, check_func = render_engine
 
     parent = Row(
         Image(IMAGE_PATH).size(width=100), # Fixed-size sibling takes 100px
-        Text("This text fills the rest").size(width='fill-available').background_color("#27ae60").text_wrap("nowrap"),
+        Text("This text fills the rest").flex_grow(1).background_color("#27ae60").text_wrap("nowrap"),
     ).size(
         width=400, height=150
     ).gap(
@@ -121,17 +121,17 @@ def test_size_fill_available_single_child(file_regression, render_engine):
     check_func(file_regression, image)
 
 
-def test_size_fill_available_multiple_children(file_regression, render_engine):
+def test_size_flex_grow_multiple_children(file_regression, render_engine):
     """
-    Tests that multiple 'fill-available' children share the remaining
+    Tests that multiple flex_grow(1) children share the remaining
     space equally.
     """
     render_func, check_func = render_engine
 
     parent = Column(
         Text("Fixed Top").size(height=50).background_color("#f39c12"),
-        Row(Text("Flexible 1")).size(height='fill-available').background_color("#2980b9"),
-        Row(Text("Flexible 2")).size(height='fill-available').background_color("#8e44ad"),
+        Row(Text("Flexible 1")).flex_grow(1).background_color("#2980b9"),
+        Row(Text("Flexible 2")).flex_grow(1).background_color("#8e44ad"),
         Text("Fixed Bottom").size(height=30).background_color("#f39c12").text_wrap("nowrap"),
     ).size(
         width=300, height=400
@@ -145,16 +145,16 @@ def test_size_fill_available_multiple_children(file_regression, render_engine):
     check_func(file_regression, image)
 
 
-def test_size_fill_available_parent_with_percent_child(file_regression, render_engine):
+def test_size_flex_grow_parent_with_percent_child(file_regression, render_engine):
     """
     Tests that a child with percentage width is correctly declared inside a 
-    parent with 'fill-available' width.
+    parent with flex_grow(1).
     """
     render_func, check_func = render_engine
 
     element = Row(
         Text("I should not cause recursion").size(width="100%")
-    ).size(width="fill-available")
+    ).flex_grow(1)
 
     image = render_func(Canvas().size(width=500, height=500), element)
     check_func(file_regression, image)

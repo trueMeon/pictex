@@ -167,11 +167,6 @@ class StyleMapper:
         if aspect_ratio is not None:
             style_kwargs['aspect_ratio'] = aspect_ratio
         
-        # Map flex_grow for fill-available
-        flex_grow = cls._get_flex_grow(width_value, height_value)
-        if flex_grow > 0:
-            style_kwargs['flex_grow'] = flex_grow
-        
         # Map explicit flex_grow/flex_shrink from style
         explicit_flex_grow = computed.flex_grow.get()
         if explicit_flex_grow > 0:
@@ -261,9 +256,6 @@ class StyleMapper:
             return value
         elif mode == 'percent':
             return value * PCT
-        elif mode == 'fill-available':
-            # Will be handled by flex_grow
-            return AUTO
         elif mode == 'fit-background-image':
             # Get background image and return its dimensions
             bg_image_info = node.computed_styles.background_image.get()
@@ -277,19 +269,6 @@ class StyleMapper:
             return AUTO
         else:
             return AUTO
-
-    @classmethod
-    def _get_flex_grow(
-        cls,
-        width: Optional['SizeValue'],
-        height: Optional['SizeValue'],
-    ) -> float:
-        """Determine flex_grow based on fill-available sizing."""
-        if width and width.mode == 'fill-available':
-            return 1.0
-        if height and height.mode == 'fill-available':
-            return 1.0
-        return 0.0
 
     @classmethod
     def _map_position(cls, position: 'Position') -> tuple:

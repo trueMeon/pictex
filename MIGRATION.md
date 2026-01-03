@@ -74,6 +74,26 @@ Column(children).justify_content("space-between").align_items("stretch")
 
 ---
 
+### 3. Removal of `fill-available` Size Mode
+
+The `'fill-available'` size mode has been removed in favor of the explicit `flex_grow()` method for CSS compliance.
+
+**Before (v1.x):**
+```python
+Text("Flexible").size(width='fill-available')
+Row(children).size(height='fill-available')
+```
+
+**After (v2.0):**
+```python
+Text("Flexible").flex_grow(1)
+Row(children).flex_grow(1)
+```
+
+**Rationale**: In CSS, "filling available space" is a flex behavior (`flex-grow`), not a size value. This change makes the API more explicit and aligns with CSS Flexbox standards.
+
+---
+
 ## Additional Methods
 
 v2.0 introduces new positioning methods:
@@ -113,6 +133,7 @@ Text("Centered")
   - `vertical_distribution()` → `justify_content()`
   - `vertical_align()` → `align_items()`
   - `horizontal_align()` → `align_items()`
+- [ ] Replace `size(width='fill-available')` and `size(height='fill-available')` with `flex_grow(1)`
 - [ ] Update alignment values to use CSS standard values (`"start"`, `"end"`, etc.)
 - [ ] Run your test suite to verify layouts render correctly with the new engine
 

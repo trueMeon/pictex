@@ -24,8 +24,8 @@ class WithSizeMixin:
 
     def size(
             self,
-            width: Optional[Union[float, int, Literal['auto', 'fit-content', 'fit-background-image', 'fill-available']]] = None,
-            height: Optional[Union[float, int, Literal['auto', 'fit-content', 'fit-background-image', 'fill-available']]] = None,
+            width: Optional[Union[float, int, Literal['auto', 'fit-content', 'fit-background-image']]] = None,
+            height: Optional[Union[float, int, Literal['auto', 'fit-content', 'fit-background-image']]] = None,
     ) -> Self:
         """Sets the explicit size of the element's box using the border-box model.
 
@@ -45,14 +45,14 @@ class WithSizeMixin:
         - **`'fit-background-image'`**: The size is explicitly set to match the
           dimensions of the element's background image.
 
-        - **`'fill-available'`**: The element becomes flexible and will expand or shrink to
-          occupy a share of the available space in its parent container.
-
         - **Absolute (pixels)**: An `int` or `float` value (e.g., `200`) sets a
           fixed size.
 
         - **Percentage**: A `str` ending with `%` (e.g., `"50%"`) sets the size
           relative to the parent container's content area.
+        
+        **Note**: To make an element flexible and fill available space, use 
+        `.flex_grow(1)` instead of setting a size mode.
 
         Args:
             width (Union[float, int, str]): The horizontal size value.

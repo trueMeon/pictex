@@ -35,6 +35,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `vertical_distribution()` → `justify_content()` (Column)
   - `vertical_align()` → `align_items()` (Row)
   - `horizontal_align()` → `align_items()` (Column)
+- **BREAKING**: Removed `'fill-available'` size mode. Use `flex_grow(1)` instead for flexible sizing.
+  - **Migration**: Replace `.size(width='fill-available')` with `.flex_grow(1)`
 - **BREAKING**: Positioning logic now strictly follows CSS standards.
 - **Layout Engine**: All layout calculations now delegated to Taffy, replacing the custom multi-pass algorithm.
 
