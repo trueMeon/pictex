@@ -148,6 +148,20 @@ class StyleMapper:
         if size is not None:
             style_kwargs['size'] = size
         
+        # Map min_size constraints
+        min_width_value = computed.min_width.get()
+        min_height_value = computed.min_height.get()
+        min_size = cls._map_size(node, min_width_value, min_height_value)
+        if min_size is not None and (min_width_value is not None or min_height_value is not None):
+            style_kwargs['min_size'] = min_size
+        
+        # Map max_size constraints
+        max_width_value = computed.max_width.get()
+        max_height_value = computed.max_height.get()
+        max_size = cls._map_size(node, max_width_value, max_height_value)
+        if max_size is not None and (max_width_value is not None or max_height_value is not None):
+            style_kwargs['max_size'] = max_size
+        
         # Map flex_grow for fill-available
         flex_grow = cls._get_flex_grow(width_value, height_value)
         if flex_grow > 0:

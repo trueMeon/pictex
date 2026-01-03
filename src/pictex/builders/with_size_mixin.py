@@ -102,3 +102,99 @@ class WithSizeMixin:
         """
 
         return self.size("fit-background-image", "fit-background-image")
+
+    def min_width(self, value: Union[float, int, str]) -> Self:
+        """Sets the minimum width constraint for the element.
+
+        Ensures the element never shrinks below this width, regardless of
+        content or flex shrinking behavior.
+
+        Args:
+            value: Minimum width value. Can be:
+                - Absolute (pixels): int or float (e.g., 100)
+                - Percentage: str ending with '%' (e.g., "50%")
+
+        Returns:
+            Self: The instance for method chaining.
+
+        Example:
+            ```python
+            # Ensure text never collapses below 100px
+            Text(username).flex_grow(1).min_width(100)
+            ```
+        """
+        parsed_value = self._parse_size_value(value)
+        self._style.min_width.set(parsed_value)
+        return self
+
+    def max_width(self, value: Union[float, int, str]) -> Self:
+        """Sets the maximum width constraint for the element.
+
+        Ensures the element never grows beyond this width, regardless of
+        content or flex growing behavior.
+
+        Args:
+            value: Maximum width value. Can be:
+                - Absolute (pixels): int or float (e.g., 300)
+                - Percentage: str ending with '%' (e.g., "80%")
+
+        Returns:
+            Self: The instance for method chaining.
+
+        Example:
+            ```python
+            # Prevent long names from breaking layout
+            Text(product_name).size(width="fit-content").max_width(200)
+            ```
+        """
+        parsed_value = self._parse_size_value(value)
+        self._style.max_width.set(parsed_value)
+        return self
+
+    def min_height(self, value: Union[float, int, str]) -> Self:
+        """Sets the minimum height constraint for the element.
+
+        Ensures the element never shrinks below this height, regardless of
+        content or flex shrinking behavior.
+
+        Args:
+            value: Minimum height value. Can be:
+                - Absolute (pixels): int or float (e.g., 50)
+                - Percentage: str ending with '%' (e.g., "30%")
+
+        Returns:
+            Self: The instance for method chaining.
+
+        Example:
+            ```python
+            # Ensure card has minimum height even with little content
+            Column(children).min_height(200)
+            ```
+        """
+        parsed_value = self._parse_size_value(value)
+        self._style.min_height.set(parsed_value)
+        return self
+
+    def max_height(self, value: Union[float, int, str]) -> Self:
+        """Sets the maximum height constraint for the element.
+
+        Ensures the element never grows beyond this height, regardless of
+        content or flex growing behavior.
+
+        Args:
+            value: Maximum height value. Can be:
+                - Absolute (pixels): int or float (e.g., 400)
+                - Percentage: str ending with '%' (e.g., "90%")
+
+        Returns:
+            Self: The instance for method chaining.
+
+        Example:
+            ```python
+            # Limit description height with overflow
+            Text(description).max_height(150)
+            ```
+        """
+        parsed_value = self._parse_size_value(value)
+        self._style.max_height.set(parsed_value)
+        return self
