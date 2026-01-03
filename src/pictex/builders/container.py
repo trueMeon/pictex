@@ -3,6 +3,7 @@ from .element import Element
 from .text import Text
 from copy import deepcopy
 from ..nodes import Node
+from ..models import JustifyContent, AlignItems
 
 try:
     from typing import Self # type: ignore[attr-defined]
@@ -28,6 +29,43 @@ class Container(Element):
             The `Self` instance for chaining.
         """
         self._style.gap.set(value)
+        return self
+
+    def justify_content(self, mode: Union[JustifyContent, str]) -> Self:
+        """
+        Sets how children are distributed along the main axis (CSS justify-content).
+        
+        For Row: controls horizontal distribution.
+        For Column: controls vertical distribution.
+        
+        Args:
+            mode: Distribution mode. Can be 'start', 'center', 'end',
+                  'space-between', 'space-around', or 'space-evenly'.
+        
+        Returns:
+            The `Self` instance for chaining.
+        """
+        if isinstance(mode, str):
+            mode = JustifyContent(mode.lower())
+        self._style.justify_content.set(mode)
+        return self
+
+    def align_items(self, mode: Union[AlignItems, str]) -> Self:
+        """
+        Sets how children are aligned along the cross axis (CSS align-items).
+        
+        For Row: controls vertical alignment.
+        For Column: controls horizontal alignment.
+        
+        Args:
+            mode: Alignment mode. Can be 'start', 'center', 'end', or 'stretch'.
+        
+        Returns:
+            The `Self` instance for chaining.
+        """
+        if isinstance(mode, str):
+            mode = AlignItems(mode.lower())
+        self._style.align_items.set(mode)
         return self
 
     def _to_node(self) -> Node:

@@ -51,7 +51,7 @@ def create_color_swatch(color_name: str) -> Column:
     
     label = Text(color_name).font_size(10).color("#6B7280").text_align("center")
     
-    return Column(swatch, label).gap(8).horizontal_align("center")
+    return Column(swatch, label).gap(8).align_items("center")
 
 def create_feature_badge(feature: str) -> Row:
     """Creates a feature highlight badge"""

@@ -14,7 +14,7 @@ user_info = Column(
     Text(USERNAME).font_size(15).color("#536471")
 ).gap(2)
 
-tweet_header = Row(avatar, user_info).vertical_align("center").gap(12)
+tweet_header = Row(avatar, user_info).align_items("center").gap(12)
 tweet_body = Text(TWEET_TEXT).font_size(18).line_height(1.4)
 
 def create_stat(icon: str, count: str) -> Row:
@@ -22,13 +22,13 @@ def create_stat(icon: str, count: str) -> Row:
     return Row(
         Text(icon).font_size(16),
         Text(count).font_size(15).color("#536471")
-    ).vertical_align('center').gap(2)
+    ).align_items('center').gap(2)
 
 tweet_footer = Row(
     create_stat("💬", REPLIES),
     create_stat("🔁", REPOSTS),
     create_stat("❤", LIKES),
-).size(width="100%").horizontal_distribution('space-between')
+).size(width="100%").justify_content('space-between')
 
 tweet_card = (
     Column(

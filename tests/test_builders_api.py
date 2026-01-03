@@ -84,17 +84,17 @@ def test_builders_fluent_api_and_style_building():
         style = builder._style
         assert style.gap == 10
 
-    row.horizontal_distribution("center")
-    row.vertical_align("bottom")
+    row.justify_content("center")
+    row.align_items("start")
     style = row._style
-    assert style.horizontal_distribution == HorizontalDistribution("center")
-    assert style.vertical_alignment == VerticalAlignment("bottom")
+    assert style.justify_content == JustifyContent("center")
+    assert style.align_items == AlignItems("start")
 
-    column.vertical_distribution("bottom")
-    column.horizontal_align("center")
+    column.justify_content("start")
+    column.align_items("center")
     style = column._style
-    assert style.vertical_distribution == VerticalDistribution("bottom")
-    assert style.horizontal_alignment == HorizontalAlignment("center")
+    assert style.justify_content == JustifyContent("start")
+    assert style.align_items == AlignItems("center")
 
 def test_color_formats():
     color_formats = [

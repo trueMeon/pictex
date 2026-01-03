@@ -24,7 +24,7 @@ def create_metric_card(title: str, value: str, change: str, trend: str) -> Colum
     header = Row(
         Text(title).font_size(14).color("#64748B").font_weight(500),
         Text(trend_icon).font_size(16)
-    ).horizontal_distribution("space-between").vertical_align("center")
+    ).justify_content("space-between").align_items("center")
     
     # Main value
     main_value = Text(value).font_size(32).font_weight(700).color("#1E293B").margin(8, 0)
@@ -32,7 +32,7 @@ def create_metric_card(title: str, value: str, change: str, trend: str) -> Colum
     # Change indicator
     change_text = Text(change).font_size(14).color(trend_color).font_weight(600)
     change_label = Text("from last month").font_size(12).color("#94A3B8")
-    change_row = Row(change_text, change_label).gap(8).vertical_align("center")
+    change_row = Row(change_text, change_label).gap(8).align_items("center")
     
     # Card container
     card = (

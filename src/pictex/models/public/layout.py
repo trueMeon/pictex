@@ -15,31 +15,18 @@ class Padding:
     bottom: float = 0
     left: float = 0
 
-class HorizontalDistribution(str, Enum):
-    LEFT = "left"
+class JustifyContent(str, Enum):
+    """Main-axis distribution for flex containers (CSS justify-content)."""
+    START = "start"
     CENTER = "center"
-    RIGHT = "right"
+    END = "end"
     SPACE_BETWEEN = "space-between"
     SPACE_AROUND = "space-around"
     SPACE_EVENLY = "space-evenly"
 
-class VerticalAlignment(str, Enum):
-    TOP = "top"
+class AlignItems(str, Enum):
+    """Cross-axis alignment for flex containers (CSS align-items)."""
+    START = "start"
     CENTER = "center"
-    BOTTOM = "bottom"
+    END = "end"
     STRETCH = "stretch"
-
-class VerticalDistribution(str, Enum):
-    TOP = "top"
-    CENTER = "center"
-    BOTTOM = "bottom"
-    SPACE_BETWEEN = "space-between"
-    SPACE_AROUND = "space-around"
-    SPACE_EVENLY = "space-evenly"
-
-class HorizontalAlignment(str, Enum):
-    LEFT = "left"
-    CENTER = "center"
-    RIGHT = "right"
-    STRETCH = "stretch"
-

@@ -26,7 +26,6 @@ if TYPE_CHECKING:
         Margin,
         Border,
         Position,
-        Inset,
     )
 
 
@@ -41,59 +40,21 @@ class StyleMapper:
         >>> stretchable_style = StyleMapper.create_style(pictex_node)
     """
 
-    # Mapping from pictex HorizontalDistribution to stretchable JustifyContent
-    HORIZONTAL_DISTRIBUTION_MAP = {
-        'left': JustifyContent.START,
-        'center': JustifyContent.CENTER,
-        'right': JustifyContent.END,
-        'space-between': JustifyContent.SPACE_BETWEEN,
-        'space-around': JustifyContent.SPACE_AROUND,
-        'space-evenly': JustifyContent.SPACE_EVENLY,
-    }
-
-    # Mapping from pictex VerticalDistribution to stretchable JustifyContent
-    VERTICAL_DISTRIBUTION_MAP = {
-        'top': JustifyContent.START,
-        'center': JustifyContent.CENTER,
-        'bottom': JustifyContent.END,
-        'space-between': JustifyContent.SPACE_BETWEEN,
-        'space-around': JustifyContent.SPACE_AROUND,
-        'space-evenly': JustifyContent.SPACE_EVENLY,
-    }
-
-    # Mapping from pictex VerticalAlignment to stretchable AlignItems
-    VERTICAL_ALIGNMENT_MAP = {
-        'top': AlignItems.START,
-        'center': AlignItems.CENTER,
-        'bottom': AlignItems.END,
-        'stretch': AlignItems.STRETCH,
-    }
-
-    # Mapping from pictex HorizontalAlignment to stretchable AlignItems
-    HORIZONTAL_ALIGNMENT_MAP = {
-        'left': AlignItems.START,
-        'center': AlignItems.CENTER,
-        'right': AlignItems.END,
-        'stretch': AlignItems.STRETCH,
-    }
-
     @classmethod
     def create_row_style(cls, node: 'Node') -> StretchableStyle:
         """Create stretchable style for a Row node (flex-direction: row)."""
         computed = node.computed_styles
         
-        # Map distribution and alignment
-        h_dist = computed.horizontal_distribution.get()
-        v_align = computed.vertical_alignment.get()
-        
-        justify_content = cls.HORIZONTAL_DISTRIBUTION_MAP.get(h_dist.value, JustifyContent.START)
-        align_items = cls.VERTICAL_ALIGNMENT_MAP.get(v_align.value, AlignItems.START)
+        justify_content = computed.justify_content.get()
+        align_items = computed.align_items.get()
+        justify_content_mapped = cls._map_justify_content(justify_content.value)
+        align_items_mapped = cls._map_align_items(align_items.value)
         
         return cls._create_base_style(
             node,
             flex_direction=FlexDirection.ROW,
-            justify_content=justify_content,
-            align_items=align_items,
+            justify_content=justify_content_mapped,
+            align_items=align_items_mapped,
         )
 
     @classmethod
@@ -101,19 +62,41 @@ class StyleMapper:
         """Create stretchable style for a Column node (flex-direction: column)."""
         computed = node.computed_styles
         
-        # Map distribution and alignment (inverted for column)
-        v_dist = computed.vertical_distribution.get()
-        h_align = computed.horizontal_alignment.get()
-        
-        justify_content = cls.VERTICAL_DISTRIBUTION_MAP.get(v_dist.value, JustifyContent.START)
-        align_items = cls.HORIZONTAL_ALIGNMENT_MAP.get(h_align.value, AlignItems.START)
+        justify_content = computed.justify_content.get()
+        align_items = computed.align_items.get()
+        justify_content_mapped = cls._map_justify_content(justify_content.value)
+        align_items_mapped = cls._map_align_items(align_items.value)
         
         return cls._create_base_style(
             node,
             flex_direction=FlexDirection.COLUMN,
-            justify_content=justify_content,
-            align_items=align_items,
+            justify_content=justify_content_mapped,
+            align_items=align_items_mapped,
         )
+
+    @classmethod
+    def _map_justify_content(cls, value: str) -> JustifyContent:
+        """Map pictex JustifyContent value to stretchable JustifyContent."""
+        mapping = {
+            'start': JustifyContent.START,
+            'center': JustifyContent.CENTER,
+            'end': JustifyContent.END,
+            'space-between': JustifyContent.SPACE_BETWEEN,
+            'space-around': JustifyContent.SPACE_AROUND,
+            'space-evenly': JustifyContent.SPACE_EVENLY,
+        }
+        return mapping.get(value, JustifyContent.START)
+
+    @classmethod
+    def _map_align_items(cls, value: str) -> AlignItems:
+        """Map pictex AlignItems value to stretchable AlignItems."""
+        mapping = {
+            'start': AlignItems.START,
+            'center': AlignItems.CENTER,
+            'end': AlignItems.END,
+            'stretch': AlignItems.STRETCH,
+        }
+        return mapping.get(value, AlignItems.START)
 
     @classmethod
     def create_leaf_style(cls, node: 'Node') -> StretchableStyle:

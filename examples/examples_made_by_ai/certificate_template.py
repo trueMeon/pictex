@@ -74,7 +74,7 @@ def create_ornamental_divider() -> Row:
         left_line,
         center_ornament,
         right_line
-    ).vertical_align("center").gap(20).horizontal_distribution("center")
+    ).align_items("center").gap(20).justify_content("center")
 
 def create_signature_line(name: str, title: str) -> Column:
     """Creates a signature line with name and title"""
@@ -89,7 +89,7 @@ def create_signature_line(name: str, title: str) -> Column:
         signature_line,
         name_text,
         title_text
-    ).gap(8).horizontal_align("center")
+    ).gap(8).align_items("center")
 
 # Main certificate background
 certificate_bg = (
@@ -180,7 +180,7 @@ instructor_signature = create_signature_line(CERTIFICATE["instructor"], "Course 
 
 signature_section = Row(
     instructor_signature,
-).horizontal_distribution("space-around").vertical_align("center").margin(20, 0, 40, 0)
+).justify_content("space-around").align_items("center").margin(20, 0, 40, 0)
 
 # Certificate ID
 cert_id = (
@@ -203,7 +203,7 @@ content = Column(
     completion_date,
     signature_section,
     cert_id
-).horizontal_align("center")
+).align_items("center")
 
 # Complete certificate
 certificate = Row(

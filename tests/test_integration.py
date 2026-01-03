@@ -31,8 +31,8 @@ def test_kitchen_sink_all_features_combined(file_regression, render_engine):
     image = Image(IMAGE_PATH).resize(0.5)
     col = (
         Column(text_1, text_2, image)
-        .vertical_distribution('space-around')
-        .horizontal_align('center').gap(20)
+        .justify_content('space-around')
+        .align_items('center').gap(20)
         .border(5, "blue")
         .background_color("cyan")
     )
