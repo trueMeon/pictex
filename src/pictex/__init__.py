@@ -30,7 +30,7 @@ __all__ = [
     "Position", "PositionType", "Inset",
     "Transform",
     "SizeValue", "SizeValueMode",
-    "Margin", "Padding", "JustifyContent", "AlignItems",
+    "Margin", "Padding", "JustifyContent", "AlignItems", "AlignSelf", "FlexWrap",
     "BackgroundImage", "BackgroundImageSizeMode",
     "Border", "BorderStyle", "BorderRadiusValue", "BorderRadius",
     "RenderNode",
