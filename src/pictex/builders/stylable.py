@@ -405,6 +405,73 @@ class Stylable:
         self._style.text_wrap.set(wrap if isinstance(wrap, TextWrap) else TextWrap(wrap))
         return self
 
+    def flex_grow(self, value: float) -> Self:
+        """Sets the flex grow factor for this element (CSS flex-grow).
+        
+        Controls how much this element should grow relative to siblings when
+        there's extra space in the flex container.
+        
+        Args:
+            value: The grow factor. 0 means no growth (default), 1+ means grow.
+                   Higher values grow proportionally more.
+        
+        Returns:
+            The `Self` instance for chaining.
+        
+        Example:
+            >>> Row(
+            ...     Text("Fixed").size(width=100),
+            ...     Text("Grows x1").flex_grow(1),
+            ...     Text("Grows x2").flex_grow(2)
+            ... )
+        """
+        self._style.flex_grow.set(float(value))
+        return self
+
+    def flex_shrink(self, value: float) -> Self:
+        """Sets the flex shrink factor for this element (CSS flex-shrink).
+        
+        Controls how much this element should shrink relative to siblings when
+        the container is too small.
+        
+        Args:
+            value: The shrink factor. 0 means no shrinking, 1 means shrink
+                   proportionally (default). Higher values shrink more.
+        
+        Returns:
+            The `Self` instance for chaining.
+        
+        Example:
+            >>> Row(
+            ...     Text("Don't shrink").flex_shrink(0),
+            ...     Text("Can shrink").flex_shrink(1)
+            ... )
+        """
+        self._style.flex_shrink.set(float(value))
+        return self
+
+    def align_self(self, alignment: Union[AlignSelf, str]) -> Self:
+        """Override the container's align-items for this specific element (CSS align-self).
+        
+        Allows an individual flex item to override the alignment set by its container.
+        
+        Args:
+            alignment: Alignment mode. Can be 'auto', 'start', 'center', 'end', or 'stretch'.
+                      'auto' uses the container's align-items value (default).
+        
+        Returns:
+            The `Self` instance for chaining.
+        
+        Example:
+            >>> Row(
+            ...     Text("A"),
+            ...     Text("B").align_self('end'),  # This one aligns differently
+            ...     Text("C")
+            ... ).align_items('start')
+        """
+        self._style.align_self.set(alignment if isinstance(alignment, AlignSelf) else AlignSelf(alignment))
+        return self
+
     def _build_color(self, color: Union[str, PaintSource]) -> PaintSource:
         """Internal helper to create a SolidColor from a string.
 

@@ -3,7 +3,7 @@ from typing import Optional
 from .border import Border, BorderRadius
 from .background import BackgroundImage
 from .effects import Shadow, OutlineStroke
-from .layout import Margin, Padding, JustifyContent, AlignItems
+from .layout import Margin, Padding, JustifyContent, AlignItems, AlignSelf, FlexWrap
 from .position import Position
 from .transform import Transform
 from .style_property import StyleProperty
@@ -52,6 +52,18 @@ class Style:
     )
     align_items: StyleProperty[AlignItems] = field(
         default_factory=lambda: StyleProperty(AlignItems.START, inheritable=False)
+    )
+    align_self: StyleProperty[AlignSelf] = field(
+        default_factory=lambda: StyleProperty(AlignSelf.AUTO, inheritable=False)
+    )
+    flex_grow: StyleProperty[float] = field(
+        default_factory=lambda: StyleProperty(0.0, inheritable=False)
+    )
+    flex_shrink: StyleProperty[float] = field(
+        default_factory=lambda: StyleProperty(1.0, inheritable=False)
+    )
+    flex_wrap: StyleProperty[FlexWrap] = field(
+        default_factory=lambda: StyleProperty(FlexWrap.NOWRAP, inheritable=False)
     )
     gap: StyleProperty[float] = field(default_factory=lambda: StyleProperty(0.0, inheritable=False))
 

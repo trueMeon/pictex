@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="490" height="200"><defs><style type="text/css">@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}</style></defs>
+	<rect fill-opacity="0" width="490" height="200" />
+	<rect fill="#ECF0F1" width="490" height="200" />
+	<rect fill="#3498DB" width="56" height="97" />
+	<text font-size="80" font-family="pictex-InterVariable" x="0, " y="77.5, ">
+			A
+	</text>
+	<rect fill="#E74C3C" x="55" y="127" width="208" height="73" />
+	<text font-size="60" font-family="pictex-InterVariable" x="55, 94.257812, 111.13281, 132.34375, 167.32422, 202.77344, 239.51172, " y="185.125, ">
+			B (end)
+	</text>
+	<rect fill="#2ECC71" x="262" y="75" width="192" height="50" />
+	<text font-size="40" font-family="pictex-InterVariable" x="262, 291.21875, 302.46875, 316.60938, 339.46094, 362.78125, 386.41406, 399.10938, 422.42969, 437.48828, " y="113.75, ">
+			C (center)
+	</text>
+	<rect fill="#F39C12" x="453" width="37" height="61" />
+	<text font-size="50" font-family="pictex-InterVariable" x="453, " y="48.4375, ">
+			D
+	</text>
+</svg>

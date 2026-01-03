@@ -11,6 +11,8 @@ from stretchable.style import (
     Style as StretchableStyle,
     FlexDirection,
     AlignItems,
+    AlignSelf as StretchableAlignSelf,
+    FlexWrap as StretchableFlexWrap,
     JustifyContent,
     Display,
     Position as StretchablePosition,
@@ -151,6 +153,25 @@ class StyleMapper:
         if flex_grow > 0:
             style_kwargs['flex_grow'] = flex_grow
         
+        # Map explicit flex_grow/flex_shrink from style
+        explicit_flex_grow = computed.flex_grow.get()
+        if explicit_flex_grow > 0:
+            style_kwargs['flex_grow'] = explicit_flex_grow
+        
+        explicit_flex_shrink = computed.flex_shrink.get()
+        if explicit_flex_shrink != 1.0:  # Only set if non-default
+            style_kwargs['flex_shrink'] = explicit_flex_shrink
+        
+        # Map align_self
+        align_self = computed.align_self.get()
+        if align_self.value != 'auto':
+            style_kwargs['align_self'] = cls._map_align_self(align_self.value)
+        
+        # Map flex_wrap (only for containers)
+        flex_wrap = computed.flex_wrap.get()
+        if flex_wrap.value != 'nowrap':
+            style_kwargs['flex_wrap'] = cls._map_flex_wrap(flex_wrap.value)
+        
         # Map position and inset
         position_config: 'Position' = computed.position.get()
         if position_config is not None:
@@ -161,6 +182,27 @@ class StyleMapper:
                 style_kwargs['inset'] = inset
         
         return StretchableStyle(**style_kwargs)
+
+    @classmethod
+    def _map_align_self(cls, value: str) -> StretchableAlignSelf:
+        """Map pictex AlignSelf value to stretchable AlignSelf."""
+        mapping = {
+            'start': StretchableAlignSelf.START,
+            'center': StretchableAlignSelf.CENTER,
+            'end': StretchableAlignSelf.END,
+            'stretch': StretchableAlignSelf.STRETCH,
+        }
+        return mapping.get(value, StretchableAlignSelf.START)
+
+    @classmethod
+    def _map_flex_wrap(cls, value: str) -> StretchableFlexWrap:
+        """Map pictex FlexWrap value to stretchable FlexWrap."""
+        mapping = {
+            'nowrap': StretchableFlexWrap.NO_WRAP,
+            'wrap': StretchableFlexWrap.WRAP,
+            'wrap-reverse': StretchableFlexWrap.WRAP_REVERSE,
+        }
+        return mapping.get(value, StretchableFlexWrap.NO_WRAP)
 
     @classmethod
     def _map_size(

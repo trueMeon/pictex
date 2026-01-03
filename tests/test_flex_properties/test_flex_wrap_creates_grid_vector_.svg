@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="350" height="572"><defs><style type="text/css">@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}</style></defs>
+	<rect fill-opacity="0" width="350" height="572" />
+	<rect fill="#ECF0F1" width="350" height="572" />
+	<rect fill="#3498DB" x="10" y="10" width="80" height="131" />
+	<text font-size="50" font-family="pictex-InterVariable" x="20, 34.160156, 50.029297, 79.179688, " y="68.4375, ">
+			Item
+	</text>
+	<text font-size="50" font-family="pictex-InterVariable" x="20, " y="118.4375, ">
+			0
+	</text>
+	<rect fill="#E74C3C" x="100" y="10" width="80" height="131" />
+	<text font-size="50" font-family="pictex-InterVariable" x="110, 124.16016, 140.0293, 169.17969, " y="68.4375, ">
+			Item
+	</text>
+	<text font-size="50" font-family="pictex-InterVariable" x="110, " y="118.4375, ">
+			1
+	</text>
+	<rect fill="#3498DB" x="190" y="10" width="80" height="131" />
+	<text font-size="50" font-family="pictex-InterVariable" x="200, 214.16016, 230.0293, 259.17969, " y="68.4375, ">
+			Item
+	</text>
+	<text font-size="50" font-family="pictex-InterVariable" x="200, " y="118.4375, ">
+			2
+	</text>
+	<rect fill="#E74C3C" x="10" y="150" width="80" height="131" />
+	<text font-size="50" font-family="pictex-InterVariable" x="20, 34.160156, 50.029297, 79.179688, " y="208.4375, ">
+			Item
+	</text>
+	<text font-size="50" font-family="pictex-InterVariable" x="20, " y="258.4375, ">
+			3
+	</text>
+	<rect fill="#3498DB" x="100" y="150" width="80" height="131" />
+	<text font-size="50" font-family="pictex-InterVariable" x="110, 124.16016, 140.0293, 169.17969, " y="208.4375, ">
+			Item
+	</text>
+	<text font-size="50" font-family="pictex-InterVariable" x="110, " y="258.4375, ">
+			4
+	</text>
+	<rect fill="#E74C3C" x="190" y="150" width="80" height="131" />
+	<text font-size="50" font-family="pictex-InterVariable" x="200, 214.16016, 230.0293, 259.17969, " y="208.4375, ">
+			Item
+	</text>
+	<text font-size="50" font-family="pictex-InterVariable" x="200, " y="258.4375, ">
+			5
+	</text>
+	<rect fill="#3498DB" x="10" y="290" width="80" height="132" />
+	<text font-size="50" font-family="pictex-InterVariable" x="20, 34.160156, 50.029297, 79.179688, " y="348.4375, ">
+			Item
+	</text>
+	<text font-size="50" font-family="pictex-InterVariable" x="20, " y="398.4375, ">
+			6
+	</text>
+	<rect fill="#E74C3C" x="100" y="290" width="80" height="132" />
+	<text font-size="50" font-family="pictex-InterVariable" x="110, 124.16016, 140.0293, 169.17969, " y="348.4375, ">
+			Item
+	</text>
+	<text font-size="50" font-family="pictex-InterVariable" x="110, " y="398.4375, ">
+			7
+	</text>
+	<rect fill="#3498DB" x="190" y="290" width="80" height="132" />
+	<text font-size="50" font-family="pictex-InterVariable" x="200, 214.16016, 230.0293, 259.17969, " y="348.4375, ">
+			Item
+	</text>
+	<text font-size="50" font-family="pictex-InterVariable" x="200, " y="398.4375, ">
+			8
+	</text>
+	<rect fill="#E74C3C" x="10" y="431" width="80" height="131" />
+	<text font-size="50" font-family="pictex-InterVariable" x="20, 34.160156, 50.029297, 79.179688, " y="489.4375, ">
+			Item
+	</text>
+	<text font-size="50" font-family="pictex-InterVariable" x="20, " y="539.4375, ">
+			9
+	</text>
+	<rect fill="#3498DB" x="100" y="431" width="80" height="131" />
+	<text font-size="50" font-family="pictex-InterVariable" x="110, 124.16016, 140.0293, 169.17969, " y="489.4375, ">
+			Item
+	</text>
+	<text font-size="50" font-family="pictex-InterVariable" x="110, 130.33691, " y="539.4375, ">
+			10
+	</text>
+	<rect fill="#E74C3C" x="190" y="431" width="80" height="131" />
+	<text font-size="50" font-family="pictex-InterVariable" x="200, 214.16016, 230.0293, 259.17969, " y="489.4375, ">
+			Item
+	</text>
+	<text font-size="50" font-family="pictex-InterVariable" x="200, 220.33691, " y="539.4375, ">
+			11
+	</text>
+</svg>

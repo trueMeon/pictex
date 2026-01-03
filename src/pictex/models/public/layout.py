@@ -30,3 +30,17 @@ class AlignItems(str, Enum):
     CENTER = "center"
     END = "end"
     STRETCH = "stretch"
+
+class AlignSelf(str, Enum):
+    """Self-alignment override for flex items (CSS align-self)."""
+    AUTO = "auto"
+    START = "start"
+    CENTER = "center"
+    END = "end"
+    STRETCH = "stretch"
+
+class FlexWrap(str, Enum):
+    """Flex wrapping behavior (CSS flex-wrap)."""
+    NOWRAP = "nowrap"
+    WRAP = "wrap"
+    WRAP_REVERSE = "wrap-reverse"
