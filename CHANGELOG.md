@@ -23,6 +23,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `min_height(value)`: Set minimum height constraint to maintain minimum space
   - `max_height(value)`: Set maximum height constraint to limit vertical growth
   - All constraints support both absolute (pixels) and percentage values
+- **Aspect Ratio**: New `aspect_ratio(ratio)` method for maintaining element proportions:
+  - Automatically calculates height when width is specified (or vice versa)
+  - Supports numeric values (e.g., `16/9`, `1.618`) or string format (e.g., `"16/9"`)
 
 ### Changed
 - **BREAKING**: `absolute_position()` now uses CSS-style inset properties (`top`, `right`, `bottom`, `left`) instead of positional `(x, y)` arguments.

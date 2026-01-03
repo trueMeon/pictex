@@ -198,3 +198,62 @@ class WithSizeMixin:
         parsed_value = self._parse_size_value(value)
         self._style.max_height.set(parsed_value)
         return self
+
+    def aspect_ratio(self, ratio: Union[float, int, str]) -> Self:
+        """Sets the aspect ratio constraint for the element.
+
+        Maintains a specific width-to-height proportion. When one dimension
+        is specified (e.g., width), the other is calculated automatically
+        to maintain the ratio.
+
+        The aspect ratio is expressed as width/height. Common examples:
+        - Square: 1.0 or 1
+        - Landscape 16:9: 16/9 ≈ 1.778
+        - Portrait 9:16: 9/16 ≈ 0.5625
+        - Golden ratio: 1.618
+
+        Args:
+            ratio: Width-to-height ratio. Can be:
+                - Float or int: Direct ratio value (e.g., 1.5, 16/9)
+                - String with division: "16/9", "4/3", "1/1"
+
+        Returns:
+            Self: The instance for method chaining.
+
+        Example:
+            ```python
+            # 16:9 video placeholder - specify width, height auto-calculated
+            Element().size(width=400).aspect_ratio(16/9)  # height = 225
+
+            # Square Instagram post
+            Element().size(width=300).aspect_ratio(1)  # height = 300
+
+            # Vertical story format
+            Element().size(height=600).aspect_ratio(9/16)  # width = 337.5
+            ```
+        """
+        if isinstance(ratio, str):
+            # Support "16/9" format
+            if '/' in ratio:
+                parts = ratio.split('/')
+                if len(parts) == 2:
+                    try:
+                        ratio = float(parts[0]) / float(parts[1])
+                    except (ValueError, ZeroDivisionError):
+                        raise ValueError(f"Invalid aspect ratio format: '{ratio}'. Expected 'width/height' like '16/9'.")
+                else:
+                    raise ValueError(f"Invalid aspect ratio format: '{ratio}'. Expected 'width/height' like '16/9'.")
+            else:
+                try:
+                    ratio = float(ratio)
+                except ValueError:
+                    raise ValueError(f"Invalid aspect ratio: '{ratio}'. Expected a number or 'width/height' format.")
+        
+        if not isinstance(ratio, (int, float)):
+            raise TypeError(f"Aspect ratio must be a number or string, got {type(ratio).__name__}")
+        
+        if ratio <= 0:
+            raise ValueError(f"Aspect ratio must be positive, got {ratio}")
+        
+        self._style.aspect_ratio.set(float(ratio))
+        return self

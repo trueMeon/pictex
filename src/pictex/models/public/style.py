@@ -51,6 +51,7 @@ class Style:
     max_width: StyleProperty[Optional[SizeValue]] = field(default_factory=lambda: StyleProperty(None, inheritable=False))
     min_height: StyleProperty[Optional[SizeValue]] = field(default_factory=lambda: StyleProperty(None, inheritable=False))
     max_height: StyleProperty[Optional[SizeValue]] = field(default_factory=lambda: StyleProperty(None, inheritable=False))
+    aspect_ratio: StyleProperty[Optional[float]] = field(default_factory=lambda: StyleProperty(None, inheritable=False))
     justify_content: StyleProperty[JustifyContent] = field(
         default_factory=lambda: StyleProperty(JustifyContent.START, inheritable=False)
     )

@@ -162,6 +162,11 @@ class StyleMapper:
         if max_size is not None and (max_width_value is not None or max_height_value is not None):
             style_kwargs['max_size'] = max_size
         
+        # Map aspect_ratio
+        aspect_ratio = computed.aspect_ratio.get()
+        if aspect_ratio is not None:
+            style_kwargs['aspect_ratio'] = aspect_ratio
+        
         # Map flex_grow for fill-available
         flex_grow = cls._get_flex_grow(width_value, height_value)
         if flex_grow > 0:

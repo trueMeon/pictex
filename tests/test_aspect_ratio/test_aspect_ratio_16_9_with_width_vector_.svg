@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="225"><defs><style type="text/css">@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}</style></defs>
+	<rect fill-opacity="0" width="400" height="225" />
+	<rect fill="#3498DB" width="400" height="225" />
+	<text font-size="50" font-family="pictex-InterVariable" x="20, 40.336914, 71.342773, 85.74707, 116.75293, 130.81543, 165.3125, 177.42188, 208.03711, 237.1875, " y="68.4375, ">
+			169 Video
+	</text>
+</svg>
