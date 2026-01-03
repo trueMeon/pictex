@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `flex_shrink(value)`: Control how elements shrink when space is limited
   - `align_self(alignment)`: Override container alignment for individual items
   - `flex_wrap(mode)`: Enable multi-line flex containers for responsive layouts
+- **Size Constraints**: New methods for controlling element size boundaries:
+  - `min_width(value)`: Set minimum width constraint to prevent collapse
+  - `max_width(value)`: Set maximum width constraint to prevent overflow
+  - `min_height(value)`: Set minimum height constraint to maintain minimum space
+  - `max_height(value)`: Set maximum height constraint to limit vertical growth
+  - All constraints support both absolute (pixels) and percentage values
 
 ### Changed
 - **BREAKING**: `absolute_position()` now uses CSS-style inset properties (`top`, `right`, `bottom`, `left`) instead of positional `(x, y)` arguments.
