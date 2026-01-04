@@ -168,6 +168,10 @@ class StyleMapper:
             position_type = StretchablePosition.ABSOLUTE
         elif position.type == PositionType.RELATIVE:
             position_type = StretchablePosition.RELATIVE
+        elif position.type == PositionType.FIXED:
+            # FIXED is mapped to ABSOLUTE in Taffy
+            # The layout engine will post-process these to be canvas-relative
+            position_type = StretchablePosition.ABSOLUTE
         
         inset = position.inset
         if not inset:

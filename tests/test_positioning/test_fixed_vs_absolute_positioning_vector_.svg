@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><defs><style type="text/css">@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}</style></defs>
+	<rect fill-opacity="0" width="400" height="300" />
+	<rect fill="#6C757D" width="400" height="300" />
+	<rect fill="#FFC107" x="30" y="30" width="200" height="150" />
+	<rect fill="none" stroke="red" stroke-width="25" stroke-miterlimit="4" x="42.5" y="42.5" width="175" height="125" />
+	<rect fill="#28A745" x="50" y="50" width="154" height="71" />
+	<text fill="white" font-size="50" font-family="pictex-InterVariable" x="55, 84.516602, 97.944336, 132.05078, 162.10449, " y="103.4375, ">
+			FIXED
+	</text>
+	<rect fill="#DC3545" x="105" y="105" width="110" height="71" />
+	<text fill="white" font-size="50" font-family="pictex-InterVariable" x="110, 144.49707, 177.21191, " y="158.4375, ">
+			ABS
+	</text>
+</svg>

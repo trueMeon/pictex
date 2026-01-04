@@ -9,9 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **Taffy Layout Engine**: Migrated from custom Python layout to `stretchable` (Taffy bindings), providing robust CSS Flexbox layout with improved performance and correctness.
-- **CSS-Compliant Positioning**: New `relative_position()` method for CSS-style relative positioning with `top`, `right`, `bottom`, `left` insets.
-- **Transform Support**: New `translate()` method for post-layout transforms, enabling true centering with percentage-based offsets.
-- **Anchor-Based Positioning**: New `place()` method provides intuitive anchor-based positioning (replaces old `absolute_position(x, y)` behavior).
+- **CSS-Compliant Positioning System**: Complete overhaul of positioning methods to match CSS standards:
+  - **`absolute_position()`**: Position elements relative to their nearest ancestor (like CSS `position: absolute`). Uses `top`, `right`, `bottom`, `left` inset properties.
+  - **`fixed_position()`**: Position elements relative to the canvas viewport, ignoring parent positioning (like CSS `position: fixed`). Uses `top`, `right`, `bottom`, `left` inset properties.
+  - **`relative_position()`**: Position elements relative to their normal flow position with visual offsets (like CSS `position: relative`). Uses `top`, `right`, `bottom`, `left` inset properties.
+  - **`place()`**: Convenience method for anchor-based positioning. Internally uses `fixed_position()` with automatic translate transforms. Supports keywords (`"center"`, `"left"`, `"right"`, `"top"`, `"bottom"`), pixels, percentages, and offsets.
+- **Transform Support**: New `translate()` method for post-layout transforms, enabling true centering with percentage-based offsets (e.g., `translate(x="-50%", y="-50%")`).
 - **Flex Control Properties**: New methods for fine-grained flexbox control:
   - `flex_grow(value)`: Control how elements grow to fill available space
   - `flex_shrink(value)`: Control how elements shrink when space is limited
@@ -29,7 +32,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **BREAKING**: `absolute_position()` now uses CSS-style inset properties (`top`, `right`, `bottom`, `left`) instead of positional `(x, y)` arguments.
-  - **Migration**: Use `place(x, y)` for the old behavior, or switch to `absolute_position(top=y, left=x)` for CSS compliance.
+  - **Migration options**:
+    1. Use `place(x, y)` for simple canvas-relative positioning with anchor support (recommended for most cases)
+    2. Use `fixed_position(top=y, left=x)` for explicit canvas-relative positioning with CSS insets
+    3. Use `absolute_position(top=y, left=x)` for parent-relative positioning (new CSS-compliant behavior)
+  - **Understanding the difference**:
+    - `absolute_position()` is now **parent-relative** (like CSS `position: absolute`)
+    - `fixed_position()` and `place()` are **canvas-relative** (like CSS `position: fixed`)
 - **BREAKING**: Layout methods renamed to CSS-compliant names:
   - `horizontal_distribution()` → `justify_content()` (Row)
   - `vertical_distribution()` → `justify_content()` (Column)

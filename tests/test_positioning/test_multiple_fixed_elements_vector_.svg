@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="200"><defs><style type="text/css">@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}</style></defs>
+	<rect fill-opacity="0" width="300" height="200" />
+	<rect fill="#DEE2E6" width="300" height="200" />
+	<rect fill="#E9ECEF" width="200" height="150" />
+	<rect fill="#007BFF" x="10" y="10" width="71" height="71" />
+	<text fill="white" font-size="50" font-family="pictex-InterVariable" x="15, 47.275391, " y="63.4375, ">
+			TL
+	</text>
+	<rect fill="#28A745" x="115" y="10" width="75" height="71" />
+	<text fill="white" font-size="50" font-family="pictex-InterVariable" x="120, 152.27539, " y="63.4375, ">
+			TR
+	</text>
+	<rect fill="#FFC107" x="10" y="69" width="71" height="71" />
+	<text font-size="50" font-family="pictex-InterVariable" x="15, 47.714844, " y="122.4375, ">
+			BL
+	</text>
+	<rect fill="#DC3545" x="115" y="69" width="75" height="71" />
+	<text fill="white" font-size="50" font-family="pictex-InterVariable" x="120, 152.71484, " y="122.4375, ">
+			BR
+	</text>
+</svg>

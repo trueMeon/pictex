@@ -36,7 +36,6 @@ class Renderer:
         canvas.clear(skia.ColorTRANSPARENT)
         
         canvas.scale(scale_factor, scale_factor)
-        print(f"canvas_bounds: {canvas_bounds}")
         canvas.translate(-canvas_bounds.left(), -canvas_bounds.top())
 
         root.paint(canvas)

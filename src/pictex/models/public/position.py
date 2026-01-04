@@ -5,9 +5,9 @@ from typing import Optional, Union
 
 class PositionType(str, Enum):
     """CSS position property values."""
-    STATIC = 'static'      # Default, in normal flow
     RELATIVE = 'relative'  # In flow, but offsets apply
-    ABSOLUTE = 'absolute'  # Out of flow, positioned relative to parent
+    ABSOLUTE = 'absolute'  # Out of flow, positioned relative to nearest positioned ancestor
+    FIXED = 'fixed'        # Out of flow, positioned relative to canvas (viewport)
 
 
 # Type for inset values: pixels (float/int) or percentage string ("50%")
@@ -33,7 +33,7 @@ class Inset:
 class Position:
     """CSS-like position configuration.
     
-    Combines position type (static/relative/absolute) with inset values.
+    Combines position type (relative/absolute/fixed) with inset values.
     """
-    type: PositionType = PositionType.STATIC
+    type: PositionType = PositionType.RELATIVE
     inset: Inset = field(default_factory=Inset)

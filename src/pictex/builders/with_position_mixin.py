@@ -26,8 +26,7 @@ class WithPositionMixin:
     ) -> Self:
         """Position element absolutely (out of normal flow).
 
-        The element is positioned relative to its containing block (parent).
-        Values can be pixels (int/float) or percentages (str like "50%").
+        The element is positioned relative to its nearest ancestor.
 
         Args:
             top: Distance from top edge
@@ -43,6 +42,34 @@ class WithPositionMixin:
             >>> Text("Footer").absolute_position(bottom=0, left=0, right=0)
         """
         return self._set_position(PositionType.ABSOLUTE, top, right, bottom, left)
+
+    def fixed_position(
+        self,
+        *,
+        top: InsetValue = None,
+        right: InsetValue = None,
+        bottom: InsetValue = None,
+        left: InsetValue = None,
+    ) -> Self:
+        """Position element fixed (out of normal flow, relative to canvas).
+
+        The element is always positioned relative to the canvas (viewport),
+        regardless of its position in the DOM tree. This is like CSS position: fixed.
+
+        Args:
+            top: Distance from canvas top edge
+            right: Distance from canvas right edge
+            bottom: Distance from canvas bottom edge
+            left: Distance from canvas left edge
+
+        Returns:
+            Self: The instance for method chaining.
+
+        Example:
+            >>> Text("Watermark").fixed_position(bottom=10, right=10)
+            >>> Text("Header").fixed_position(top=0, left=0, right=0)
+        """
+        return self._set_position(PositionType.FIXED, top, right, bottom, left)
 
     def relative_position(
         self,
@@ -106,10 +133,11 @@ class WithPositionMixin:
         x_offset: float = 0,
         y_offset: float = 0,
     ) -> Self:
-        """Place element using anchor-based positioning (sugar syntax).
+        """Place element using anchor-based positioning (canvas-relative).
 
-        This is a convenience method that combines absolute_position and
-        translate to provide intuitive anchor-based placement.
+        This is a convenience method that combines fixed positioning and
+        translate to provide intuitive anchor-based placement relative to
+        the canvas (viewport).
 
         Args:
             horizontal: Horizontal anchor - "left", "center", "right", pixels, or "X%"
@@ -133,7 +161,7 @@ class WithPositionMixin:
             translate_y = (translate_y or 0) + y_offset if isinstance(translate_y, (int, float, type(None))) else y_offset
 
         self._style.position.set(Position(
-            type=PositionType.ABSOLUTE,
+            type=PositionType.FIXED,
             inset=Inset(top=top, right=right, bottom=bottom, left=left)
         ))
 

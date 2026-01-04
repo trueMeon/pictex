@@ -71,7 +71,7 @@ def test_builders_fluent_api_and_style_building():
 
         style = builder._style
         position = style.position.get()
-        assert position.type == PositionType.ABSOLUTE
+        assert position.type == PositionType.FIXED  # place() uses canvas-relative positioning
         assert position.inset.top == "70%"
         assert position.inset.left == "50%"
         transform = style.transform.get()
@@ -211,7 +211,7 @@ def test_position():
     # Test place() for anchor-based positioning
     builder.place("left", "bottom")
     position = builder._style.position.get()
-    assert position.type == PositionType.ABSOLUTE
+    assert position.type == PositionType.FIXED  # place() uses canvas-relative positioning
     assert position.inset.top is None
     assert position.inset.left == 0
     assert position.inset.bottom == 0
