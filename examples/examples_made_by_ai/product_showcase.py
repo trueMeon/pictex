@@ -89,7 +89,7 @@ def create_price_section(price: str, original_price: str) -> Row:
         .margin(8, 0, 0, 0)
     )
     
-    return Row(current_price, original, discount_badge).vertical_align("center").gap(12)
+    return Row(current_price, original, discount_badge).align_items("center").gap(12)
 
 # Product image placeholder (would be actual product image in real scenario)
 product_image = (
@@ -109,7 +109,7 @@ new_badge = (
     .padding(6, 10)
     .background_color("#EF4444")
     .border_radius(12)
-    .position(16, 16)  # Top-left corner
+    .absolute_position(left=16, top=16)  # Top-left corner
 )
 
 image_section = Row(product_image, new_badge)
@@ -121,7 +121,7 @@ product_name = Text(PRODUCT["name"]).font_size(24).font_weight(700).color("#1F29
 # Rating section
 rating_stars = create_star_rating(PRODUCT["rating"])
 rating_text = Text(f"{PRODUCT['rating']} ({PRODUCT['reviews']} reviews)").font_size(14).color("#6B7280")
-rating_section = Row(rating_stars, rating_text).vertical_align("center").gap(8).margin(12, 0)
+rating_section = Row(rating_stars, rating_text).align_items("center").gap(8).margin(12, 0)
 
 # Price section
 price_section = create_price_section(PRODUCT["price"], PRODUCT["original_price"]).margin(16, 0)
@@ -176,7 +176,7 @@ product_info = Column(
 product_showcase = Row(
     image_section,
     product_info
-).gap(40).vertical_align("top")
+).gap(40).align_items("start")
 
 # Main container
 main_container = (

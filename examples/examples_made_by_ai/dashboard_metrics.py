@@ -62,7 +62,7 @@ def create_progress_bar(percentage: float, color: str = "#3B82F6") -> Column:
     progress_text = Text(f"{percentage}% Complete").font_size(12).color("#6B7280")
     
     return Column(
-        Row(bg_bar, fill_bar.position(0, 0)),  # Layered bars
+        Row(bg_bar, fill_bar.absolute_position(left=0, top=0)),  # Layered bars
         progress_text
     )
 

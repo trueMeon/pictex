@@ -37,14 +37,14 @@ def create_horizontal_bar_chart(items: list) -> Column:
         )
         
         # Bar container with overlay
-        bar_container = Row(bar_bg, bar_fill.position(0, 0))
+        bar_container = Row(bar_bg, bar_fill.absolute_position(left=0, top=0))
         
         # Complete bar row
         bar_row = Row(
             name_text.size(width=100),
             bar_container,
             perc_text.size(width=50)
-        ).vertical_align("center").gap(16)
+        ).align_items("center").gap(16)
         
         bars.append(bar_row)
     

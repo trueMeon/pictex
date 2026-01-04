@@ -29,7 +29,7 @@ def create_decorative_border() -> Column:
         .size(corner_size, corner_size)
         .background_color("#C9A96E")
         .border_radius(0, 0, corner_size, 0)
-        .position(0, 0)
+        .absolute_position(left=0, top=0)
     )
     
     # Top-right corner  
@@ -38,7 +38,7 @@ def create_decorative_border() -> Column:
         .size(corner_size, corner_size)
         .background_color("#C9A96E")
         .border_radius(0, 0, 0, corner_size)
-        .position(740, 0)
+        .absolute_position(left=740, top=0)
     )
     
     # Bottom-left corner
@@ -47,7 +47,7 @@ def create_decorative_border() -> Column:
         .size(corner_size, corner_size)
         .background_color("#C9A96E")
         .border_radius(0, corner_size, 0, 0)
-        .position(0, 540)
+        .absolute_position(left=0, top=540)
     )
     
     # Bottom-right corner
@@ -56,7 +56,7 @@ def create_decorative_border() -> Column:
         .size(corner_size, corner_size)
         .background_color("#C9A96E")
         .border_radius(corner_size, 0, 0, 0)
-        .position(740, 540)
+        .absolute_position(left=740, top=540)
     )
     
     return Column(top_left, top_right, bottom_left, bottom_right)
@@ -207,8 +207,8 @@ content = Column(
 
 # Complete certificate
 certificate = Row(
-    certificate_bg.position(0, 0),
-    decorative_border.position(0, 0),
+    certificate_bg.absolute_position(left=0, top=0),
+    decorative_border.absolute_position(left=0, top=0),
     content.size(800)
 )
 
