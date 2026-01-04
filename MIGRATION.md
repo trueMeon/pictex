@@ -27,8 +27,8 @@ Text("Badge").absolute_position(10, 20)  # x=10, y=20
 
 **After (v2.0):**
 ```python
-# Option A: Use CSS insets
-Text("Badge").absolute_position(top=20, left=10)
+# Option A: Use CSS insets (canvas-relative)
+Text("Badge").fixed_position(top=20, left=10)
 
 # Option B: Use place() for anchor-based positioning
 Text("Badge").place(10, 20)

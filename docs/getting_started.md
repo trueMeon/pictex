@@ -35,7 +35,7 @@ user_info = Column(
 user_banner = Row(
     avatar,
     user_info
-).gap(15).vertical_align('center') # Vertically center the avatar and user info
+).gap(15).align_items('center')  # Vertically center the avatar and user info
 
 # 3. Create a Canvas and render the final composition
 canvas = Canvas().padding(20).background_color("#F5F8FA")
@@ -80,6 +80,44 @@ vector_image.save("output.svg")
 # Get the raw SVG string
 svg_string = vector_image.svg
 ```
+
+## Canvas as a Style Template
+
+The `Canvas` acts as a global style template. Properties you set on the Canvas are **inherited** by all elements unless explicitly overridden on individual builders.
+
+**Inherited properties:**
+- Typography: `font_family`, `font_size`, `font_weight`, `font_style`, `color`
+- Text layout: `text_align`, `line_height`
+- Text effects: `text_shadows`, `text_stroke`, `underline`, `strikethrough`
+
+**Not inherited (element-specific):**
+- Box model: `padding`, `margin`, `border`, `border_radius`
+- Background: `background_color`, `background_image`
+- Effects: `box_shadows`
+- Layout: `size`, `position`, `flex_grow`, etc.
+
+```python
+from pictex import Canvas, Column, Text
+
+# Canvas sets global typography
+canvas = (
+    Canvas()
+    .font_family("Arial")
+    .font_size(75)
+    .color("blue")
+)
+
+# These inherit the font settings but can override them
+layout = Column(
+    Text("Inherits blue"),
+    Text("Overrides to red").color("red"),
+    Text("Inherits blue again")
+)
+
+canvas.render(layout).save("inheritance_example.png")
+```
+
+![Inheritance Example](https://res.cloudinary.com/dlvnbnb9v/image/upload/v1767555688/inheritance_example_ebdnpg.png)
 
 ## What's Next?
 
