@@ -18,8 +18,8 @@
 	<text font-size="50" font-family="pictex-InterVariable" x="148, 177.15039, 217.16504, " y="92.4375, ">
 			Two
 	</text>
-	<rect fill="#2ECC71" x="116" width="160" height="81" />
-	<text font-size="50" font-family="pictex-InterVariable" x="126, 158.27539, 187.84082, 205.83398, 234.98438, " y="58.4375, ">
+	<rect fill="#2ECC71" x="117" width="159" height="81" />
+	<text font-size="50" font-family="pictex-InterVariable" x="127, 159.27539, 188.84082, 206.83398, 235.98438, " y="58.4375, ">
 			Three
 	</text>
 </svg>

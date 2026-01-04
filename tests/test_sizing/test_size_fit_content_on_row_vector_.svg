@@ -11,8 +11,8 @@
 	<text font-size="50" font-family="pictex-InterVariable" x="10, 39.516602, 51.625977, 70.449219, 96.84082, " y="58.4375, ">
 			First
 	</text>
-	<rect fill="#E67E22" x="143" width="201" height="81" />
-	<text font-size="50" font-family="pictex-InterVariable" x="153, 185.08008, 214.23047, 242.79492, 272.77539, 302.31641, " y="58.4375, ">
+	<rect fill="#E67E22" x="144" width="200" height="81" />
+	<text font-size="50" font-family="pictex-InterVariable" x="154, 186.08008, 215.23047, 243.79492, 273.77539, 303.31641, " y="58.4375, ">
 			Second
 	</text>
 </svg>

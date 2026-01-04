@@ -4,7 +4,7 @@ from .node import Node
 from ..models import TextDecoration, Style, RenderProps, Line
 from ..text import FontManager, TextShaper
 from ..painters import Painter, BackgroundPainter, TextPainter, DecorationPainter, BorderPainter
-from ..utils import cached_property, cached_method
+from ..utils import cached_property, cached_method, to_int_skia_rect
 
 
 class TextNode(Node):
@@ -109,13 +109,13 @@ class TextNode(Node):
 
         content_bounds.join(self.relative_text_bounds)
 
-        return content_bounds
+        return to_int_skia_rect(content_bounds)
     
-    def compute_intrinsic_width(self) -> float:
+    def compute_intrinsic_width(self) -> int:
         """Intrinsic width for stretchable measure function."""
         return self._compute_intrinsic_content_bounds().width()
     
-    def compute_intrinsic_height(self) -> float:
+    def compute_intrinsic_height(self) -> int:
         """Intrinsic height for stretchable measure function."""
         return self._compute_intrinsic_content_bounds().height()
 
@@ -164,5 +164,5 @@ class TextNode(Node):
 
         return self._text_wrap_width
 
-    def set_text_wrap_width(self, width: int) -> None:
+    def set_text_wrap_width(self, width: Optional[int]) -> None:
         self._text_wrap_width = width

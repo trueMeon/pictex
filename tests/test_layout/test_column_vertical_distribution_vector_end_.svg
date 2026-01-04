@@ -10,12 +10,12 @@
 }</style></defs>
 	<rect fill-opacity="0" width="409" height="500" />
 	<rect fill="#ECF0F1" width="409" height="500" />
-	<rect fill="#3498DB" y="258" width="147" height="82" />
-	<text font-size="50" font-family="pictex-InterVariable" x="10, 42.080078, 71.645508, 101.62598, 121.23047, " y="316.4375, ">
+	<rect fill="#3498DB" y="257" width="147" height="81" />
+	<text font-size="50" font-family="pictex-InterVariable" x="10, 42.080078, 71.645508, 101.62598, 121.23047, " y="315.4375, ">
 			Short
 	</text>
-	<rect fill="#E74C3C" y="339" width="409" height="81" />
-	<text font-size="50" font-family="pictex-InterVariable" x="10, 38.271484, 68.251953, 98.232422, 128.21289, 158.19336, 188.17383, 218.1543, 248.13477, 278.11523, 308.0957, 338.07617, 367.61719, " y="397.4375, ">
+	<rect fill="#E74C3C" y="338" width="409" height="81" />
+	<text font-size="50" font-family="pictex-InterVariable" x="10, 38.271484, 68.251953, 98.232422, 128.21289, 158.19336, 188.17383, 218.1543, 248.13477, 278.11523, 308.0957, 338.07617, 367.61719, " y="396.4375, ">
 			Loooooooooong
 	</text>
 	<rect fill="#2ECC71" y="419" width="269" height="81" />
