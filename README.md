@@ -5,11 +5,11 @@
 [![Codecov](https://codecov.io/gh/francozanardi/pictex/branch/main/graph/badge.svg)](https://codecov.io/gh/francozanardi/pictex)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Programmatically generate images using CSS Flexbox layout. Built for Python developers who want the power of web layouts for fast image generation.
+Programmatically generate high-quality images using standard CSS Flexbox layouts. Powered by Skia and Taffy.
 
 ![PicTex](https://res.cloudinary.com/dlvnbnb9v/image/upload/v1753831765/readme-1_vqnohh.png)
 
-PicTex brings CSS Flexbox to Python image generation. Build complex layouts using familiar web standards, such as `justify-content`, `align-items`, `flex-grow`, then render them as high-quality PNG, JPEG, WebP, or SVG. Perfect for Open Graph, social media graphics, video thumbnails, data visualizations, and automated report generation.
+A Python library for efficient image generation using CSS Flexbox. Build complex layouts using familiar web standards, such as `justify-content`, `align-items`, `flex-grow`, then render them as high-quality PNG, JPEG, WebP, or SVG. Perfect for Open Graph, social media graphics, video thumbnails, data visualizations, and automated report generation. Browser-grade layouts without the browser overhead
 
 ## Features
 
@@ -22,6 +22,9 @@ PicTex brings CSS Flexbox to Python image generation. Build complex layouts usin
     -   **Raster**: Save as PNG/JPEG/WebP, or convert to NumPy/Pillow.
     -   **Vector**: Export to a clean, scalable SVG file with font embedding.
 -   **High-Quality Rendering**: Powered by Google's **Skia** graphics engine (via `skia-python`).
+
+> [!IMPORTANT]
+> **Upgrading from v1.x?** PicTex v2.0 introduces significant changes to the layout and positioning system. Please read the [Migration Guide](docs/MIGRATION.md) to update your code.
 
 ## Installation
 
