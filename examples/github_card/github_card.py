@@ -19,11 +19,7 @@ REPO = "francozanardi/pictex"
 def fetch_repo_data(repo: str) -> dict:
     """Fetch repository data from GitHub API (no auth needed for public repos)"""
     base_url = f"https://api.github.com/repos/{repo}"
-    
-    # Get repo info
     repo_data = requests.get(base_url).json()
-    
-    # Get languages
     languages = requests.get(f"{base_url}/languages").json()
     
     return {
@@ -33,7 +29,7 @@ def fetch_repo_data(repo: str) -> dict:
         "stars": repo_data.get("stargazers_count", 0),
         "forks": repo_data.get("forks_count", 0),
         "watchers": repo_data.get("subscribers_count", 0),
-        "topics": repo_data.get("topics", [])[:6],  # Limit to 6 topics
+        "topics": repo_data.get("topics", [])[:8],  # Limit to 8 topics
         "languages": languages,
         "owner_avatar": repo_data.get("owner", {}).get("avatar_url", ""),
     }
@@ -125,7 +121,6 @@ def create_language_legend(languages: dict) -> Row:
         
         items.append(Row(dot, label).align_items("center").gap(6))
     
-    # flex_wrap() for responsive layout
     return Row(*items).gap(16).flex_wrap("wrap")
 
 def create_stat(icon: str, value: str, label: str, icon_color: str = None) -> Column:
@@ -157,7 +152,6 @@ repo_icon = (
     .border_radius(8)
 )
 
-# Star badge on repo icon (absolute_position - parent relative)
 star_badge = (
     Text(f"★ {format_number(data['stars'])}")
     .font_size(11)
@@ -180,7 +174,6 @@ repo_name = (
 
 header = Row(repo_icon_with_badge, repo_name).align_items("center").gap(16)
 
-# Description (flex_grow to fill available space)
 description = (
     Text(data["description"] or "No description")
     .font_size(14)
@@ -188,26 +181,22 @@ description = (
     .line_height(1.5)
 )
 
-# Topics with flex_wrap
 topics_row = Row()
 if data["topics"]:
     topic_tags = [create_topic_tag(t) for t in data["topics"]]
     topics_row = Row(*topic_tags).gap(8).flex_wrap("wrap")
 
-# Language bar
 lang_section = Column(
     create_language_bar(data["languages"]),
     create_language_legend(data["languages"])
 ).gap(12 if data["languages"] else 0)
 
-# Stats row (needs width for justify_content to work)
 stats_row = Row(
     create_stat("⭐", format_number(data["stars"]), "stars", COLORS["star"]),
     create_stat("🍴", format_number(data["forks"]), "forks"),
     create_stat("👁", format_number(data["watchers"]), "watching"),
 ).size(width="100%").justify_content("space-around")
 
-# Main card
 card = (
     Column(
         header,
@@ -224,8 +213,6 @@ card = (
     .border_radius(12)
 )
 
-# Trending badge (fixed_position - canvas relative)
-# Only show if repo has 1000+ stars
 trending_badge = None
 if data["stars"] >= 1000:
     trending_badge = (
@@ -239,7 +226,6 @@ if data["stars"] >= 1000:
         .fixed_position(top=0, right=0)
     )
 
-# Canvas
 canvas = (
     Canvas()
     .font_family("Arial")
@@ -247,11 +233,8 @@ canvas = (
     .padding(40)
 )
 
-# Render with optional trending badge
 if trending_badge:
     result = canvas.render(card, trending_badge, scale_factor=4)
 else:
     result = canvas.render(card, scale_factor=4)
 result.save("github_card.png")
-
-print(f"Generated github_card.png for {data['full_name']}")

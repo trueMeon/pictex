@@ -31,11 +31,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Supports numeric values (e.g., `16/9`, `1.618`) or string format (e.g., `"16/9"`)
 
 ### Changed
-- **BREAKING**: `absolute_position()` now uses CSS-style inset properties (`top`, `right`, `bottom`, `left`) instead of positional `(x, y)` arguments.
-  - **Migration options**:
-    1. Use `place(x, y)` for simple canvas-relative positioning with anchor support (recommended for most cases)
-    2. Use `fixed_position(top=y, left=x)` for explicit canvas-relative positioning with CSS insets
-    3. Use `absolute_position(top=y, left=x)` for parent-relative positioning (new CSS-compliant behavior)
+- **BREAKING**: `position()` method removed. This method positioned elements relative to their **parent** using anchor-based coordinates.
+  - **Migration**: Use `absolute_position(top=, left=, right=, bottom=)` with CSS insets for parent-relative positioning.
+- **BREAKING**: `absolute_position()` now uses CSS-style inset properties (`top`, `right`, `bottom`, `left`) instead of positional `(x, y)` arguments. It is now **parent-relative** (like CSS `position: absolute`).
+  - **Migration options** for old canvas-relative `absolute_position(x, y)`:
+    1. Use `place(x, y)` for anchor-based canvas positioning
+    2. Use `fixed_position(top=, left=)` for CSS-style canvas positioning
   - **Understanding the difference**:
     - `absolute_position()` is now **parent-relative** (like CSS `position: absolute`)
     - `fixed_position()` and `place()` are **canvas-relative** (like CSS `position: fixed`)

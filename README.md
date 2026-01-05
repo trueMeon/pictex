@@ -1,6 +1,6 @@
 # PicTex
 
-[![PyPI version](https://badge.fury.io/py/pictex.svg?v=4)](https://pypi.org/project/pictex/)
+[![PyPI version](https://badge.fury.io/py/pictex.svg?v=5)](https://pypi.org/project/pictex/)
 [![CI Status](https://github.com/francozanardi/pictex/actions/workflows/ci.yml/badge.svg)](https://github.com/francozanardi/pictex/actions/workflows/ci.yml)
 [![Codecov](https://codecov.io/gh/francozanardi/pictex/branch/main/graph/badge.svg)](https://codecov.io/gh/francozanardi/pictex)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -117,7 +117,7 @@ image.save("profile_card.png")
 
 | Preview                                                      | Description                                                                                                                                                                                                                    |
 |:-------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| ![GitHub Card Example](https://res.cloudinary.com/dlvnbnb9v/image/upload/v1767559196/github_card_imhh6z.png)   | **GitHub Repository Card** <br/> Generate beautiful cards for any GitHub repo. Just change the repo name and it fetches real data from the API. <br/> **[View Code »](https://github.com/francozanardi/pictex/blob/main/examples/github_card/github_card.py)**    |
+| ![GitHub Card Example](https://res.cloudinary.com/dlvnbnb9v/image/upload/v1767576541/github_card_imhh6z.png)   | **GitHub Repository Card** <br/> Generate beautiful cards for any GitHub repo. Just change the repo name and it fetches real data from the API. <br/> **[View Code »](https://github.com/francozanardi/pictex/blob/main/examples/github_card/github_card.py)**    |
 | ![Tweet to Image Example](https://res.cloudinary.com/dlvnbnb9v/image/upload/v1754446864/tweet_ouzwyf.png)   | **Tweet to Image** <br/> Recreate the look and feel of a tweet, perfect for sharing on other social platforms. <br/> **[View Code »](https://github.com/francozanardi/pictex/blob/main/examples/tweet_card/tweet_card.py)**    |
 | ![Data Table Example](https://res.cloudinary.com/dlvnbnb9v/image/upload/v1754446872/table_t8hoyi.png)            | **Data Table** <br/> Generate a clean, styled table from a 2D list. Includes headers, zebra-striping, and shadows. <br/> **[View Code »](https://github.com/francozanardi/pictex/blob/main/examples/table/table.py)**          |
 | ![Code Snippet Example](https://res.cloudinary.com/dlvnbnb9v/image/upload/v1754446867/result_exfjqr.png?v=1) | **Code Snippet** <br/> Create beautifully syntax-highlighted images of your code snippets for tutorials or social media. <br/> **[View Code »](https://github.com/francozanardi/pictex/blob/main/examples/code_to_image/code_to_image.py)** |

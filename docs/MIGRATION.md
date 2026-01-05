@@ -16,25 +16,55 @@ PicTex v2.0 is a major release focused on CSS compliance and layout engine robus
 
 ### 1. Positioning API
 
-#### `absolute_position()` signature changed
+The positioning system has been completely redesigned to follow CSS standards. Both `position()` and `absolute_position()` methods have changed.
 
-The `absolute_position()` method now uses CSS-style inset properties instead of positional arguments.
+#### `position()` removed (parent-relative with anchors)
+
+The old `position(x, y, x_offset, y_offset)` method positioned elements relative to their **parent** using anchor-based coordinates. This has been replaced with CSS-style inset properties.
 
 **Before (v1.x):**
 ```python
-Text("Badge").absolute_position(10, 20)  # x=10, y=20
+# Position relative to parent with anchor
+Text("Badge").position("right", "top", x_offset=-10, y_offset=10)
+Text("Badge").position(50, 100)  # Anchor at 50px, 100px from parent
 ```
 
 **After (v2.0):**
 ```python
-# Option A: Use CSS insets (canvas-relative)
-Text("Badge").fixed_position(top=20, left=10)
-
-# Option B: Use place() for anchor-based positioning
-Text("Badge").place(10, 20)
+# Use absolute_position for parent-relative positioning with CSS insets
+Text("Badge").absolute_position(top=10, right=10)
+Text("Badge").absolute_position(top=100, left=50)
 ```
 
-The new `place()` method provides the same anchor-based positioning as the old API:
+#### `absolute_position()` signature changed (canvas-relative with anchors)
+
+The old `absolute_position(x, y, x_offset, y_offset)` method positioned elements relative to the **canvas** using anchor-based coordinates. This is now handled by `place()` or `fixed_position()`.
+
+**Before (v1.x):**
+```python
+# Position relative to canvas with anchor
+Text("Watermark").absolute_position("right", "bottom", x_offset=-20, y_offset=-20)
+Text("Overlay").absolute_position("center", "center")
+```
+
+**After (v2.0):**
+```python
+# Option A: Use place() for anchor-based canvas positioning
+Text("Watermark").place("right", "bottom", x_offset=-20, y_offset=-20)
+Text("Overlay").place("center", "center")
+
+# Option B: Use fixed_position() with CSS insets
+Text("Watermark").fixed_position(bottom=20, right=20)
+```
+
+#### Summary of positioning methods
+
+| v1.x Method | v2.0 Equivalent | Relative To |
+|-------------|-----------------|-------------|
+| `position(x, y, ...)` | `absolute_position(top=, left=, ...)` | Parent |
+| `absolute_position(x, y, ...)` | `place(x, y, ...)` or `fixed_position(...)` | Canvas |
+
+The new `place()` method provides anchor-based positioning:
 - Supports keywords: `"left"`, `"center"`, `"right"`, `"top"`, `"bottom"`
 - Supports pixels: `place(50, 100)`
 - Supports percentages: `place("25%", "75%")`
@@ -125,9 +155,10 @@ Text("Centered")
 
 ## Migration Checklist
 
-- [ ] Replace `absolute_position(x, y)` calls with either:
-  - `place(x, y)` for anchor-based positioning, or
-  - `absolute_position(top=y, left=x)` for CSS-style positioning
+- [ ] Replace `position(x, y, ...)` calls with `absolute_position(top=, left=, ...)` (parent-relative)
+- [ ] Replace `absolute_position(x, y, ...)` calls with either:
+  - `place(x, y, ...)` for anchor-based canvas positioning (recommended), or
+  - `fixed_position(top=, left=, ...)` for CSS-style canvas positioning
 - [ ] Rename layout methods:
   - `horizontal_distribution()` → `justify_content()`
   - `vertical_distribution()` → `justify_content()`
