@@ -13,7 +13,7 @@ PicTex brings CSS Flexbox to Python image generation. Build complex layouts usin
 
 ## Features
 
--   **CSS Flexbox Layout**: Built on industry-standard CSS Flexbox principles with near-complete property support. If you know CSS, you know PicTex. See the [CSS Flexbox Compliance](#css-flexbox-compliance) table below.
+-   **CSS Flexbox Layout**: Built on industry-standard CSS Flexbox principles with near-complete property support. If you know CSS, you know PicTex. See the [CSS Flexbox Compliance](#css-flexbox-compliance) table below. Powered by **Taffy** layout engine (via `stretchable`).
 -   **Component-Based Design**: Compose complex visuals by nesting powerful layout primitives like `Row`, `Column`, and `Image`.
 -   **Rich Styling**: Gradients, multiple shadows, borders with rounded corners, and text decorations.
 -   **Advanced Typography**: Custom fonts, variable fonts, line height, alignment, and text shaping with kerning and ligatures.
@@ -21,7 +21,7 @@ PicTex brings CSS Flexbox to Python image generation. Build complex layouts usin
 -   **Flexible Output**: 
     -   **Raster**: Save as PNG/JPEG/WebP, or convert to NumPy/Pillow.
     -   **Vector**: Export to a clean, scalable SVG file with font embedding.
--   **High-Quality Rendering**: Powered by Google's Skia graphics engine.
+-   **High-Quality Rendering**: Powered by Google's **Skia** graphics engine (via `skia-python`).
 
 ## Installation
 
