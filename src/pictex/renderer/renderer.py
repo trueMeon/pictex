@@ -7,12 +7,16 @@ from ..models import RenderProps
 from ..bitmap_image import BitmapImage
 from ..vector_image import VectorImage
 from ..nodes import Node
+from ..layout import LayoutEngine
 
 class Renderer:
 
+    def __init__(self):
+        self._layout_engine = LayoutEngine()
+
     def render_as_bitmap(self, root: Node, crop_mode: CropMode, font_smoothing: FontSmoothing, scale_factor: float = 1.0) -> BitmapImage:
         """Renders the nodes with the given builders, generating a bitmap image."""
-        root.prepare_tree_for_rendering(RenderProps(False, crop_mode, font_smoothing))
+        self._prepare_tree_for_rendering(root, RenderProps(False, crop_mode, font_smoothing))
 
         canvas_bounds = root.paint_bounds
         render_width = int(canvas_bounds.width() * scale_factor)
@@ -42,7 +46,7 @@ class Renderer:
     def render_as_svg(self, root: Node, embed_fonts: bool) -> VectorImage:
         """Renders the text with the given builders, generating a vector image."""
         # If support shadows in the near future, we should use CropMode.NONE.
-        root.prepare_tree_for_rendering(RenderProps(True, CropMode.CONTENT_BOX, FontSmoothing.SUBPIXEL))
+        self._prepare_tree_for_rendering(root, RenderProps(True, CropMode.CONTENT_BOX, FontSmoothing.SUBPIXEL))
 
         canvas_bounds = root.paint_bounds
         stream = skia.DynamicMemoryWStream()
@@ -53,3 +57,9 @@ class Renderer:
         root.paint(canvas)
         del canvas
         return VectorImageProcessor().process(stream, embed_fonts, root)
+
+    def _prepare_tree_for_rendering(self, root: Node, render_props: RenderProps) -> None:
+        """Prepare the tree for rendering."""
+        root.clear()
+        root.init_render_dependencies(render_props)
+        self._layout_engine.compute_layout(root)

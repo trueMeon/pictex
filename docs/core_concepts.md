@@ -1,6 +1,6 @@
 # Core Concepts: Builders & Layout
 
-Welcome to PicTex's layout engine! With version 1.0, PicTex has evolved from a text-styler into a powerful visual composition tool. This guide introduces the core concepts of building and arranging elements.
+PicTex provides a powerful visual composition tool built on CSS Flexbox principles. This guide introduces the core concepts of building and arranging elements.
 
 ## Everything is a Builder
 
@@ -45,20 +45,19 @@ Every layout builder has two axes:
 -   **Main Axis**: The direction in which children are placed. For `Row`, it's **horizontal**. For `Column`, it's **vertical**.
 -   **Cross Axis**: The axis perpendicular to the main axis. For `Row`, it's **vertical**. For `Column`, it's **horizontal**.
 
-### Distribution (Main Axis)
+### Main Axis Distribution with `justify-content()`
 
-Distribution controls how children are spaced along the **main axis**, especially when the container is larger than the children combined.
+The `justify_content()` method controls how children are distributed along the **main axis** (horizontal for `Row`, vertical for `Column`). This follows the CSS [`justify-content`](https://developer.mozilla.org/en-US/docs/Web/CSS/justify-content) property.
 
--   **On a `Row`**: Use `.horizontal_distribution()`
--   **On a `Column`**: Use `.vertical_distribution()`
+**Available values:**
+-   `'start'` (Default) - Items packed at the start
+-   `'center'` - Items centered  
+-   `'end'` - Items packed at the end
+-   `'space-between'` - Space distributed between items
+-   `'space-around'` - Space around each item
+-   `'space-evenly'` - Equal space everywhere
 
-**Available Modes:**
--   `'left'` / `'top'` (Default): `[X|X|X|.........]`
--   `'center'`: `[.....|X|X|X|.....]`
--   `'right'` / `'bottom'`: `[.........|X|X|X]`
--   `'space-between'`: `[X|.....|X|.....|X]` (Space is only between elements)
--   `'space-around'`: `[..|X|.....|X|.....|X|..]` (Space around each element)
--   `'space-evenly'`: `[..|X|..|X|..|X|..]` (Space is equal everywhere)
+See the [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/justify-content#values) for detailed value descriptions.
 
 ```python
 from pictex import *
@@ -68,16 +67,16 @@ def create_distribution_example(distribution):
         Text("A").background_color("blue"),
         Text("B").background_color("red"),
         Text("C").background_color("green"),
-    ).horizontal_distribution(distribution).border(4, "black").size(width=300)
+    ).justify_content(distribution).border(4, "black").size(width=300)
     return Column(
         Text(distribution).font_size(40),
         row_with_distribution
     ).background_color("pink")
 
 distributions = [
-    "left",
+    "start",
     "center",
-    "right",
+    "end",
     "space-between",
     "space-around",
     "space-evenly",
@@ -91,20 +90,19 @@ image = Canvas().font_size(80).render(Column(*examples).gap(20))
 image.save("distribution.png")
 ```
 
-![Distribution Example](https://res.cloudinary.com/dlvnbnb9v/image/upload/v1754098899/distribution_vr3al5.png)
+![Distribution Example](https://res.cloudinary.com/dlvnbnb9v/image/upload/v1767555658/distribution_idmuqa.png)
 
-### Alignment (Cross Axis)
+### Cross Axis Alignment with `align-items()`
 
-Alignment controls how children are positioned along the **cross axis**.
+The `align_items()` method controls how children are positioned along the **cross axis** (vertical for `Row`, horizontal for `Column`). This follows the CSS [`align-items`](https://developer.mozilla.org/en-US/docs/Web/CSS/align-items) property.
 
--   **On a `Row`**: Use `.vertical_align()`
--   **On a `Column`**: Use `.horizontal_align()`
+**Available values:**
+-   `'start'` (Default) - Aligns children to the start
+-   `'center'` - Centers children
+-   `'end'` - Aligns children to the end
+-   `'stretch'` - Resizes children to fill the container
 
-**Available Modes:**
--   `'top'` / `'left'` (Default): Aligns children to the start of the cross axis.
--   `'center'`: Centers children along the cross axis.
--   `'bottom'` / `'right'`: Aligns children to the end of the cross axis.
--   `'stretch'`: Resizes children to fill the container along the cross axis.
+See the [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/align-items#values) for detailed value descriptions.
 
 ```python
 from pictex import *
@@ -114,16 +112,16 @@ def create_alignment_example(align):
         Text("A").background_color("blue").font_size(80),
         Text("B").background_color("red").font_size(65),
         Text("C").background_color("green").font_size(50),
-    ).vertical_align(align).border(4, "black").gap(30)
+    ).align_items(align).border(4, "black").gap(30)
     return Column(
         Text(align).font_size(40),
         row_with_alignment
     ).background_color("pink")
 
 aligns = [
-    "top",
+    "start",
     "center",
-    "bottom",
+    "end",
     "stretch"
 ]
 examples = []
@@ -134,58 +132,48 @@ image = Canvas().font_size(80).render(Column(*examples).gap(20))
 image.save("alignment.png")
 ```
 
-![Alignment Example](https://res.cloudinary.com/dlvnbnb9v/image/upload/v1754774757/alignment_m66sum.png)
+![Alignment Example](https://res.cloudinary.com/dlvnbnb9v/image/upload/v1767555657/alignment_see0pd.png)
 
-#### How `stretch` Works
+### Positioning: Breaking Out of the Flow
 
-The `'stretch'` alignment is particularly powerful. It makes all children in a container have the same height (in a `Row`) or width (in a `Column`), creating clean, uniform layouts.
+PicTex provides several methods for positioning elements outside the normal flex layout flow. When you position an element, it's removed from the flow and other elements behave as if it isn't there.
 
-**`stretch` only affects children whose size for that axis is set to `'auto'` (the default).**
+#### Anchor-Based Positioning with `.place()`
 
-If you give a child an explicit size (e.g., `.size(height=50)` or `.size(height='fit-content')`), that child will **opt out** of being stretched and will keep its specified size. This allows you to create flexible layouts with specific exceptions.
-
-```python
-from pictex import *
-
-col = Column(
-    Text("I will stretch").background_color("blue"),
-    Text("I am fixed").background_color("green").size(width="fit-content"),
-    Text("I will also stretch").background_color("red")
-).horizontal_align('stretch')
-
-Canvas().render(col).save("stretch.png")
-```
-
-![Stretch Example](https://res.cloudinary.com/dlvnbnb9v/image/upload/v1754774789/stretch_lxinzt.png)
-
-### Spacing with `.gap()`
-
-Instead of adding margins to each child, the cleanest way to add space between elements is with `.gap()`. This applies a consistent spacing on the **main axis**.
+The `.place()` method positions an element at specific coordinates using anchor points relative to the **canvas viewport** (similar to CSS `position: fixed`). This is a convenience method that internally uses `fixed_position()` and `translate()` to provide intuitive anchor-based placement.
 
 ```python
-# Add a 20px gap between all children in the column
-card = Column(
-    product_image,
-    header,
-    description
-).gap(20)
+from pictex import Canvas, Row, Text
+
+background = Row().size(width=300, height=200).background_color("lightblue")
+badge = Text("SALE").background_color("red").color("white").padding(5)
+
+result = Canvas().render(
+    background,
+    badge.place("right", "top", x_offset=-10, y_offset=10)
+)
+result.save("badge_example.png")
 ```
 
-### Breaking the Flow: `position()` and `absolute_position()`
+![Badge Example](https://res.cloudinary.com/dlvnbnb9v/image/upload/v1767555657/badge_example_s3a6om.png)
 
-Sometimes you need to place an element at a specific coordinate, ignoring the normal `Row` or `Column` flow. PicTex offers two powerful methods for this, each with a different frame of reference. When you use either method, the element is removed from the layout flow, and other elements will behave as if it isn't there.
+**Supported anchors:**
+- Keywords: `"left"`, `"center"`, `"right"`, `"top"`, `"bottom"`
+- Pixels: `place(50, 100)`
+- Percentages: `place("25%", "75%")`
+- Offsets: `place("right", "top", x_offset=-10, y_offset=10)`
 
-#### Relative Positioning with `.position()`
+### Supported Positioning Modes
 
-This is the most common method for positioning. It places an element relative to its **direct parent's content area**. This means the `(0, 0)` origin is the corner *inside* the parent's padding and border. This is perfect for overlays within a component, like placing a badge on an image, because the positioned element will move along with its parent.
+PicTex supports three CSS-compliant positioning modes, each with different behavior:
 
-#### Absolute Positioning with `.absolute_position()`
+#### 1. `absolute_position()` - Parent-relative Positioning
 
-This method provides an "escape hatch" from all parent containers. It places an element relative to the **root canvas**. The `(0, 0)` origin is the absolute top-left corner of the final rendered image, ignoring any margin, border, or padding on the root container itself. This is best for global elements like watermarks.
+Similar to CSS `position: absolute`, positions the element relative to its **nearest ancestor**.
 
-#### Visualizing the Difference
+#### 2. `fixed_position()` - Canvas-relative Positioning
 
-The following example makes the distinction clear. We create a `Canvas` with a large margin, border, and padding. Inside, we place two `Text` elements, both at `(0, 0)`—one with `absolute_position` and one with `position`.
+Similar to CSS `position: fixed`, positions the element relative to the **canvas viewport**, regardless of parent position or nesting.
 
 ```python
 from pictex import Canvas, Text
@@ -200,14 +188,14 @@ from pictex import Canvas, Text
     .font_size(20)
     .color("orange")
     .render(
-        Text("ABSOLUTE").absolute_position(0, 0),
-        Text("RELATIVE").position(0, 0)
+        Text("FIXED").fixed_position(top=0, left=0),
+        Text("ABSOLUTE").absolute_position(top=0, left=0)
     )
 ).save("position.png")
 ```
 
-![Positioning Example](https://res.cloudinary.com/dlvnbnb9v/image/upload/v1754260873/position_uxawu1.png)
+![Position Example](https://res.cloudinary.com/dlvnbnb9v/image/upload/v1767555659/position_dqu9ry.png)
 
-As you can see:
--   **`ABSOLUTE`** is rendered at the true `(0, 0)` of the final image, ignoring the canvas's own box model.
--   **`RELATIVE`** is rendered at `(0, 0)` relative to the parent's **content area**. Its final position is correctly offset by the canvas's 25px margin, 25px border, and 25px padding.
+#### 3. `relative_position()` - Flow-relative Positioning
+
+Positions the element relative to its **normal flow position** (where it would naturally be placed by flexbox).

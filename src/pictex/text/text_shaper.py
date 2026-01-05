@@ -145,12 +145,11 @@ class TextShaper:
 
             potential_width = current_width + token_width
 
-            if potential_width <= max_width:
-                # Token fits, add it
+            # Allow trailing whitespace to hang/overflow
+            if potential_width <= max_width or token.isspace():
                 current_line_tokens.append(token)
                 current_width = potential_width
             else:
-                # Token doesn't fit, start new line
                 wrapped_lines.append(''.join(current_line_tokens).strip())
                 current_line_tokens = [token]
                 current_width = token_width

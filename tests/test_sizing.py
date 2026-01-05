@@ -1,5 +1,5 @@
 import pytest
-from pictex import Canvas, Row, Column, Text, Image, Box
+from pictex import Canvas, Row, Column, Text, Image
 from .conftest import IMAGE_PATH
 
 def test_size_absolute(file_regression, render_engine):
@@ -53,7 +53,7 @@ def test_size_fit_background_image(file_regression, render_engine):
     render_func, check_func = render_engine
 
     element = (
-        Row("The row has the size of the image").text_wrap("nowrap")
+        Row("The row has the size of the image")
         .background_image(IMAGE_PATH)
         .fit_background_image()
     )
@@ -99,46 +99,16 @@ def test_size_percent_height(file_regression, render_engine):
     check_func(file_regression, image)
 
 
-def test_size_percent_throws_error_on_fit_content_parent(render_engine):
+def test_size_flex_grow_single_child(file_regression, render_engine):
     """
-    Verifies that the system correctly raises a ValueError when a child
-    with a percentage size is placed inside a parent with a 'fit-content'
-    size, preventing an infinite loop.
-    """
-    render_func, _ = render_engine
-
-    # This parent's size depends on its children.
-    parent_with_fit_content = Row(
-        # This child's size depends on its parent.
-        Text("I cause a problem").size(width="50%")
-    )  # No .size() means 'fit-content'
-
-    with pytest.raises(ValueError, match="Cannot use 'percent' size if parent element has 'fit-content' size"):
-        render_func(Canvas(), parent_with_fit_content)
-
-
-def test_size_percent_on_root_element_is_not_supported(render_engine):
-    """
-    Verifies that using a percentage size on a root element, which has no
-    container to be relative to, raises an error.
-    """
-    render_func, _ = render_engine
-
-    canvas = Canvas().size(width="50%")
-
-    with pytest.raises(ValueError, match="Cannot use 'percent' size on a root element without a parent"):
-        render_func(canvas, "Percent")
-
-def test_size_fill_available_single_child(file_regression, render_engine):
-    """
-    Tests that a single 'fill-available' child expands to fill all the
+    Tests that a single flex_grow(1) child expands to fill all the
     remaining space in a Row next to a fixed-size sibling.
     """
     render_func, check_func = render_engine
 
     parent = Row(
         Image(IMAGE_PATH).size(width=100), # Fixed-size sibling takes 100px
-        Text("This text fills the rest").size(width='fill-available').background_color("#27ae60").text_wrap("nowrap"),
+        Text("This text fills the rest").flex_grow(1).background_color("#27ae60").text_wrap("nowrap"),
     ).size(
         width=400, height=150
     ).gap(
@@ -151,17 +121,17 @@ def test_size_fill_available_single_child(file_regression, render_engine):
     check_func(file_regression, image)
 
 
-def test_size_fill_available_multiple_children(file_regression, render_engine):
+def test_size_flex_grow_multiple_children(file_regression, render_engine):
     """
-    Tests that multiple 'fill-available' children share the remaining
+    Tests that multiple flex_grow(1) children share the remaining
     space equally.
     """
     render_func, check_func = render_engine
 
     parent = Column(
         Text("Fixed Top").size(height=50).background_color("#f39c12"),
-        Row(Text("Flexible 1")).size(height='fill-available').background_color("#2980b9"),
-        Row(Text("Flexible 2")).size(height='fill-available').background_color("#8e44ad"),
+        Row(Text("Flexible 1")).flex_grow(1).background_color("#2980b9"),
+        Row(Text("Flexible 2")).flex_grow(1).background_color("#8e44ad"),
         Text("Fixed Bottom").size(height=30).background_color("#f39c12").text_wrap("nowrap"),
     ).size(
         width=300, height=400
@@ -175,16 +145,16 @@ def test_size_fill_available_multiple_children(file_regression, render_engine):
     check_func(file_regression, image)
 
 
-def test_size_fill_available_parent_with_percent_child(file_regression, render_engine):
+def test_size_flex_grow_parent_with_percent_child(file_regression, render_engine):
     """
     Tests that a child with percentage width is correctly declared inside a 
-    parent with 'fill-available' width.
+    parent with flex_grow(1).
     """
     render_func, check_func = render_engine
 
     element = Row(
         Text("I should not cause recursion").size(width="100%")
-    ).size(width="fill-available")
+    ).flex_grow(1)
 
     image = render_func(Canvas().size(width=500, height=500), element)
     check_func(file_regression, image)

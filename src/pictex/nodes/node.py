@@ -2,12 +2,18 @@ from __future__ import annotations
 from copy import deepcopy
 from typing import Optional, Tuple
 import skia
-from ..models import Style, Shadow, PositionMode, RenderProps, CropMode
+from ..models import Style, Shadow, RenderProps, CropMode, Transform
 from ..painters import Painter
-from ..utils import create_composite_shadow_filter, clone_skia_rect, to_int_skia_rect, cached_property, Cacheable
-from ..layout import SizeResolver
+from ..utils import create_composite_shadow_filter, to_int_skia_rect, clone_skia_rect, cached_property, Cacheable
+from ..layout import LayoutResult
+
 
 class Node(Cacheable):
+    """Base class for all pictex nodes.
+    
+    Nodes form a tree structure where layout is computed by stretchable.
+    All bounds are in absolute canvas coordinates after layout is computed.
+    """
 
     def __init__(self, style: Style):
         super().__init__()
@@ -15,8 +21,7 @@ class Node(Cacheable):
         self._parent: Optional[Node] = None
         self._children: list[Node] = []
         self._render_props: Optional[RenderProps] = None
-        self._absolute_position: Optional[Tuple[float, float]] = None
-        self._forced_size: Tuple[Optional[int], Optional[int]] = (None, None)
+        self._layout_result: Optional[LayoutResult] = None
 
     @property
     def parent(self) -> Optional[Node]:
@@ -26,211 +31,188 @@ class Node(Cacheable):
     def children(self) -> list[Node]:
         return self._children
 
+    @property
+    def absolute_position(self) -> Tuple[int, int]:
+        if self._layout_result is None:
+            raise RuntimeError("Layout not computed")
+        return (self.border_bounds.x(), self.border_bounds.y())
+
     @cached_property()
     def computed_styles(self) -> Style:
         return self._compute_styles()
-
-    @cached_property(group='bounds')
-    def size(self) -> Tuple[int, int]:
-        return (self.border_bounds.width(), self.border_bounds.height())
     
     @cached_property(group='bounds')
-    def content_width(self) -> float:
-        return SizeResolver(self).resolve_width()
-
-    @cached_property(group='bounds')
-    def content_height(self) -> float:
-        return SizeResolver(self).resolve_height()
-
-    @property
-    def absolute_position(self) -> Optional[Tuple[float, float]]:
-        return self._absolute_position
-
-    @property
-    def forced_size(self) -> Tuple[Optional[int], Optional[int]]:
-        return self._forced_size
-
-    @cached_property(group='bounds')
-    def padding_bounds(self):
-        return to_int_skia_rect(self._compute_padding_bounds())
-
-    @cached_property(group='bounds')
-    def border_bounds(self):
-        return to_int_skia_rect(self._compute_border_bounds())
-
-    @cached_property(group='bounds')
-    def margin_bounds(self):
-        return to_int_skia_rect(self._compute_margin_bounds())
+    def size(self) -> Tuple[int, int]:
+        """Size of the border box (width, height)."""
+        return (int(self.border_bounds.width()), int(self.border_bounds.height()))
 
     @cached_property(group='bounds')
     def content_bounds(self) -> skia.Rect:
-        return to_int_skia_rect(skia.Rect.MakeWH(self.content_width, self.content_height))
+        """Content area bounds in absolute canvas coordinates."""
+        if self._layout_result is None:
+            raise RuntimeError("Layout not computed")
+        bounds = self._layout_result.get_content_bounds()
+
+        return self._apply_transform(bounds)
+
+    @cached_property(group='bounds')
+    def padding_bounds(self) -> skia.Rect:
+        """Padding box bounds in absolute canvas coordinates."""
+        if self._layout_result is None:
+            raise RuntimeError("Layout not computed")
+        bounds = self._layout_result.get_padding_bounds()
+        return self._apply_transform(bounds)
+
+    @cached_property(group='bounds')
+    def border_bounds(self) -> skia.Rect:
+        """Border box bounds in absolute canvas coordinates."""
+        if self._layout_result is None:
+            raise RuntimeError("Layout not computed")
+        bounds = self._layout_result.get_border_bounds()
+        
+        return self._apply_transform(bounds)
+
+    @cached_property(group='bounds')
+    def margin_bounds(self) -> skia.Rect:
+        """Margin box bounds in absolute canvas coordinates."""
+        if self._layout_result is None:
+            raise RuntimeError("Layout not computed")
+        bounds = self._layout_result.get_margin_bounds()
+        return self._apply_transform(bounds)
 
     @cached_property(group='bounds')
     def paint_bounds(self) -> skia.Rect:
+        """Total paint area including shadows, in absolute canvas coordinates."""
         return to_int_skia_rect(self._compute_paint_bounds())
 
-    def _compute_padding_bounds(self) -> skia.Rect:
-        """
-        Compute the box bounds, relative to the node box size, (0, 0).
-        """
-        content_bounds = self.content_bounds
-        padding = self.computed_styles.padding.get()
-        return skia.Rect.MakeLTRB(
-            content_bounds.left() - padding.left,
-            content_bounds.top() - padding.top,
-            content_bounds.right() + padding.right,
-            content_bounds.bottom() + padding.bottom
-        )
-
-    def _compute_border_bounds(self) -> skia.Rect:
-        """
-        Compute the box bounds, relative to the node box size, (0, 0).
-        """
-        padding_bounds = self.padding_bounds
-        border = self.computed_styles.border.get()
-        if not border:
-            return clone_skia_rect(padding_bounds)
-
-        return skia.Rect.MakeLTRB(
-            padding_bounds.left() - border.width,
-            padding_bounds.top() - border.width,
-            padding_bounds.right() + border.width,
-            padding_bounds.bottom() + border.width
-        )
-
-    def _compute_margin_bounds(self) -> skia.Rect:
-        """
-        Compute the layout bounds (box + margin), relative to the node box size, (0, 0).
-        """
-        border_bounds = self.border_bounds
-        margin = self.computed_styles.margin.get()
-        return skia.Rect.MakeLTRB(
-            border_bounds.left() - margin.left,
-            border_bounds.top() - margin.top,
-            border_bounds.right() + margin.right,
-            border_bounds.bottom() + margin.bottom
-        )
-
     def _compute_paint_bounds(self) -> skia.Rect:
+        paint_bounds = clone_skia_rect(self.margin_bounds)
+        for child in self.children:
+            paint_bounds.join(child.paint_bounds)
+        
+        paint_bounds.join(
+            self._compute_shadow_bounds(self.border_bounds, self.computed_styles.box_shadows.get())
+        )
+
+        # This only makes sense if the padding is negative
+        paint_bounds.join(self.content_bounds) 
+
+        return paint_bounds
+
+    def _compute_shadow_bounds(self, source_bounds: skia.Rect, shadows: list[Shadow]) -> skia.Rect:
+        """Compute bounds expanded by shadow effects."""
+        # I don't like this. It only makes sense because it is only being used by paint bounds calculation
+        #  However, that responsibility is not clear by the method name.
+        #  I mean, if you want to get the shadow bounds in another scenario, this "if" statement don't make any sense.
+        if self._render_props and self._render_props.crop_mode == CropMode.CONTENT_BOX:
+            return source_bounds
+        filter = create_composite_shadow_filter(shadows)
+        if filter:
+            return filter.computeFastBounds(source_bounds)
+        return source_bounds
+
+    def _apply_transform(self, bounds: skia.Rect) -> skia.Rect:
+        """Apply transform (translate) to bounds.
+        
+        We always use border_bounds size as reference
+        to ensure all bounds (border, padding, content, text) move the same amount.
+        
+        Args:
+            bounds: The original bounds from layout.
+            
+        Returns:
+            Bounds offset by translate transform, if any.
         """
-        Compute the paint bounds, including anything that will be painted for this node, even outside the box (like shadows).
-        The final result is relative to the node box size, (0, 0).
+        transform: Transform = self.computed_styles.transform.get()
+        if transform is None:
+            return bounds
+        
+        # Get border_bounds for reference size (without recursion)
+        reference_bounds = self._layout_result.get_border_bounds() if self._layout_result else bounds
+        
+        dx = self._compute_translate_offset(transform.translate_x, reference_bounds.width())
+        dy = self._compute_translate_offset(transform.translate_y, reference_bounds.height())
+        
+        if dx == 0 and dy == 0:
+            return bounds
+        
+        result = to_int_skia_rect(skia.Rect.MakeXYWH(
+            bounds.x() + dx,
+            bounds.y() + dy,
+            bounds.width(),
+            bounds.height()
+        ))
+        return result
+
+    def _compute_translate_offset(self, value, size: float) -> float:
+        """Compute translate offset from value.
+        
+        Args:
+            value: Translate value - None, pixels (int/float), or percentage string.
+            size: Element size for percentage calculation.
+            
+        Returns:
+            Offset in pixels.
         """
-        raise NotImplementedError("_compute_paint_bounds() is not implemented")
+        if value is None:
+            return 0.0
+        
+        if isinstance(value, (int, float)):
+            return float(value)
+        
+        if isinstance(value, str) and value.endswith('%'):
+            pct = float(value.rstrip('%'))
+            result = size * pct / 100.0
+            return result
+        
+        return 0.0
 
     def _get_painters(self) -> list[Painter]:
+        """Return list of painters for this node. Must be implemented by subclasses."""
         raise NotImplementedError("_get_painters() is not implemented")
     
-    def compute_min_width(self) -> int:
-        raise NotImplementedError("compute_min_width() is not implemented")
-    
-    def compute_intrinsic_width(self) -> skia.Rect:
-        """
-        Compute the intrinsic width. That is, ignoring any size strategy set.
-        It measures the actual content (if the strategy is 'fit-content', then it's the same that self.content_width)
-        """
+    def compute_intrinsic_width(self) -> int:
+        """Compute intrinsic content width. Used by measure functions."""
         raise NotImplementedError("compute_intrinsic_width() is not implemented")
     
-    def compute_intrinsic_height(self) -> skia.Rect:
-        """
-        Compute the intrinsic height. That is, ignoring any size strategy set.
-        It measures the actual content (if the strategy is 'fit-content', then it's the same that self.content_height)
-        """
+    def compute_intrinsic_height(self) -> int:
+        """Compute intrinsic content height. Used by measure functions."""
         raise NotImplementedError("compute_intrinsic_height() is not implemented")
 
-    def prepare_tree_for_rendering(self, render_props: RenderProps) -> None:
-        """
-        Prepares the node and its children to be rendered.
-        It's meant to be called in the root node.
-        """
-        self.clear()
-        self._init_render_dependencies(render_props)
-        self._set_width_constraint(None)
-        self._clear_bounds()
-        self._before_calculating_bounds()
-        self._clear_bounds()
-        self._calculate_bounds()
-        self._setup_absolute_position()
-
-    def _init_render_dependencies(self, render_props: RenderProps) -> None:
-        self._render_props = render_props
-        for child in self._children:
-            child._init_render_dependencies(render_props)
-
-    def _calculate_bounds(self) -> None:
-        for child in self._children:
-            child._calculate_bounds()
-
-        bounds = self._get_all_bounds()
-        offset_x, offset_y = -self.margin_bounds.left(), -self.margin_bounds.top()
-        for bound in bounds:
-            bound.offset(offset_x, offset_y)
-
-    def _get_all_bounds(self) -> list[skia.Rect]:
-        return [
-            self.content_bounds,
-            self.padding_bounds,
-            self.border_bounds,
-            self.margin_bounds,
-            self.paint_bounds,
-        ]
-
-    def _setup_absolute_position(self, x: float = 0, y: float = 0) -> None:
-        position = self.computed_styles.position.get()
-        if not position or not self._parent or not self._parent.absolute_position:
-            self._absolute_position = (x, y)
-            return
-
-        self_width, self_height = self.size
-        if position.mode == PositionMode.RELATIVE:
-            parent_content_bounds = self._parent.content_bounds
-            parent_position = self._parent.absolute_position
-            self_position = position.get_relative_position(self_width, self_height, parent_content_bounds.width(), parent_content_bounds.height())
-            self._absolute_position = (
-                parent_position[0] + parent_content_bounds.left() + self_position[0],
-                parent_position[1] + parent_content_bounds.top() + self_position[1]
-            )
-        else:
-            root = self._get_root()
-            root_width, root_height = root.size
-            self._absolute_position = position.get_relative_position(self_width, self_height, root_width, root_height)
-
     def paint(self, canvas: skia.Canvas) -> None:
-        canvas.save()
-        absolute_position = self.absolute_position
-        if not absolute_position:
-            raise RuntimeError("Unexpected error: node doesn't have a defined position during paint()")
-        x, y = absolute_position
-        canvas.translate(x, y)
+        """Paint this node and its children to the canvas. All bounds are in absolute canvas coordinates."""
         for painter in self._get_painters():
             painter.paint(canvas)
-
-        canvas.restore()
-
+        
         for child in self._children:
             child.paint(canvas)
 
-    def clear(self):
+    def init_render_dependencies(self, render_props: RenderProps) -> None:
+        """Initialize rendering dependencies (fonts, text shapers, etc.)."""
+        self._render_props = render_props
+        for child in self._children:
+            child.init_render_dependencies(render_props)
+
+    def set_layout_result(self, layout_result: LayoutResult) -> None:
+        """Set the layout result after layout computation"""
+        self._layout_result = layout_result
+
+    def clear(self) -> None:
+        """Clear all cached data and render state."""
         for child in self._children:
             child.clear()
-
         self._render_props = None
-        self._absolute_position = None
-        self._forced_size = (None, None)
+        self._layout_result = None
         self.clear_cache()
 
-    def _clear_bounds(self):
-        """
-        Resets only the calculated layout and bounds information.
-        This is a more targeted version of clear().
-        """
+    def _clear_bounds(self) -> None:
+        """Clear only bounds-related cache."""
         for child in self._children:
             child._clear_bounds()
-
         self.clear_cache('bounds')
 
     def _compute_styles(self) -> Style:
+        """Compute styles with inheritance from parent."""
         parent_computed_styles = self._parent.computed_styles if self._parent else None
         computed_styles = deepcopy(self._raw_style)
         if not parent_computed_styles:
@@ -242,49 +224,13 @@ class Node(Cacheable):
                 continue
             if computed_styles.is_explicit(field_name):
                 continue
-
             parent_field_value = deepcopy(getattr(parent_computed_styles, field_name))
             setattr(computed_styles, field_name, parent_field_value)
 
         return computed_styles
 
-    def _compute_shadow_bounds(self, source_bounds: skia.Rect, shadows: list[Shadow]) -> skia.Rect:
-        # I don't like this. It only makes sense because it is only being used by paint bounds calculation
-        #  However, that responsibility is not clear by the method name.
-        #  I mean, if you want to get the shadow bounds in another scenario, this "if" statement don't make any sense.
-        if self._render_props and self._render_props.crop_mode == CropMode.CONTENT_BOX:
-            return source_bounds
-        filter = create_composite_shadow_filter(shadows)
-        if filter:
-            return filter.computeFastBounds(source_bounds)
-        return source_bounds
-
-    def _set_children(self, nodes: list[Node]):
+    def _set_children(self, nodes: list[Node]) -> None:
+        """Set children and establish parent relationships."""
         for node in nodes:
             node._parent = self
         self._children = nodes
-
-    def _get_root(self) -> Node:
-        root = self
-        while root._parent:
-            root = root._parent
-        return root
-
-    def _get_positionable_children(self) -> list[Node]:
-        return [child for child in self.children if child.computed_styles.position.get() is None]
-    
-    def _get_non_positionable_children(self) -> list[Node]:
-        return [child for child in self.children if child.computed_styles.position.get() is not None]
-
-    def _before_calculating_bounds(self) -> None:
-        """
-        The idea of this method is calculate those values that are needed to re-calculate the bounds.
-        So, every bound calculated in this process, will be removed.
-        For example, we can calculate the text node parent width to the text-wrap feature,
-        or we can calculate how much width/height should have each node with fill-available size.
-        """
-        for child in self._children:
-            child._before_calculating_bounds()
-
-    def _set_width_constraint(self, width_constraint: Optional[int]) -> None:
-        raise NotImplementedError("_set_width_constraint() is not implemented")

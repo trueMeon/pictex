@@ -29,7 +29,7 @@ def create_decorative_border() -> Column:
         .size(corner_size, corner_size)
         .background_color("#C9A96E")
         .border_radius(0, 0, corner_size, 0)
-        .position(0, 0)
+        .absolute_position(left=0, top=0)
     )
     
     # Top-right corner  
@@ -38,7 +38,7 @@ def create_decorative_border() -> Column:
         .size(corner_size, corner_size)
         .background_color("#C9A96E")
         .border_radius(0, 0, 0, corner_size)
-        .position(740, 0)
+        .absolute_position(left=740, top=0)
     )
     
     # Bottom-left corner
@@ -47,7 +47,7 @@ def create_decorative_border() -> Column:
         .size(corner_size, corner_size)
         .background_color("#C9A96E")
         .border_radius(0, corner_size, 0, 0)
-        .position(0, 540)
+        .absolute_position(left=0, top=540)
     )
     
     # Bottom-right corner
@@ -56,7 +56,7 @@ def create_decorative_border() -> Column:
         .size(corner_size, corner_size)
         .background_color("#C9A96E")
         .border_radius(corner_size, 0, 0, 0)
-        .position(740, 540)
+        .absolute_position(left=740, top=540)
     )
     
     return Column(top_left, top_right, bottom_left, bottom_right)
@@ -74,7 +74,7 @@ def create_ornamental_divider() -> Row:
         left_line,
         center_ornament,
         right_line
-    ).vertical_align("center").gap(20).horizontal_distribution("center")
+    ).align_items("center").gap(20).justify_content("center")
 
 def create_signature_line(name: str, title: str) -> Column:
     """Creates a signature line with name and title"""
@@ -89,7 +89,7 @@ def create_signature_line(name: str, title: str) -> Column:
         signature_line,
         name_text,
         title_text
-    ).gap(8).horizontal_align("center")
+    ).gap(8).align_items("center")
 
 # Main certificate background
 certificate_bg = (
@@ -180,7 +180,7 @@ instructor_signature = create_signature_line(CERTIFICATE["instructor"], "Course 
 
 signature_section = Row(
     instructor_signature,
-).horizontal_distribution("space-around").vertical_align("center").margin(20, 0, 40, 0)
+).justify_content("space-around").align_items("center").margin(20, 0, 40, 0)
 
 # Certificate ID
 cert_id = (
@@ -203,12 +203,12 @@ content = Column(
     completion_date,
     signature_section,
     cert_id
-).horizontal_align("center")
+).align_items("center")
 
 # Complete certificate
 certificate = Row(
-    certificate_bg.position(0, 0),
-    decorative_border.position(0, 0),
+    certificate_bg.absolute_position(left=0, top=0),
+    decorative_border.absolute_position(left=0, top=0),
     content.size(800)
 )
 

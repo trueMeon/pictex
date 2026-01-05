@@ -10,7 +10,7 @@ from .models.public import *
 from .bitmap_image import BitmapImage
 from .vector_image import VectorImage
 
-__version__ = "1.5.1"
+__version__ = "2.0.0"
 
 __all__ = [
     "Canvas", "Text", "Row", "Column", "Image", "Element",
@@ -27,9 +27,10 @@ __all__ = [
     "TextDecoration",
     "CropMode",
     "Box",
-    "Position", "PositionMode",
+    "Position", "PositionType", "Inset",
+    "Transform",
     "SizeValue", "SizeValueMode",
-    "Margin", "Padding", "HorizontalDistribution", "VerticalAlignment", "HorizontalAlignment", "VerticalDistribution",
+    "Margin", "Padding", "JustifyContent", "AlignItems", "AlignSelf", "FlexWrap",
     "BackgroundImage", "BackgroundImageSizeMode",
     "Border", "BorderStyle", "BorderRadiusValue", "BorderRadius",
     "RenderNode",

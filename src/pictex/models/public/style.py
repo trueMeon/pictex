@@ -3,8 +3,9 @@ from typing import Optional
 from .border import Border, BorderRadius
 from .background import BackgroundImage
 from .effects import Shadow, OutlineStroke
-from .layout import Margin, Padding, HorizontalDistribution, VerticalAlignment, HorizontalAlignment, VerticalDistribution
+from .layout import Margin, Padding, JustifyContent, AlignItems, AlignSelf, FlexWrap
 from .position import Position
+from .transform import Transform
 from .style_property import StyleProperty
 from .typography import TextAlign, FontWeight, FontStyle, TextWrap
 from .paint_source import PaintSource
@@ -43,19 +44,31 @@ class Style:
     border: StyleProperty[Optional[Border]] = field(default_factory=lambda: StyleProperty(None, inheritable=False))
     border_radius: StyleProperty[Optional[BorderRadius]] = field(default_factory=lambda: StyleProperty(None, inheritable=False))
     position: StyleProperty[Optional[Position]] = field(default_factory=lambda: StyleProperty(None, inheritable=False))
+    transform: StyleProperty[Optional[Transform]] = field(default_factory=lambda: StyleProperty(None, inheritable=False))
     width: StyleProperty[Optional[SizeValue]] = field(default_factory=lambda: StyleProperty(None, inheritable=False))
     height: StyleProperty[Optional[SizeValue]] = field(default_factory=lambda: StyleProperty(None, inheritable=False))
-    horizontal_distribution: StyleProperty[HorizontalDistribution] = field(
-        default_factory=lambda: StyleProperty(HorizontalDistribution.LEFT, inheritable=False)
+    min_width: StyleProperty[Optional[SizeValue]] = field(default_factory=lambda: StyleProperty(None, inheritable=False))
+    max_width: StyleProperty[Optional[SizeValue]] = field(default_factory=lambda: StyleProperty(None, inheritable=False))
+    min_height: StyleProperty[Optional[SizeValue]] = field(default_factory=lambda: StyleProperty(None, inheritable=False))
+    max_height: StyleProperty[Optional[SizeValue]] = field(default_factory=lambda: StyleProperty(None, inheritable=False))
+    aspect_ratio: StyleProperty[Optional[float]] = field(default_factory=lambda: StyleProperty(None, inheritable=False))
+    justify_content: StyleProperty[JustifyContent] = field(
+        default_factory=lambda: StyleProperty(JustifyContent.START, inheritable=False)
     )
-    vertical_alignment: StyleProperty[VerticalAlignment] = field(
-        default_factory=lambda: StyleProperty(VerticalAlignment.TOP, inheritable=False)
+    align_items: StyleProperty[AlignItems] = field(
+        default_factory=lambda: StyleProperty(AlignItems.START, inheritable=False)
     )
-    vertical_distribution: StyleProperty[VerticalDistribution] = field(
-        default_factory=lambda: StyleProperty(VerticalDistribution.TOP, inheritable=False)
+    align_self: StyleProperty[AlignSelf] = field(
+        default_factory=lambda: StyleProperty(AlignSelf.AUTO, inheritable=False)
     )
-    horizontal_alignment: StyleProperty[HorizontalAlignment] = field(
-        default_factory=lambda: StyleProperty(HorizontalAlignment.LEFT, inheritable=False)
+    flex_grow: StyleProperty[float] = field(
+        default_factory=lambda: StyleProperty(0.0, inheritable=False)
+    )
+    flex_shrink: StyleProperty[float] = field(
+        default_factory=lambda: StyleProperty(1.0, inheritable=False)
+    )
+    flex_wrap: StyleProperty[FlexWrap] = field(
+        default_factory=lambda: StyleProperty(FlexWrap.NOWRAP, inheritable=False)
     )
     gap: StyleProperty[float] = field(default_factory=lambda: StyleProperty(0.0, inheritable=False))
 

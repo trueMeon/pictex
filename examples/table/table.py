@@ -49,7 +49,7 @@ def create_table_row(row_data: list, column_widths: list, is_header: bool = Fals
         for item, col_width in zip(row_data, column_widths)
     ]
 
-    table_row = Row(*cells).vertical_align('center')
+    table_row = Row(*cells).align_items('center')
 
     if is_header:
         table_row.background_color("#34495e")

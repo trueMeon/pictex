@@ -67,13 +67,16 @@ def test_builders_fluent_api_and_style_building():
         assert style.height == SizeValue(SizeValueMode.ABSOLUTE, 300)
 
     for builder in with_position_builders:
-        builder.absolute_position("center", "70%")
+        builder.place("center", "70%")
 
         style = builder._style
-        assert style.position == Position(container_anchor_x=0.5, content_anchor_x=0.5, container_anchor_y=0.7, mode = PositionMode.ABSOLUTE)
-
-        builder.position("center", "70%")
-        assert style.position == Position(container_anchor_x=0.5, content_anchor_x=0.5, container_anchor_y=0.7, mode = PositionMode.RELATIVE)
+        position = style.position.get()
+        assert position.type == PositionType.FIXED  # place() uses canvas-relative positioning
+        assert position.inset.top == "70%"
+        assert position.inset.left == "50%"
+        transform = style.transform.get()
+        assert transform.translate_x == "-50%"
+        assert transform.translate_y == "-70.0%"
 
     for builder in container_builders:
         builder.gap(10)
@@ -81,17 +84,17 @@ def test_builders_fluent_api_and_style_building():
         style = builder._style
         assert style.gap == 10
 
-    row.horizontal_distribution("center")
-    row.vertical_align("bottom")
+    row.justify_content("center")
+    row.align_items("start")
     style = row._style
-    assert style.horizontal_distribution == HorizontalDistribution("center")
-    assert style.vertical_alignment == VerticalAlignment("bottom")
+    assert style.justify_content == JustifyContent("center")
+    assert style.align_items == AlignItems("start")
 
-    column.vertical_distribution("bottom")
-    column.horizontal_align("center")
+    column.justify_content("start")
+    column.align_items("center")
     style = column._style
-    assert style.vertical_distribution == VerticalDistribution("bottom")
-    assert style.horizontal_alignment == HorizontalAlignment("center")
+    assert style.justify_content == JustifyContent("start")
+    assert style.align_items == AlignItems("center")
 
 def test_color_formats():
     color_formats = [
@@ -190,12 +193,28 @@ def test_size():
 
 def test_position():
     builder = Text("")
-    builder.position(10, 20)
-    assert builder._style.position == Position(x_offset=10, y_offset=20, mode=PositionMode.RELATIVE)
-    builder.absolute_position("30%", "40%")
-    assert builder._style.position == Position(container_anchor_x=0.3, container_anchor_y=0.4, mode=PositionMode.ABSOLUTE)
-    builder.position("left", "bottom")
-    assert builder._style.position == Position(container_anchor_y=1.0, content_anchor_y=1.0, mode=PositionMode.RELATIVE)
+    
+    # Test relative_position with pixel offsets
+    builder.relative_position(top=10, left=20)
+    position = builder._style.position.get()
+    assert position.type == PositionType.RELATIVE
+    assert position.inset.top == 10
+    assert position.inset.left == 20
+    
+    # Test absolute_position with percentages
+    builder.absolute_position(top="30%", left="40%")
+    position = builder._style.position.get()
+    assert position.type == PositionType.ABSOLUTE
+    assert position.inset.top == "30%"
+    assert position.inset.left == "40%"
+    
+    # Test place() for anchor-based positioning
+    builder.place("left", "bottom")
+    position = builder._style.position.get()
+    assert position.type == PositionType.FIXED  # place() uses canvas-relative positioning
+    assert position.inset.top is None
+    assert position.inset.left == 0
+    assert position.inset.bottom == 0
 
 def test_font_paths_can_be_object():
     canvas = Canvas()

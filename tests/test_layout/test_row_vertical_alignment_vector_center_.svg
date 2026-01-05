@@ -10,16 +10,16 @@
 }</style></defs>
 	<rect fill-opacity="0" width="123" height="150" />
 	<rect fill="#ECF0F1" width="123" height="150" />
-	<rect fill="#3498DB" transform="translate(0 52.5)" width="34" height="45" />
-	<text transform="translate(0 52.5)" font-size="20" font-family="pictex-InterVariable" x="10, " y="29.375, ">
+	<rect fill="#3498DB" y="52" width="34" height="46" />
+	<text font-size="20" font-family="pictex-InterVariable" x="10, " y="81.375, ">
 			A
 	</text>
-	<rect fill="#E74C3C" transform="translate(34 40.5)" width="47" height="69" />
-	<text transform="translate(44 50.5)" font-size="40" font-family="pictex-InterVariable" x="0, " y="38.75, ">
+	<rect fill="#E74C3C" x="34" y="40" width="47" height="70" />
+	<text font-size="40" font-family="pictex-InterVariable" x="44, " y="88.75, ">
 			B
 	</text>
-	<rect fill="#2ECC71" transform="translate(81 46.5)" width="42" height="57" />
-	<text transform="translate(81 46.5)" font-size="30" font-family="pictex-InterVariable" x="10, " y="39.0625, ">
+	<rect fill="#2ECC71" x="81" y="46" width="42" height="58" />
+	<text font-size="30" font-family="pictex-InterVariable" x="91, " y="85.0625, ">
 			C
 	</text>
 </svg>

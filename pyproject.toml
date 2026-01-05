@@ -1,7 +1,7 @@
 [project]
 name = "pictex"
-version = "1.5.1"
-description = "A library to generate complex visual compositions and beautifully styled images."
+version = "2.0.0"
+description = "A Python library for efficient image generation using CSS Flexbox."
 authors = [
     { name = "Franco Zanardi", email = "francozanardi97@gmail.com" },
 ]
@@ -29,6 +29,7 @@ classifiers = [
 
 dependencies = [
   "skia-python",
+  "stretchable>=0.3.0",
   "typing_extensions >=4.0; python_version < '3.11'",
   "importlib_resources >=5.0; python_version < '3.10'",
   "regex"

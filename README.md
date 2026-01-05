@@ -5,22 +5,26 @@
 [![Codecov](https://codecov.io/gh/francozanardi/pictex/branch/main/graph/badge.svg)](https://codecov.io/gh/francozanardi/pictex)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A powerful Python library for creating complex visual compositions and beautifully styled images. Powered by Skia.
+Programmatically generate high-quality images using standard CSS Flexbox layouts. Powered by Skia and Taffy.
 
 ![PicTex](https://res.cloudinary.com/dlvnbnb9v/image/upload/v1753831765/readme-1_vqnohh.png)
 
-**`PicTex`** is a component-based graphics library that makes it easy to generate dynamic images for social media, video overlays, and digital art. It abstracts away the complexity of graphics engines, offering a declarative and chainable interface inspired by modern layout systems.
+A Python library for efficient image generation using CSS Flexbox. Build complex layouts using familiar web standards, such as `justify-content`, `align-items`, `flex-grow`, then render them as high-quality PNG, JPEG, WebP, or SVG. Perfect for Open Graph, social media graphics, video thumbnails, data visualizations, and automated report generation. Browser-grade layouts without the browser overhead
 
 ## Features
 
--   **Component-Based Layout**: Compose complex visuals by nesting powerful layout primitives like `Row`, `Column`, and `Image`.
+-   **CSS Flexbox Layout**: Built on industry-standard CSS Flexbox principles with near-complete property support. If you know CSS, you know PicTex. See the [CSS Flexbox Compliance](#css-flexbox-compliance) table below. Powered by **Taffy** layout engine (via `stretchable`).
+-   **Component-Based Design**: Compose complex visuals by nesting powerful layout primitives like `Row`, `Column`, and `Image`.
 -   **Rich Styling**: Gradients, multiple shadows, borders with rounded corners, and text decorations.
 -   **Advanced Typography**: Custom fonts, variable fonts, line height, alignment, and text shaping with kerning and ligatures.
 -   **Automatic Font Fallback**: Seamlessly render emojis and multilingual text.
 -   **Flexible Output**: 
     -   **Raster**: Save as PNG/JPEG/WebP, or convert to NumPy/Pillow.
     -   **Vector**: Export to a clean, scalable SVG file with font embedding.
--   **High-Quality Rendering**: Powered by Google's Skia graphics engine.
+-   **High-Quality Rendering**: Powered by Google's **Skia** graphics engine (via `skia-python`).
+
+> [!IMPORTANT]
+> **Upgrading from v1.x?** PicTex v2.0 introduces significant changes to the layout and positioning system. Please read the [Migration Guide](docs/MIGRATION.md) to update your code.
 
 ## Installation
 
@@ -89,7 +93,7 @@ avatar = (
 user_info = Column(
     Text("Alex Doe").font_size(24).font_weight(700).color("#184e77"),
     Text("Graphic Designer").color("#edf6f9").text_shadows(Shadow(offset=(1, 1), blur_radius=1, color="black")),
-).horizontal_align("center").gap(4)
+).align_items("center").gap(4)
 
 # 2. Compose them in a layout container
 card = (
@@ -97,7 +101,7 @@ card = (
     .background_color(LinearGradient(["#d9ed92", "#52b69a"]))
     .border_radius(20)
     .padding(30)
-    .horizontal_align("center")
+    .align_items("center")
     .gap(20)
 )
 
@@ -111,15 +115,58 @@ image.save("profile_card.png")
 
 ## More Examples
 
-PicTex 1.0's layout engine unlocks a huge range of possibilities, from social media graphics to data visualizations. We've created a collection of ready-to-run examples to showcase what you can build.
-
 | Preview                                                      | Description                                                                                                                                                                                                                    |
 |:-------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ![GitHub Card Example](https://res.cloudinary.com/dlvnbnb9v/image/upload/v1767559196/github_card_imhh6z.png)   | **GitHub Repository Card** <br/> Generate beautiful cards for any GitHub repo. Just change the repo name and it fetches real data from the API. <br/> **[View Code »](https://github.com/francozanardi/pictex/blob/main/examples/github_card/github_card.py)**    |
 | ![Tweet to Image Example](https://res.cloudinary.com/dlvnbnb9v/image/upload/v1754446864/tweet_ouzwyf.png)   | **Tweet to Image** <br/> Recreate the look and feel of a tweet, perfect for sharing on other social platforms. <br/> **[View Code »](https://github.com/francozanardi/pictex/blob/main/examples/tweet_card/tweet_card.py)**    |
 | ![Data Table Example](https://res.cloudinary.com/dlvnbnb9v/image/upload/v1754446872/table_t8hoyi.png)            | **Data Table** <br/> Generate a clean, styled table from a 2D list. Includes headers, zebra-striping, and shadows. <br/> **[View Code »](https://github.com/francozanardi/pictex/blob/main/examples/table/table.py)**          |
 | ![Code Snippet Example](https://res.cloudinary.com/dlvnbnb9v/image/upload/v1754446867/result_exfjqr.png?v=1) | **Code Snippet** <br/> Create beautifully syntax-highlighted images of your code snippets for tutorials or social media. <br/> **[View Code »](https://github.com/francozanardi/pictex/blob/main/examples/code_to_image/code_to_image.py)** |
 
 Check out the full [examples](https://github.com/francozanardi/pictex/tree/main/examples) directory for more!
+
+## CSS Flexbox Compliance
+
+PicTex v2.0 implements CSS Flexbox layout with high fidelity. If you're familiar with CSS, you'll feel right at home. Here's our compliance status:
+
+### Container Properties
+
+| CSS Property | Status | PicTex Method | Notes |
+|--------------|--------|---------------|-------|
+| `display: flex` | ✅ | `Row()` / `Column()` | Implicit in layout containers |
+| `flex-direction` | ✅ | `Row()` / `Column()` | `Row` = row, `Column` = column |
+| `flex-wrap` | ✅ | `.flex_wrap()` | `nowrap`, `wrap`, `wrap-reverse` |
+| `flex-flow` | ⚠️ | N/A | Shorthand for flex-direction + flex-wrap |
+| `justify-content` | ✅ | `.justify_content()` | All standard values supported |
+| `align-items` | ✅ | `.align_items()` | All standard values supported |
+| `align-content` | ⚠️ | Not yet | Planned for multi-line flex containers |
+| `gap` | ✅ | `.gap()` | Unified gap (not split into row-gap/column-gap) |
+
+### Item Properties
+
+|  CSS Property | Status | PicTex Method | Notes |
+|--------------|--------|---------------|-------|
+| `flex` | ⚠️ | N/A | Shorthand for flex-grow + flex-shrink + flex-basis |
+| `flex-grow` | ✅ | `.flex_grow()` | Control growth behavior |
+| `flex-shrink` | ✅ | `.flex_shrink()` | Control shrink behavior |
+| `flex-basis` | ⚠️ | Not yet | Can use `.size()` as alternative |
+| `align-self` | ✅ | `.align_self()` | Override container alignment |
+| `order` | ❌ | Not planned | Less relevant for static image generation |
+
+### Positioning & Sizing
+
+| CSS Property | Status | PicTex Method | Notes |
+|--------------|--------|---------------|-------|
+| `position` | ✅ | `.absolute_position()` / `.relative_position()` | Full CSS positioning support |
+| `top` / `right` / `bottom` / `left` | ✅ | `.absolute_position(top=, right=, ...)` | CSS insets |
+| `width` / `height` | ✅ | `.size()` | Pixels, percentages, auto, fit-content |
+| `min-width` / `max-width` | ✅ | `.min_width()` / `.max_width()` | Prevent collapse/overflow |
+| `min-height` / `max-height` | ✅ | `.min_height()` / `.max_height()` | Prevent collapse/overflow |
+| `aspect-ratio` | ✅ | `.aspect_ratio()` | Maintain proportions |
+| `transform: translate()` | ✅ | `.translate()` | Post-layout transforms |
+
+**Legend**: ✅ Fully supported | ⚠️ Planned | ❌ Not planned
+
+This compliance makes PicTex an excellent choice for developers who want to apply their CSS knowledge to generate images programmatically.
 
 ## 📚 Dive Deeper
 

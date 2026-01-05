@@ -1,132 +1,233 @@
-from typing import Union, Tuple
-from ..models import Position, Style, PositionMode
+from typing import Union, Optional
 
 try:
     from typing import Self # type: ignore[attr-defined]
 except ImportError:
     from typing_extensions import Self
 
+from ..models import Style, Position, PositionType, Inset, Transform
+
+
+InsetValue = Optional[Union[float, int, str]]
+TranslateValue = Optional[Union[float, int, str]]
+
 class WithPositionMixin:
+    """Mixin providing CSS-compliant positioning methods."""
 
     _style: Style
 
     def absolute_position(
-            self,
-            x: Union[float, int, str],
-            y: Union[float, int, str],
-            x_offset: float = 0,
-            y_offset: float = 0
+        self,
+        *,
+        top: InsetValue = None,
+        right: InsetValue = None,
+        bottom: InsetValue = None,
+        left: InsetValue = None,
     ) -> Self:
-        """Sets the element's position relative to the root canvas.
+        """Position element absolutely (out of normal flow).
 
-        This method removes the element from the normal layout flow (`Row` or
-        `Column`) and positions it based on the absolute dimensions of the
-        entire canvas. The (0, 0) coordinate is the top-left corner of the
-        final rendered image, ignoring any margin, border, or padding set on
-        the root container.
-
-        This is ideal for global overlays like watermarks or headers that should
-        be placed at a fixed position on the final image.
-
-        The coordinate system (`x`, `y`) supports three modes:
-        - **Absolute (pixels)**: `absolute_position(100, 250)`
-        - **Percentage**: `absolute_position("50%", "100%")`
-        - **Keyword Alignment**: `absolute_position("center", "top")`
+        The element is positioned relative to its nearest ancestor.
 
         Args:
-            x (Union[float, int, str]): The horizontal position value. Can be an
-                absolute pixel value, a percentage string (e.g., "50%"), or an
-                alignment keyword ("left", "center", "right").
-            y (Union[float, int, str]): The vertical position value. Can be an
-                absolute pixel value, a percentage string (e.g., "75%"), or an
-                alignment keyword ("top", "center", "bottom").
-            x_offset (float, optional): An additional horizontal offset in
-                pixels. Defaults to 0.
-            y_offset (float, optional): An additional vertical offset in
-                pixels. Defaults to 0.
+            top: Distance from top edge
+            right: Distance from right edge
+            bottom: Distance from bottom edge
+            left: Distance from left edge
 
         Returns:
             Self: The instance for method chaining.
+
+        Example:
+            >>> Text("Badge").absolute_position(top=10, right=10)
+            >>> Text("Footer").absolute_position(bottom=0, left=0, right=0)
         """
-        return self._set_position(x, y, x_offset, y_offset, PositionMode.ABSOLUTE)
+        return self._set_position(PositionType.ABSOLUTE, top, right, bottom, left)
 
-    def position(
-            self,
-            x: Union[float, int, str],
-            y: Union[float, int, str],
-            x_offset: float = 0,
-            y_offset: float = 0
+    def fixed_position(
+        self,
+        *,
+        top: InsetValue = None,
+        right: InsetValue = None,
+        bottom: InsetValue = None,
+        left: InsetValue = None,
     ) -> Self:
-        """Sets the element's position relative to its direct parent's content area.
+        """Position element fixed (out of normal flow, relative to canvas).
 
-        This method removes the element from the normal layout flow (`Row` or
-        `Column`) and positions it relative to its immediate parent. The (0, 0)
-        coordinate is the top-left corner *inside* the parent's padding and
-        border. The element will be correctly offset by its parent's position.
-
-        This is ideal for creating overlays within a component, such as placing a
-        badge on an image or custom-placing text inside a styled container.
-
-        The coordinate system (`x`, `y`) supports three modes:
-        - **Absolute (pixels)**: `position(100, 250)`
-        - **Percentage**: `position("50%", "100%")`
-        - **Keyword Alignment**: `position("center", "top")`
+        The element is always positioned relative to the canvas (viewport),
+        regardless of its position in the DOM tree. This is like CSS position: fixed.
 
         Args:
-            x (Union[float, int, str]): The horizontal position value. Can be an
-                absolute pixel value, a percentage string (e.g., "50%"), or an
-                alignment keyword ("left", "center", "right").
-            y (Union[float, int, str]): The vertical position value. Can be an
-                absolute pixel value, a percentage string (e.g., "75%"), or an
-                alignment keyword ("top", "center", "bottom").
-            x_offset (float, optional): An additional horizontal offset in
-                pixels. Defaults to 0.
-            y_offset (float, optional): An additional vertical offset in
-                pixels. Defaults to 0.
+            top: Distance from canvas top edge
+            right: Distance from canvas right edge
+            bottom: Distance from canvas bottom edge
+            left: Distance from canvas left edge
 
         Returns:
             Self: The instance for method chaining.
-        """
-        return self._set_position(x, y, x_offset, y_offset, PositionMode.RELATIVE)
 
-    def _set_position(
-            self,
-            x: Union[float, int, str],
-            y: Union[float, int, str],
-            x_offset: float,
-            y_offset: float,
-            mode: PositionMode
+        Example:
+            >>> Text("Watermark").fixed_position(bottom=10, right=10)
+            >>> Text("Header").fixed_position(top=0, left=0, right=0)
+        """
+        return self._set_position(PositionType.FIXED, top, right, bottom, left)
+
+    def relative_position(
+        self,
+        *,
+        top: InsetValue = None,
+        right: InsetValue = None,
+        bottom: InsetValue = None,
+        left: InsetValue = None,
     ) -> Self:
-        container_ax, content_ax = self._parse_anchor(x, axis='x')
-        container_ay, content_ay = self._parse_anchor(y, axis='y')
-        x_offset = x + x_offset if isinstance(x, (float, int)) else x_offset
-        y_offset = y + y_offset if isinstance(y, (float, int)) else y_offset
+        """Position element relatively (stays in flow, but offset visually).
+
+        The element remains in normal flow but is visually offset by the
+        specified values.
+
+        Args:
+            top: Offset from normal top position
+            right: Offset from normal right position
+            bottom: Offset from normal bottom position
+            left: Offset from normal left position
+
+        Returns:
+            Self: The instance for method chaining.
+
+        Example:
+            >>> Text("Nudged").relative_position(top=5, left=5)
+        """
+        return self._set_position(PositionType.RELATIVE, top, right, bottom, left)
+
+    def translate(
+        self,
+        *,
+        x: TranslateValue = None,
+        y: TranslateValue = None,
+    ) -> Self:
+        """Apply a translate transform to the element.
+
+        This is applied post-layout as a visual offset. Commonly used with
+        absolute_position for true centering.
+
+        Values can be pixels (int/float) or percentages of the element's own
+        size (str like "-50%").
+
+        Args:
+            x: Horizontal translation
+            y: Vertical translation
+
+        Returns:
+            Self: The instance for method chaining.
+
+        Example:
+            >>> # True centering
+            >>> Text("Centered").absolute_position(top="50%", left="50%").translate(x="-50%", y="-50%")
+        """
+        self._style.transform.set(Transform(translate_x=x, translate_y=y))
+        return self
+
+    def place(
+        self,
+        horizontal: Union[float, int, str],
+        vertical: Union[float, int, str],
+        x_offset: float = 0,
+        y_offset: float = 0,
+    ) -> Self:
+        """Place element using anchor-based positioning (canvas-relative).
+
+        This is a convenience method that combines fixed positioning and
+        translate to provide intuitive anchor-based placement relative to
+        the canvas (viewport).
+
+        Args:
+            horizontal: Horizontal anchor - "left", "center", "right", pixels, or "X%"
+            vertical: Vertical anchor - "top", "center", "bottom", pixels, or "Y%"
+            x_offset: Additional horizontal offset in pixels (default 0)
+            y_offset: Additional vertical offset in pixels (default 0)
+
+        Returns:
+            Self: The instance for method chaining.
+
+        Example:
+            >>> Text("Overlay").place("center", "center")
+            >>> Text("Badge").place("right", "top", x_offset=-10, y_offset=10)
+        """
+        left, right, translate_x = self._parse_horizontal_anchor(horizontal)
+        top, bottom, translate_y = self._parse_vertical_anchor(vertical)
+
+        if x_offset != 0:
+            translate_x = (translate_x or 0) + x_offset if isinstance(translate_x, (int, float, type(None))) else x_offset
+        if y_offset != 0:
+            translate_y = (translate_y or 0) + y_offset if isinstance(translate_y, (int, float, type(None))) else y_offset
 
         self._style.position.set(Position(
-            container_anchor_x=container_ax,
-            content_anchor_x=content_ax,
-            x_offset=x_offset,
-            container_anchor_y=container_ay,
-            content_anchor_y=content_ay,
-            y_offset=y_offset,
-            mode=mode
+            type=PositionType.FIXED,
+            inset=Inset(top=top, right=right, bottom=bottom, left=left)
+        ))
+
+        if translate_x is not None or translate_y is not None:
+            self._style.transform.set(Transform(translate_x=translate_x, translate_y=translate_y))
+
+        return self
+
+    def _set_position(
+        self,
+        position_type: PositionType,
+        top: InsetValue = None,
+        right: InsetValue = None,
+        bottom: InsetValue = None,
+        left: InsetValue = None,
+    ) -> Self:
+        """Internal method to set position and inset values."""
+        self._style.position.set(Position(
+            type=position_type,
+            inset=Inset(top=top, right=right, bottom=bottom, left=left)
         ))
         return self
 
-    def _parse_anchor(self, value: Union[str, int, float], axis: str) -> Tuple[float, float]:
-        if not isinstance(value, str):
-            return 0, 0
+    def _parse_horizontal_anchor(self, value: Union[str, int, float]) -> tuple:
+        """Parse horizontal anchor to (left, right, translate_x) tuple."""
+        if isinstance(value, (int, float)):
+            return value, None, None  # left=value
 
         if value.endswith('%'):
-            container_anchor = float(value.rstrip('%')) / 100
-            return container_anchor, 0.0
+            pct = float(value.rstrip('%'))
+            if pct == 0:
+                return 0, None, None  # left=0
+            elif pct == 100:
+                return None, 0, None  # right=0, already positioned correctly
+            else:
+                return value, None, f"-{pct}%"  # left=X%, translate to center on point
 
-        keywords = {
-            'x': {'left': (0.0, 0.0), 'center': (0.5, 0.5), 'right': (1.0, 1.0)},
-            'y': {'top': (0.0, 0.0), 'center': (0.5, 0.5), 'bottom': (1.0, 1.0)}
-        }
+        if value == 'left':
+            return 0, None, None
+        elif value == 'center':
+            return "50%", None, "-50%"
+        elif value == 'right':
+            return None, 0, None  # right=0, already positioned correctly
 
-        if value in keywords[axis]:
-            return keywords[axis][value]
+        raise ValueError(f"Invalid horizontal anchor value '{value}'")
 
-        raise ValueError(f"Invalid keyword '{value}' for axis '{axis}'")
+    def _parse_vertical_anchor(self, value: Union[str, int, float]) -> tuple:
+        """Parse vertical anchor to (top, bottom, translate_y) tuple."""
+        if isinstance(value, (int, float)):
+            return value, None, None  # top=value
+
+        if value.endswith('%'):
+            pct = float(value.rstrip('%'))
+            if pct == 0:
+                return 0, None, None  # top=0
+            elif pct == 100:
+                return None, 0, None  # bottom=0, already positioned correctly
+            else:
+                return value, None, f"-{pct}%"  # top=X%, translate to center on point
+
+        if value == 'top':
+            return 0, None, None
+        elif value == 'center':
+            return "50%", None, "-50%"
+        elif value == 'bottom':
+            return None, 0, None  # bottom=0, already positioned correctly
+
+        raise ValueError(f"Invalid vertical anchor value '{value}'")
+

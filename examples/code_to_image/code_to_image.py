@@ -65,7 +65,7 @@ code_lines = []
 for i, line in enumerate(CODE_SNIPPET.strip().split('\n'), 1):
     line_number = Text(f"{i: >2}").color(COLORS["line_number"]).margin(0, 15, 0, 0)
     parsed_code_row = parse_python_line(line)
-    code_lines.append(Row(line_number, parsed_code_row).vertical_align('top'))
+    code_lines.append(Row(line_number, parsed_code_row).align_items('start'))
 
 code_block = Column(*code_lines).padding(15, 20).gap(4)
 

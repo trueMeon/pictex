@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="248"><defs><style type="text/css">@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}</style></defs>
+	<rect fill-opacity="0" width="400" height="248" />
+	<rect fill="#E67E22" width="400" height="248" />
+	<text font-size="50" font-family="pictex-InterVariable" x="20, 57.304688, 87.285156, 99.394531, 130.00977, 159.16016, 188.70117, 202.76367, 234.69727, 262.77344, 279.13086, 291.24023, " y="68.4375, ">
+			Golden Ratio
+	</text>
+</svg>

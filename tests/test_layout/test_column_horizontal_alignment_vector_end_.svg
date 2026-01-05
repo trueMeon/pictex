@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="409" height="243"><defs><style type="text/css">@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}</style></defs>
+	<rect fill-opacity="0" width="409" height="243" />
+	<rect fill="#ECF0F1" transform="translate(109 0)" width="300" height="243" />
+	<rect fill="#3498DB" transform="translate(109 0)" x="153" width="147" height="81" />
+	<text transform="translate(109 0)" font-size="50" font-family="pictex-InterVariable" x="163, 195.08008, 224.64551, 254.62598, 274.23047, " y="58.4375, ">
+			Short
+	</text>
+	<rect fill="#E74C3C" transform="translate(109 0)" x="-109" y="81" width="409" height="81" />
+	<text transform="translate(109 0)" font-size="50" font-family="pictex-InterVariable" x="-99, -70.728516, -40.748047, -10.767578, 19.212891, 49.193359, 79.173828, 109.1543, 139.13477, 169.11523, 199.0957, 229.07617, 258.61719, " y="139.4375, ">
+			Loooooooooong
+	</text>
+	<rect fill="#2ECC71" transform="translate(109 0)" x="31" y="162" width="269" height="81" />
+	<text transform="translate(109 0)" font-size="50" font-family="pictex-InterVariable" x="41, 86.166016, 115.31641, 144.4668, 173.61719, 204.23242, 216.3418, 245.90723, " y="220.4375, ">
+			Meeedium
+	</text>
+</svg>

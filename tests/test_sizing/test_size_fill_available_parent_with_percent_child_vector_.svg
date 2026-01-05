@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="669" height="500"><defs><style type="text/css">@font-face {
-    font-family: 'pictex-InterVariable';
-    src: url('InterVariable.ttf');
-}</style></defs>
-	<rect fill-opacity="0" width="669" height="500" />
-	<text font-size="50" font-family="pictex-InterVariable" x="0, 13.427734, 27.490234, 53.881836, 83.447266, 113.42773, 142.99316, 155.10254, 185.71777, 199.78027, 229.32129, 259.30176, 275.65918, 289.72168, 318.77441, 346.85059, 376.41602, 402.80762, 431.95801, 446.02051, 464.01367, 493.16406, 521.72852, 551.29395, 570.11719, 596.50879, 608.61816, 638.59863, " y="48.4375, ">
-			I should not cause recursion
-	</text>
-</svg>
