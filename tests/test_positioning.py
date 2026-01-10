@@ -115,6 +115,25 @@ def test_place_with_mixed_anchors(file_regression, render_engine):
     image = render_func(Canvas(), container)
     check_func(file_regression, image)
 
+def test_place_with_nested_children(file_regression, render_engine):
+    """Tests that place() works with nested children."""
+    render_func, check_func = render_engine
+
+    container = (
+        Row(
+            Column(
+                Text("This should be centered"),
+                Text("Another text"),
+            ),
+        )
+        .place("center", "center")
+        .border(width=5, color="red")
+    )
+
+    canvas = Canvas().size(500, 500).background_color("pink")
+    image = render_func(canvas, container)
+    check_func(file_regression, image)
+
 
 def test_container_with_place(file_regression, render_engine):
     """Test a container with place positioning using pixel values (FIXED)."""
@@ -154,6 +173,23 @@ def test_translate_for_centering(file_regression, render_engine):
         width=300, height=200
     ).background_color("#ecf0f1")
     
+    image = render_func(Canvas(), container)
+    check_func(file_regression, image)
+
+def test_translate_with_nested_children(file_regression, render_engine):
+    """Test using translate with nested children."""
+    render_func, check_func = render_engine
+    
+    with_translate = (
+        Row(Text("With translate child"))
+        .absolute_position(top="50%", left="50%")
+        .translate(x="-50%", y="-50%")
+        .background_color("#9b59b6")
+        .padding(10)
+    )
+    without_translate = Text("Without translate child")
+
+    container = Column(without_translate, with_translate).size(400, 400).background_color("pink")
     image = render_func(Canvas(), container)
     check_func(file_regression, image)
 
