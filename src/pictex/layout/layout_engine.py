@@ -158,6 +158,8 @@ class LayoutEngine:
             return
         
         layout_result = pictex_node.layout_result
+        if layout_result is None:
+            return
         x = layout_result.offset_x + offset_x
         y = layout_result.offset_y + offset_y
         new_layout_result = LayoutResult(layout_result.stretchable_node, x, y)
