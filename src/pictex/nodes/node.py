@@ -32,6 +32,10 @@ class Node(Cacheable):
         return self._children
 
     @property
+    def layout_result(self) -> Optional[LayoutResult]:
+        return self._layout_result
+
+    @property
     def absolute_position(self) -> Tuple[int, int]:
         if self._layout_result is None:
             raise RuntimeError("Layout not computed")
@@ -51,34 +55,28 @@ class Node(Cacheable):
         """Content area bounds in absolute canvas coordinates."""
         if self._layout_result is None:
             raise RuntimeError("Layout not computed")
-        bounds = self._layout_result.get_content_bounds()
-
-        return self._apply_transform(bounds)
+        return self._layout_result.get_content_bounds()
 
     @cached_property(group='bounds')
     def padding_bounds(self) -> skia.Rect:
         """Padding box bounds in absolute canvas coordinates."""
         if self._layout_result is None:
             raise RuntimeError("Layout not computed")
-        bounds = self._layout_result.get_padding_bounds()
-        return self._apply_transform(bounds)
+        return self._layout_result.get_padding_bounds()
 
     @cached_property(group='bounds')
     def border_bounds(self) -> skia.Rect:
         """Border box bounds in absolute canvas coordinates."""
         if self._layout_result is None:
             raise RuntimeError("Layout not computed")
-        bounds = self._layout_result.get_border_bounds()
-        
-        return self._apply_transform(bounds)
+        return self._layout_result.get_border_bounds()
 
     @cached_property(group='bounds')
     def margin_bounds(self) -> skia.Rect:
         """Margin box bounds in absolute canvas coordinates."""
         if self._layout_result is None:
             raise RuntimeError("Layout not computed")
-        bounds = self._layout_result.get_margin_bounds()
-        return self._apply_transform(bounds)
+        return self._layout_result.get_margin_bounds()
 
     @cached_property(group='bounds')
     def paint_bounds(self) -> skia.Rect:
@@ -111,62 +109,6 @@ class Node(Cacheable):
             return filter.computeFastBounds(source_bounds)
         return source_bounds
 
-    def _apply_transform(self, bounds: skia.Rect) -> skia.Rect:
-        """Apply transform (translate) to bounds.
-        
-        We always use border_bounds size as reference
-        to ensure all bounds (border, padding, content, text) move the same amount.
-        
-        Args:
-            bounds: The original bounds from layout.
-            
-        Returns:
-            Bounds offset by translate transform, if any.
-        """
-        transform: Transform = self.computed_styles.transform.get()
-        if transform is None:
-            return bounds
-        
-        # Get border_bounds for reference size (without recursion)
-        reference_bounds = self._layout_result.get_border_bounds() if self._layout_result else bounds
-        
-        dx = self._compute_translate_offset(transform.translate_x, reference_bounds.width())
-        dy = self._compute_translate_offset(transform.translate_y, reference_bounds.height())
-        
-        if dx == 0 and dy == 0:
-            return bounds
-        
-        result = to_int_skia_rect(skia.Rect.MakeXYWH(
-            bounds.x() + dx,
-            bounds.y() + dy,
-            bounds.width(),
-            bounds.height()
-        ))
-        return result
-
-    def _compute_translate_offset(self, value, size: float) -> float:
-        """Compute translate offset from value.
-        
-        Args:
-            value: Translate value - None, pixels (int/float), or percentage string.
-            size: Element size for percentage calculation.
-            
-        Returns:
-            Offset in pixels.
-        """
-        if value is None:
-            return 0.0
-        
-        if isinstance(value, (int, float)):
-            return float(value)
-        
-        if isinstance(value, str) and value.endswith('%'):
-            pct = float(value.rstrip('%'))
-            result = size * pct / 100.0
-            return result
-        
-        return 0.0
-
     def _get_painters(self) -> list[Painter]:
         """Return list of painters for this node. Must be implemented by subclasses."""
         raise NotImplementedError("_get_painters() is not implemented")
@@ -196,6 +138,7 @@ class Node(Cacheable):
     def set_layout_result(self, layout_result: LayoutResult) -> None:
         """Set the layout result after layout computation"""
         self._layout_result = layout_result
+        self._clear_bounds()
 
     def clear(self) -> None:
         """Clear all cached data and render state."""

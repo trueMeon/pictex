@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="582" height="500"><defs><style type="text/css">@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}@font-face {
+    font-family: 'pictex-InterVariable';
+    src: url('InterVariable.ttf');
+}</style></defs>
+	<rect fill-opacity="0" width="582" height="500" />
+	<rect fill="#FFC0CB" transform="translate(41 0)" width="500" height="500" />
+	<rect fill="none" stroke="red" stroke-width="5" stroke-miterlimit="4" transform="translate(41 0)" x="-38.5" y="186.5" width="577" height="127" />
+	<text transform="translate(41 0)" font-size="50" font-family="pictex-InterVariable" x="-36, -3.7246094, 25.84082, 37.950195, 64.341797, 78.404297, 104.7959, 134.36133, 164.3418, 193.90723, 206.0166, 236.63184, 250.69434, 281.30957, 310.45996, 324.52246, 353.08691, 382.2373, 411.77832, 427.64746, 456.79785, 474.79102, 503.94141, " y="237.4375, ">
+			This should be centered
+	</text>
+	<text transform="translate(41 0)" font-size="50" font-family="pictex-InterVariable" x="-36, -1.5029297, 28.038086, 58.018555, 74.375977, 103.94141, 133.0918, 151.91504, 165.97754, 181.84668, 209.87402, 238.14551, " y="298.4375, ">
+			Another text
+	</text>
+</svg>

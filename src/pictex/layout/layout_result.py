@@ -22,6 +22,18 @@ class LayoutResult:
         self._stretchable_node: StretchableNode = stretchable_node
         self._offset_x = offset_x
         self._offset_y = offset_y
+
+    @property
+    def stretchable_node(self) -> StretchableNode:
+        return self._stretchable_node
+
+    @property
+    def offset_x(self) -> float:
+        return self._offset_x
+    
+    @property
+    def offset_y(self) -> float:
+        return self._offset_y
     
     def get_content_bounds(self) -> skia.Rect:
         """Get content area bounds in absolute canvas coordinates.

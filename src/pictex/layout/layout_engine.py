@@ -5,7 +5,7 @@ for computing CSS-like flexbox layouts.
 """
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Optional, Callable, Dict, Tuple
+from typing import TYPE_CHECKING, Optional, Callable, Dict, Tuple, Union
 
 from stretchable import Node as StretchableNode, Edge
 from stretchable.style.geometry.size import SizePoints, SizeAvailableSpace
@@ -37,6 +37,7 @@ class LayoutEngine:
         root_box = stretchable_root.get_box(Edge.MARGIN, relative=False)
         origin = (root_box.x, root_box.y)
         self._fix_canvas_relative_positions(root, origin)
+        self._apply_translate_transform(root, origin)
 
     def _build_stretchable_tree(self, node: 'Node') -> StretchableNode:
         """Recursively build stretchable node tree from pictex node tree."""
@@ -123,7 +124,13 @@ class LayoutEngine:
             stretchable_child = self._get_stretchable_node(pictex_child)
             self._link_layout_results(pictex_child, stretchable_child)
 
-    def _fix_canvas_relative_positions(self, pictex_node: 'Node', origin: Tuple[float, float]) -> None:
+    def _fix_canvas_relative_positions(
+        self,
+        pictex_node: 'Node',
+        origin: Tuple[float, float],
+        parent_offset_x: float = 0.0,
+        parent_offset_y: float = 0.0,
+    ) -> None:
         """Recursively fix FIXED position elements to be canvas-relative.
         
         FIXED elements are positioned relative to the canvas, not their parent.
@@ -136,15 +143,62 @@ class LayoutEngine:
             is_fixed = position_config and position_config.type == PositionType.FIXED
 
             if is_fixed:
-                stretchable_child = self._get_stretchable_node(pictex_child)
                 stretchable_parent = self._get_stretchable_node(pictex_node)
                 parent_box = stretchable_parent.get_box(Edge.PADDING, relative=False)
                 offset_x = -abs(origin[0] - parent_box.x)
                 offset_y = -abs(origin[1] - parent_box.y)
-                pictex_child._clear_bounds()
-                pictex_child.set_layout_result(LayoutResult(stretchable_child, offset_x, offset_y))
+                self._apply_offset_to_layout_result(pictex_child, offset_x, offset_y)
+                self._fix_canvas_relative_positions(pictex_child, origin, offset_x, offset_y)
+            else:
+                self._apply_offset_to_layout_result(pictex_child, parent_offset_x, parent_offset_y)
+                self._fix_canvas_relative_positions(pictex_child, origin, parent_offset_x, parent_offset_y)
 
-            self._fix_canvas_relative_positions(pictex_child, origin)
+    def _apply_offset_to_layout_result(self, pictex_node: 'Node', offset_x: float, offset_y: float) -> None:
+        if offset_x == 0.0 and offset_y == 0.0:
+            return
+        
+        layout_result = pictex_node.layout_result
+        x = layout_result.offset_x + offset_x
+        y = layout_result.offset_y + offset_y
+        new_layout_result = LayoutResult(layout_result.stretchable_node, x, y)
+        pictex_node.set_layout_result(new_layout_result)
+
+    def _apply_translate_transform(
+        self,
+        pictex_node: 'Node',
+        origin: Tuple[float, float],
+        parent_offset_x: float = 0.0,
+        parent_offset_y: float = 0.0,
+    ) -> None:
+
+        from ..models import Transform
+      
+        for pictex_child in pictex_node.children:
+            transform: Transform = pictex_child.computed_styles.transform.get()
+            if transform is not None:
+                stretchable_child = self._get_stretchable_node(pictex_child)
+                parent_box = stretchable_child.get_box(Edge.BORDER, relative=False)
+                dx = parent_offset_x + self._compute_translate_offset(transform.translate_x, parent_box.width)
+                dy = parent_offset_y + self._compute_translate_offset(transform.translate_y, parent_box.height)
+                self._apply_offset_to_layout_result(pictex_child, dx, dy)
+                self._apply_translate_transform(pictex_child, origin, dx, dy)
+            else:
+                self._apply_offset_to_layout_result(pictex_child, parent_offset_x, parent_offset_y)
+                self._apply_translate_transform(pictex_child, origin, parent_offset_x, parent_offset_y)
+    
+    def _compute_translate_offset(self, value: Optional[Union[int, float, str]], size: float) -> float:
+        if value is None:
+            return 0.0
+        
+        if isinstance(value, (int, float)):
+            return float(value)
+        
+        if isinstance(value, str) and value.endswith('%'):
+            pct = float(value.rstrip('%'))
+            result = size * pct / 100.0
+            return result
+        
+        return 0.0
 
     def _get_stretchable_node(self, pictex_node: 'Node') -> StretchableNode:
         if pictex_node not in self._node_map:
