@@ -93,7 +93,10 @@ class BitmapImage:
         Returns:
             A byte string containing the raw pixel data.
         """
-        return self._skia_image.tobytes()
+        return self._skia_image.convert(
+            alphaType=skia.kUnpremul_AlphaType,
+            colorType=skia.kBGRA_8888_ColorType,
+        ).tobytes()
 
     def to_numpy(self, mode: Literal['RGBA', 'BGRA', 'RGB', 'Grayscale'] = 'RGBA') -> np.ndarray:
         """Converts the image to a NumPy array in the specified channel order.
